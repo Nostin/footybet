@@ -28,7 +28,7 @@ def enrich(df):
         lambda x: x.diff().dt.days.shift(1)
     )
 
-    # ========== Contextual Features ==========
+    # ========== Team-Level Contextual Features ==========
     home_ground_map = {
         'Hawthorn': 'MCG', 'Collingwood': 'MCG', 'Carlton': 'MCG', 'Essendon': 'MCG',
         'Dees': 'MCG', 'Richmond': 'MCG', 'Saints': 'Docklands', 'Bulldogs': 'Docklands',
@@ -66,6 +66,46 @@ def enrich(df):
         suffixes=('', '_opponent')
     ).drop(columns=['Team_opponent'])
 
+    # ========== 🔥 New Features ==========
+
+    # 1. Team's average disposals to date (cumulative)
+    df['team_avg_disposals'] = df.groupby('Team')['Disposals'].transform(
+        lambda x: x.shift(1).rolling(5, min_periods=2).mean()
+    )
+    # Team form over last 4 games Convert result to a win=1, draw=0.5, loss=0
+    result_map = {'Win': 1, 'Draw': 0.5, 'Loss': 0}
+    df['result_num'] = df['Game Result'].map(result_map)
+
+    df['team_form_last_4'] = df.groupby('Team')['result_num'].transform(
+        lambda x: x.shift(1).rolling(4, min_periods=1).mean()
+    )
+
+    df['avg_disposals_all'] = df.groupby('Player')['Disposals'].transform(
+        lambda x: x.expanding().mean().shift(1)
+    )
+    df['form_diff'] = df['disposals_last_3'] - df['avg_disposals_all']
+    df['form_diff_last_4'] = df['team_form_last_4'] - df['avg_disposals_all']
+
+    # ========== 🔒 Safe Rolling Avg: Team Total Disposals per Game (last 4) ==========
+    # Step 1: Calculate total team disposals per game (sum over all players in a match)
+    team_disposals_per_game = df.groupby(['Date', 'Team'])['Disposals'].sum().reset_index()
+    team_disposals_per_game.rename(columns={'Disposals': 'team_total_disposals'}, inplace=True)
+
+    # Step 2: Sort for rolling
+    team_disposals_per_game.sort_values(by=['Team', 'Date'], inplace=True)
+
+    # Step 3: Rolling average over last 4 games, shifted to prevent leakage
+    team_disposals_per_game['avg_team_disposals_last_4'] = team_disposals_per_game.groupby('Team')['team_total_disposals'] \
+        .transform(lambda x: x.shift(1).rolling(4, min_periods=1).mean())
+
+    # Step 4: Merge it back into main DF on Date and Team
+    df = df.merge(
+        team_disposals_per_game[['Date', 'Team', 'avg_team_disposals_last_4']],
+        on=['Date', 'Team'],
+        how='left'
+    )
+
+
     # ========== Targets ==========
     df['target_20'] = (df['Disposals'] >= 20).astype(int)
     df['target_25'] = (df['Disposals'] >= 25).astype(int)
@@ -73,7 +113,9 @@ def enrich(df):
 
     # ========== Final Clean-up ==========
     df = df.drop_duplicates(subset=["Player", "Date"])
+    df.drop(columns=['result_num'], inplace=True)
     return df
+
 
 # Load and enrich train data
 train_df = pd.read_sql('SELECT * FROM player_stats_train', engine)
