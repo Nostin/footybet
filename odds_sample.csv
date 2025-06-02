@@ -1,0 +1,122 @@
+﻿Team,Opponent,Player,Odds of getting 25+,Team Win Odds,Venue,Timeslot,Got 25?,Model Probability
+Fremantle,Suns,Caleb Serong,1.28,2.94,Gold Coast,Day,Yes,0.9702995224786548
+Fremantle,Suns,Andrew Brayshaw,1.26,2.94,Gold Coast,Day,Yes,0.9487244016930644
+Suns,Fremantle,Noah Anderson,1.45,1.38,Gold Coast,Day,Yes,0.9883067836563977
+Suns,Fremantle,Touk Miller,2,1.38,Gold Coast,Day,No,0.9425895689951094
+Suns,Fremantle,Matt Rowell,2.6,1.38,Gold Coast,Day,Yes,0.8466789103352322
+Suns,Fremantle,Daniel Rioli,3.6,1.38,Gold Coast,Day,Yes,0.4257820138394647
+Suns,Fremantle,John Noble,1.91,1.38,Gold Coast,Day,No,0.9307257851318673
+GWS,Richmond,Cody Angove,16,1.06,Engie,Twilight,No,0.049067654
+GWS,Richmond,Jesse Hogan,10.5,1.06,Engie,Twilight,No,0.023909013
+GWS,Richmond,Toby Bedford,14,1.06,Engie,Twilight,No,0.021407542
+GWS,Richmond,Sam Taylor,10,1.06,Engie,Twilight,No,0.1409086014760569
+GWS,Richmond,Xavier O'Halloran,8,1.06,Engie,Twilight,No,0.047152521977578486
+GWS,Richmond,Darcy Jones,7.5,1.06,Engie,Twilight,No,0.11221460137999263
+GWS,Richmond,Connor Idun,5.4,1.06,Engie,Twilight,Yes,0.43017542207961057
+GWS,Richmond,Harry Himmelberg,5,1.06,Engie,Twilight,No,0.4743510812713544
+GWS,Richmond,Callan Ward,5,1.06,Engie,Twilight,No,0.21438285401569437
+GWS,Richmond,Toby Greene,3.8,1.06,Engie,Twilight,No,0.4034855152244553
+GWS,Richmond,Josh Kelly,1.84,1.06,Engie,Twilight,No,0.7849571313165937
+GWS,Richmond,Lachie Ash,1.28,1.06,Engie,Twilight,Yes,0.9737561227521043
+GWS,Richmond,Lachie Whitfield,1.17,1.06,Engie,Twilight,Yes,0.9890324057237008
+GWS,Richmond,Tom Green,1.1,1.06,Engie,Twilight,Yes,0.9908325854015603
+Richmond,GWS,Tim Taranto,1.54,9.5,Engie,Twilight,No,0.8939183323211628
+Richmond,GWS,Jacob Hopper,1.9,9.5,Engie,Twilight,Yes,0.9075192487225233
+Richmond,GWS,Sam Banks,2.6,9.5,Engie,Twilight,Yes,0.4466303145865809
+Richmond,GWS,Kane McAuliffe,6.25,9.5,Engie,Twilight,No,0.2916486484552531
+Richmond,GWS,Toby Nankervis,7,9.5,Engie,Twilight,No,0.10725168286466256
+Richmond,GWS,Jack Ross,9,9.5,Engie,Twilight,No,0.26257317083835285
+Richmond,GWS,Tom Brown,10.5,9.5,Engie,Twilight,No,0.074767193
+Richmond,GWS,Tyler Sonsie,14,9.5,Engie,Twilight,No,0.003512745
+Richmond,GWS,Hugo Ralphsmith,14,9.5,Engie,Twilight,No,0.047766672700668915
+Richmond,GWS,Nathan Broad,15,9.5,Engie,Twilight,No,0.084704065
+Adelaide,Sydney,Jordan Dawson,1.66,1.63,SCG,Night,No,0.9084832031677642
+Adelaide,Sydney,Izak Rankine,2.45,1.63,SCG,Night,No,0.8048579140236407
+Adelaide,Sydney,Jake Soligo,2.65,1.63,SCG,Night,No,0.7475812927458151
+Adelaide,Sydney,James Peatling,3.15,1.63,SCG,Night,No,0.5634155678320618
+Adelaide,Sydney,Josh Worrell,4.6,1.63,SCG,Night,No,0.5976129694817908
+Adelaide,Sydney,Sam Berry,4.5,1.63,SCG,Night,No,0.034835463554369124
+Adelaide,Sydney,Alex Neal-Bullen,10.5,1.63,SCG,Night,Yes,0.20199299846248275
+Adelaide,Sydney,Isaac Cumming,10.5,1.63,SCG,Night,No,0.11676818690163666
+Adelaide,Sydney,Ben Keays,10.5,1.63,SCG,Night,No,0.17987560639148176
+Adelaide,Sydney,Mark Keane,11,1.63,SCG,Night,No,0.054153017
+Adelaide,Sydney,Josh Rachele,14,1.63,SCG,Night,No,0.07374185
+Adelaide,Sydney,Taylor Walker,14,1.63,SCG,Night,No,0.033341012
+Adelaide,Sydney,Riley Thilthorpe,15,1.63,SCG,Night,No,0.10035833237645998
+Adelaide,Sydney,Daniel Curtin,19,1.63,SCG,Night,No,0.021696496560332033
+Sydney,Adelaide,Chad Warner,2.18,2.28,SCG,Night,No,0.7513014553550132
+Sydney,Adelaide,Isaac Heeney,2.3,2.28,SCG,Night,No,0.6629865424053751
+Sydney,Adelaide,Justin McInerney,4.3,2.28,SCG,Night,Yes,0.6116289773272637
+Sydney,Adelaide,Angus Sheldrick,3.6,2.28,SCG,Night,No,0.044229834126354596
+Sydney,Adelaide,Nick Blakey,4.9,2.28,SCG,Night,No,0.4547065480457151
+Sydney,Adelaide,Jake Lloyd,4.8,2.28,SCG,Night,No,0.5193326043164612
+Sydney,Adelaide,James Rowbottom,7.75,2.28,SCG,Night,No,0.2537080395233536
+Sydney,Adelaide,Riley Bice,7.75,2.28,SCG,Night,No,0.19737280363118237
+Sydney,Adelaide,Brodie Grundy,10.5,2.28,SCG,Night,No,0.22364173175232982
+Sydney,Adelaide,James Jordon,14,2.28,SCG,Night,No,0.10788146861675675
+Saints,Dees,Jack Sinclair,1.32,2.63,Alice Springs,Day,Yes,0.9527682721307177
+Saints,Dees,Nasiah Wanganeen-Milera,1.29,2.63,Alice Springs,Day,Yes,0.9761246537575736
+Saints,Dees,Jack Steele,2.5,2.63,Alice Springs,Day,No,0.5188099185234837
+Saints,Dees,Bradley Hill,3.9,2.63,Alice Springs,Day,Yes,0.3979463006482593
+Saints,Dees,Hunter Clark,4.9,2.63,Alice Springs,Day,No,0.036195608
+Saints,Dees,Marcus Windhager,5.4,2.63,Alice Springs,Day,Yes,0.5373499755247653
+Saints,Dees,Mattaes Phillipou,5.9,2.63,Alice Springs,Day,No,0.18608373392622302
+Saints,Dees,Zak Jones,6.25,2.63,Alice Springs,Day,No,0.18639372425341325
+Saints,Dees,Callum Wilkie,6.5,2.63,Alice Springs,Day,Yes,0.3586575209976932
+Saints,Dees,Rowan Marshall,7.75,2.63,Alice Springs,Day,No,0.19574955208332756
+Saints,Dees,Ryan Byrnes,7.75,2.63,Alice Springs,Day,No,0.3477484429199936
+Saints,Dees,Mason Wood,10.5,2.63,Alice Springs,Day,No,0.13012794151821847
+Saints,Dees,Tobie Travaglia,11.5,2.63,Alice Springs,Day,No,0.016901764
+Saints,Dees,Anthony Caminiti,14,2.63,Alice Springs,Day,No,0.06292352
+Saints,Dees,Cooper Sharman,19,2.63,Alice Springs,Day,No,0.032297396
+Dees,Saints,Christian Petracca,1.71,1.49,Alice Springs,Day,No,0.9333441951333621
+Dees,Saints,Clayton Oliver,1.66,1.49,Alice Springs,Day,No,0.9354341293210868
+Dees,Saints,Jake Bowey,2.2,1.49,Alice Springs,Day,No,0.7196850270390882
+Dees,Saints,Ed Langdon,2.5,1.49,Alice Springs,Day,No,0.7814061436453875
+Dees,Saints,Trent Rivers,2.4,1.49,Alice Springs,Day,No,0.6476225972183458
+Dees,Saints,Christian Salem,3,1.49,Alice Springs,Day,No,0.7831823725532221
+Dees,Saints,Max Gawn,3.25,1.49,Alice Springs,Day,No,0.561130605
+Dees,Saints,Kysaiah Pickett,4.2,1.49,Alice Springs,Day,No,0.5609107859625501
+Dees,Saints,Harvey Langford,4.5,1.49,Alice Springs,Day,No,0.3923583421080443
+Dees,Saints,Kade Chandler,8.25,1.49,Alice Springs,Day,No,0.086668701
+Dees,Saints,Xavier Lindsay,6,1.49,Alice Springs,Day,No,0.18730107941873167
+Dees,Saints,Caleb Windsor,6.5,1.49,Alice Springs,Day,No,0.27071375699394634
+Dees,Saints,Steven May,7,1.49,Alice Springs,Day,No,0.18879756522102764
+Dees,Saints,Judd McVee,10,1.49,Alice Springs,Day,No,0.21076458114243468
+Dees,Saints,Jake Lever,10,1.49,Alice Springs,Day,No,0.069114537
+Dees,Saints,Daniel Turner,14,1.49,Alice Springs,Day,No,0.031133240815305715
+Eagles,Geelong,Ryan Maric,2.45,8,Perth,Twilight,No,0.5963034510224642
+Eagles,Geelong,Liam Baker,3.1,9,Perth,Twilight,Yes,0.5730278043887191
+Eagles,Geelong,Liam Duggan,3.6,10,Perth,Twilight,No,0.2813436642724234
+Eagles,Geelong,Jack Graham,7.25,11,Perth,Twilight,No,0.26832751658210763
+Eagles,Geelong,Harley Reid,7.75,12,Perth,Twilight,No,0.13229439589717842
+Eagles,Geelong,Brady Hough,7.75,13,Perth,Twilight,No,0.042005047014814605
+Eagles,Geelong,Tim Kelly,8.5,14,Perth,Twilight,No,0.12815675875454607
+Eagles,Geelong,Liam Ryan,11,15,Perth,Twilight,No,0.018996149862670775
+Eagles,Geelong,Jayden Hunt,14,16,Perth,Twilight,No,0.049633113
+Eagles,Geelong,Tyrell Dewar,15,17,Perth,Twilight,No,0.012929894073975115
+Eagles,Geelong,Elijah Hewett,17,18,Perth,Twilight,No,0.058255378
+Eagles,Geelong,Tyler Brockman,19,19,Perth,Twilight,No,0.030097445288693722
+Geelong,Eagles,Bailey Smith,1.15,1.08,Perth,Twilight,Yes,0.9891472973742809
+Geelong,Eagles,Max Holmes,1.69,1.08,Perth,Twilight,Yes,0.8457990552630876
+Geelong,Eagles,Gryan Miers,3.2,1.08,Perth,Twilight,Yes,0.5611278082275664
+Geelong,Eagles,Tom Stewart,4.1,1.08,Perth,Twilight,No,0.16549480391991295
+Geelong,Eagles,Lawson Humphries,4.9,1.08,Perth,Twilight,No,0.40193744568397155
+Geelong,Eagles,Shaun Mannagh,5.75,1.08,Perth,Twilight,No,0.316901799
+Geelong,Eagles,Sam De Koning,8.5,1.08,Perth,Twilight,No,0.10559605198955715
+Geelong,Eagles,Tom Atkins,7,1.08,Perth,Twilight,No,0.30124254576514803
+Geelong,Eagles,Oliver Dempsey,8,1.08,Perth,Twilight,No,0.164055915
+Geelong,Eagles,Zach Guthrie,8.25,1.08,Perth,Twilight,No,0.3541732641334801
+Geelong,Eagles,Mitch Duncan,8.25,1.08,Perth,Twilight,No,0.14822953371767916
+Geelong,Eagles,Mark Blicavs,8.25,1.08,Perth,Twilight,No,0.040078718
+Geelong,Eagles,Jeremy Cameron,10,1.08,Perth,Twilight,No,0.083033625
+Geelong,Eagles,Mark O'Connor,14,1.08,Perth,Twilight,No,0.064474673
+Geelong,Eagles,Connor O'Sullivan,19,1.08,Perth,Twilight,No,0.023899469
+GWS,Richmond,Joseph Fonti,19,1.06,Engie,Twilight,No,Not assessed
+Richmond,GWS,Dion Prestia,3.8,9.5,Engie,Twilight,Yes,Not assessed
+Richmond,GWS,Nick Vlaustin,4.1,9.5,Engie,Twilight,No,Not assessed
+Adelaide,Sydney,Mitch Hinge,3.8,1.63,SCG,Night,No,Not assessed
+Saints,Dees,Mitchito Owens,10,2.63,Alice Springs,Day,No,Not assessed
+Adelaide,Sydney,Wayner Milera,5.3,1.63,SCG,Night,No,Not assessed
+Sydney,Adelaide,Matthew Roberts,2.25,2.28,SCG,Night,No,Not assessed
+Adelaide,Sydney,Max Michanlanney,13,1.63,SCG,Night,No,Not assessed
