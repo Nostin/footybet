@@ -4510,3 +4510,647 @@
 2025-05-25,Suns,Saints,Bodhi Uwland,83,0,0,19,14,5,9,1,0,0,464,0,90,Docklands,1.49,Twilight,Win
 2025-05-25,Suns,Saints,Jed Walter,47,1,1,9,3,6,2,3,0,0,95,0,65,Docklands,1.49,Twilight,Win
 2025-05-25,Suns,Saints,Jarrod Witts,103,0,0,12,3,9,2,6,49,6,67,1,86,Docklands,1.49,Twilight,Win
+2025-05-29,Brisbane,Essendon,Callum Ah Chee,59,1,0,13,5,8,3,3,0,1,117,2,78,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Harris Andrews,77,0,0,16,10,6,9,2,0,0,72,0,92,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Noah Answerth,89,1,0,20,14,6,6,3,0,1,401,1,81,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Levi Ashcroft,57,0,0,15,11,4,5,0,0,0,210,0,63,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Will Ashcroft,102,0,1,30,17,13,4,2,0,7,419,1,82,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Zac Bailey,94,0,2,20,13,7,10,2,0,1,315,0,80,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Jarrod Berry,110,0,1,25,17,8,9,3,0,1,392,0,80,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Charlie Cameron,44,1,0,8,5,3,3,2,0,0,110,0,83,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Josh Dunkley,82,0,0,20,7,13,3,7,0,2,202,0,77,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Jaspa Fletcher,105,1,0,21,17,4,12,1,0,1,345,0,89,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Darcy Fort,74,0,1,10,6,4,3,2,30,0,38,0,83,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Darcy Gardiner,50,1,0,9,5,4,4,2,1,0,143,1,69,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Eric Hipwood,60,1,0,12,7,5,5,2,2,1,215,0,75,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Ryan Lester,72,0,0,15,12,3,7,3,0,1,300,0,85,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Kai Lohmann,79,3,0,15,13,2,5,3,0,1,379,2,82,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Hugh McCluggage,152,0,1,41,20,21,11,4,0,7,557,2,85,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Logan Morris,85,2,3,11,11,0,9,3,0,0,236,0,76,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Lachie Neale,81,0,0,26,11,15,2,3,0,7,231,1,84,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Jack Payne,72,0,0,17,13,4,9,0,0,0,381,0,85,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Cam Rayner,56,1,0,14,7,7,3,3,0,0,240,0,88,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Deven Robertson,14,0,0,3,2,1,2,0,0,0,4,1,14,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Darcy Wilmot,68,1,0,14,7,7,6,3,0,0,156,0,79,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Dayne Zorko,90,0,1,23,22,1,6,2,0,0,345,0,89,Brisbane,1.06,Night,Win
+2025-05-29,Essendon,Brisbane,Nate Caddy,57,2,1,10,8,2,5,1,0,0,270,0,85,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Jye Caldwell,128,1,0,30,16,14,4,8,0,10,334,2,79,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Angus Clarke,42,0,0,11,5,6,3,3,0,1,228,1,79,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Archer Day-Wicks,41,0,0,9,4,5,2,4,0,0,109,0,66,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Sam Durham,33,1,0,8,2,6,1,2,0,0,27,1,76,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Xavier Duursma,52,0,0,12,7,5,4,3,0,2,210,0,78,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Todd Goldstein,65,1,0,8,3,5,1,0,39,3,96,0,77,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Jade Gresham,64,1,1,13,9,4,7,1,0,0,223,1,77,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Matt Guelfi,49,0,0,10,3,7,3,4,0,1,71,1,87,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Ben Hobbs,64,0,0,19,12,7,3,1,0,2,294,1,74,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Zak Johnson,34,0,0,11,5,6,1,1,0,0,204,0,64,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Isaac Kako,41,0,1,11,6,5,2,2,0,0,148,0,76,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Jayden Laverde,64,0,0,15,7,8,7,2,0,0,128,0,100,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Nic Martin,116,2,0,29,16,13,7,2,0,4,349,0,90,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Andrew McGrath,41,0,0,15,4,11,1,1,0,0,221,0,88,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Zach Merrett,94,0,0,28,17,11,4,2,0,2,562,0,93,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Archie Perkins,41,0,0,15,7,8,1,1,0,2,142,0,74,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Jaxon Prior,39,0,0,14,5,9,2,0,0,1,147,0,85,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Mason Redman,84,0,0,26,18,8,3,2,0,0,605,1,92,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Archie Roberts,76,0,1,20,12,8,8,1,0,2,390,0,81,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Will Setterfield,91,1,0,23,10,13,2,7,0,4,276,0,76,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Elijah Tsatas,19,0,0,6,3,3,0,1,0,2,66,0,16,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Peter Wright,86,2,1,15,10,5,6,2,8,1,289,1,85,Brisbane,8.07,Night,Loss
+2025-05-30,Collingwood,Hawthorn,Edward Allan,80,0,0,23,11,12,5,2,0,3,330,0,78,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Darcy Cameron,108,0,0,16,11,5,4,6,32,6,264,0,81,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Jack Crisp,71,0,2,16,10,6,2,5,0,6,400,1,76,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Josh Daicos,100,0,1,24,15,9,8,3,0,2,357,0,88,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Nick Daicos,128,1,0,32,16,16,7,6,0,4,496,1,86,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Jamie Elliott,86,5,1,12,9,3,5,2,0,0,222,2,87,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Billy Frampton,16,0,0,4,2,2,1,0,3,0,5,0,93,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Bobby Hill,62,1,1,14,8,6,5,1,0,1,193,2,74,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Will Hoskin-Elliott,38,0,1,8,4,4,3,2,0,0,87,0,76,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Dan Houston,81,0,0,21,16,5,4,2,0,0,328,1,79,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Jeremy Howe,47,0,0,10,10,0,4,1,0,0,210,0,86,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Patrick Lipinski,61,2,0,11,6,5,3,3,0,0,264,2,49,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Ned Long,101,0,0,24,8,16,4,11,0,3,245,2,79,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Beau McCreery,51,0,0,11,4,7,0,6,0,0,145,0,80,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Tim Membrey,45,1,1,9,5,4,5,0,0,0,85,0,90,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Brody Mihocek,93,4,1,12,10,2,6,4,2,1,208,0,85,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Darcy Moore,28,0,0,7,3,4,2,2,0,0,63,0,91,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Scott Pendlebury,99,0,0,22,11,11,7,8,0,2,244,0,73,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Harry Perryman,65,0,0,13,11,2,7,4,0,0,417,0,84,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Isaac Quaynor,74,0,0,20,10,10,6,2,0,0,273,0,80,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Lachie Schultz,64,0,0,13,6,7,4,6,0,0,105,0,70,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Steele Sidebottom,129,2,1,27,18,9,8,5,0,2,594,1,89,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Lachlan Sullivan,23,0,0,5,3,2,2,1,0,0,140,0,27,MCG,1.59,Night,Win
+2025-05-30,Hawthorn,Collingwood,Karl Amon,66,0,0,22,16,6,3,0,0,2,507,0,85,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Tom Barrass,42,0,0,9,3,6,4,2,0,0,59,0,78,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Josh Battle,68,0,0,15,11,4,8,2,0,0,261,0,81,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Mabior Chol,62,0,0,11,9,2,6,2,4,1,274,1,88,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Massimo D'Ambrosio,71,0,0,18,15,3,4,2,0,4,390,0,78,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jack Ginnivan,115,3,0,31,18,13,4,1,0,0,418,0,82,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jack Gunston,52,2,0,10,8,2,5,0,0,0,208,2,82,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Blake Hardwick,41,0,1,9,5,4,4,1,0,0,135,0,77,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jarman Impey,66,0,0,16,12,4,6,1,0,2,189,0,86,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Changkuoth Jiath,40,0,0,12,7,5,4,0,0,0,217,0,82,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Connor Macdonald,50,0,0,15,7,8,3,1,0,1,136,0,72,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Finn Maginness,30,0,0,5,4,1,1,3,0,1,88,0,26,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Lloyd Meek,80,0,0,15,4,11,1,4,37,6,127,0,84,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Dylan Moore,87,0,2,18,12,6,8,3,0,0,283,1,87,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Harry Morrison,44,0,1,12,6,6,4,1,0,1,188,0,86,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Conor Nash,83,0,0,25,12,13,3,3,1,9,274,1,71,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jai Newcombe,63,0,1,18,10,8,3,3,0,3,355,1,80,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jack Scrimshaw,28,0,0,8,3,5,3,0,0,0,54,0,62,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,James Sicily,20,0,0,6,4,2,3,1,0,0,92,0,89,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Josh Ward,85,0,0,26,11,15,3,3,0,4,301,0,76,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Nick Watson,35,1,0,9,4,5,2,0,0,1,105,0,83,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Josh Weddle,63,1,0,12,8,4,7,1,0,0,194,0,89,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,James Worpel,81,1,0,21,14,7,2,4,0,5,314,0,74,MCG,2.27,Night,Loss
+2025-05-31,Suns,Fremantle,Ben Ainsworth,49,0,0,13,7,6,6,1,0,0,248,1,77,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Noah Anderson,116,0,1,39,22,17,4,1,0,12,840,1,84,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Mac Andrew,83,0,1,20,11,9,6,4,0,0,284,0,94,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Sam Clohesy,76,0,0,18,9,9,2,6,0,2,365,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Sam Collins,45,0,0,10,6,4,3,2,0,0,108,0,93,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Brayden Fiorini,62,0,0,19,10,9,0,3,0,3,299,0,89,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Sam Flanders,75,3,1,16,9,7,3,1,0,4,257,0,80,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Nick Holman,52,0,0,12,3,9,1,7,0,0,146,0,80,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Bailey Humphrey,61,0,0,12,4,8,1,9,0,1,220,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Joel Jeffrey,75,0,0,15,12,3,5,4,0,0,422,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Ben King,42,1,1,7,5,2,2,2,0,0,153,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Leonardo Lombard,28,1,0,8,2,6,0,1,0,3,38,0,54,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Ben Long,61,1,3,11,9,2,5,1,0,0,165,0,87,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Touk Miller,75,0,1,24,12,12,0,3,0,9,358,0,81,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Ned Moyle,35,0,0,3,1,2,1,2,15,0,65,0,54,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,John Noble,86,0,0,22,13,9,4,4,0,0,419,1,87,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Wil Powell,41,0,0,10,7,3,3,3,0,0,320,0,87,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Daniel Rioli,89,0,0,27,9,18,3,5,0,3,335,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Matt Rowell,117,0,0,27,15,12,1,13,0,8,448,0,84,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,David Swallow,13,0,0,3,3,0,0,1,0,0,13,0,23,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Bodhi Uwland,63,1,0,15,10,5,4,2,0,0,298,0,83,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Jed Walter,46,2,0,10,4,6,2,2,0,0,81,0,80,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Jarrod Witts,86,0,0,10,3,7,1,6,40,1,63,1,71,Gold Coast,1.38,Day,Loss
+2025-05-31,Fremantle,Suns,Jye Amiss,33,1,0,9,3,6,3,0,0,1,127,0,87,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Bailey Banfield,42,0,0,13,6,7,3,0,0,2,194,0,80,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Shai Bolton,102,3,2,20,13,7,4,6,0,2,326,0,81,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Andrew Brayshaw,113,1,0,30,13,17,3,7,0,5,336,0,82,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Heath Chapman,58,0,0,13,7,6,1,6,0,0,218,0,79,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Jordan Clark,120,0,0,30,24,6,6,4,0,5,813,1,91,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Brennan Cox,21,0,0,10,3,7,1,1,0,0,72,0,86,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Sean Darcy,51,0,0,3,1,2,0,5,29,2,64,0,50,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Joshua Draper,5,0,0,3,1,2,0,1,0,1,32,0,92,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Neil Erasmus,80,0,0,19,10,9,1,7,0,2,313,1,68,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Michael Frederick,38,1,1,7,5,2,1,3,0,0,158,0,74,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Nat Fyfe,21,0,0,7,3,4,2,1,0,1,81,0,20,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Luke Jackson,116,0,0,27,12,15,2,7,21,4,373,1,81,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Matthew Johnson,65,0,0,18,5,13,1,5,0,3,237,0,82,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Murphy Reid,33,0,0,14,8,6,1,0,0,1,194,0,85,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Luke Ryan,60,0,0,18,14,4,4,1,0,1,461,0,97,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Caleb Serong,111,0,1,27,18,9,2,8,0,6,661,1,90,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Jeremy Sharp,27,0,0,4,3,1,1,3,0,0,74,0,87,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Sam Switkowski,82,1,0,17,7,10,2,7,0,2,215,2,83,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Josh Treacy,61,0,0,15,8,7,5,2,0,0,303,2,92,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Patrick Voss,77,3,1,7,7,0,3,9,0,0,247,0,78,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Corey Wagner,81,1,1,18,17,1,4,2,0,0,630,0,82,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Karl Worner,35,0,0,10,5,5,3,1,0,1,149,0,54,Gold Coast,2.94,Day,Win
+2025-05-31,GWS,Richmond,Leek Aleer,45,0,0,15,5,10,4,0,0,1,85,0,75,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Cody Angove,46,1,0,7,2,5,1,5,0,0,99,0,68,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Lachie Ash,112,0,0,36,25,11,6,0,0,1,797,1,77,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Toby Bedford,66,0,0,12,7,5,2,8,0,2,300,0,76,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Kieren Briggs,82,1,0,9,4,5,3,4,32,2,86,0,71,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Callum M. Brown,71,3,1,10,9,1,5,2,0,1,244,0,83,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Jack Buckley,56,0,0,17,10,7,6,0,0,0,241,0,100,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Aaron Cadman,75,2,1,10,8,2,7,4,0,0,177,0,71,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Joe Fonti,86,0,0,17,10,7,6,6,0,1,345,1,79,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Tom Green,112,1,1,30,14,16,3,7,0,6,567,1,84,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Toby Greene,62,1,0,12,7,5,3,4,0,2,228,0,87,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Harry Himmelberg,67,0,0,21,12,9,4,0,0,0,355,1,88,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Jesse Hogan,35,0,0,8,5,3,4,1,0,0,53,0,93,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Connor Idun,84,0,0,25,13,12,7,0,0,1,446,0,85,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Darcy Jones,55,0,1,17,5,12,1,3,0,4,194,0,90,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Josh Kelly,82,0,0,20,12,8,8,3,0,0,390,1,83,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Toby McMullin,72,1,0,20,11,9,5,0,0,3,370,1,68,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Xavier O'Halloran,58,0,0,19,10,9,2,1,0,3,414,0,80,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Jake Riccardi,108,2,0,17,12,5,8,5,6,2,225,0,66,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Sam Taylor,63,0,0,13,8,5,8,2,0,0,137,1,100,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Harvey Thomas,38,0,0,9,5,4,3,3,0,0,139,1,84,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Callan Ward,3,0,0,1,1,0,0,0,0,0,32,0,8,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Lachie Whitfield,119,0,0,28,16,12,9,5,0,0,519,0,85,Engie,1.05,Twilight,Win
+2025-05-31,Richmond,GWS,Sam Banks,87,0,0,25,16,9,7,0,0,2,491,0,85,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Nathan Broad,70,0,0,17,11,6,7,1,0,0,172,0,91,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Tom Brown,43,0,0,12,9,3,2,1,0,0,262,1,89,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Seth Campbell,55,0,0,13,6,7,2,4,0,1,241,0,80,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Jonty Faull,47,1,2,8,7,1,5,0,0,1,161,0,81,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Campbell Gray,50,0,0,13,9,4,5,0,0,0,206,0,77,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Steely Green,41,2,2,7,6,1,1,1,0,0,80,0,86,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Jacob Hopper,94,1,0,29,15,14,3,2,0,13,493,0,82,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Tom Lynch,65,2,1,10,8,2,5,2,0,0,183,0,86,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Rhyan Mansell,58,0,1,11,7,4,5,4,0,1,318,0,66,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Kane McAuliffe,55,0,0,18,5,13,2,2,0,4,225,1,62,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Kamdyn McIntosh,19,0,1,4,3,1,1,1,0,0,25,0,25,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Ben Miller,54,0,0,11,9,2,6,2,0,0,285,0,97,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Toby Nankervis,104,0,0,15,7,8,3,6,36,2,196,1,82,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Dion Prestia,111,1,1,31,15,16,2,5,0,7,381,0,74,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Hugo Ralphsmith,70,0,1,23,15,8,2,0,0,2,454,1,91,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Jack Ross,65,0,0,17,11,6,4,2,0,2,515,1,83,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Thomas Sims,69,0,1,13,9,4,7,1,4,0,316,1,70,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Kaleb Smith,59,0,0,13,10,3,5,2,0,0,204,0,75,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Tyler Sonsie,66,1,1,17,9,8,1,3,0,2,206,0,85,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Tim Taranto,89,2,0,23,11,12,4,2,0,5,361,0,87,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Luke Trainor,31,0,1,9,5,4,1,1,0,0,195,0,59,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Nick Vlastuin,69,0,0,19,13,6,4,1,0,0,443,0,86,Engie,8.53,Twilight,Loss
+2025-05-31,Sydney,Adelaide,Taylor Adams,60,0,0,11,5,6,2,9,0,2,49,0,74,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Riley Bice,9,0,0,2,1,1,0,1,0,0,28,0,37,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Nick Blakey,36,0,0,11,5,6,0,3,0,0,237,0,85,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Braeden Campbell,45,1,2,8,6,2,2,3,0,0,150,0,84,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Caiden Cleary,8,0,0,4,0,4,0,0,0,1,-19,0,45,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Brodie Grundy,124,0,0,23,11,12,6,5,35,8,104,0,78,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Joel Hamling,38,0,0,9,4,5,2,3,0,0,23,0,90,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Will Hayward,60,1,0,10,6,4,2,7,0,1,90,1,81,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Isaac Heeney,81,1,1,23,13,10,0,4,0,3,365,0,83,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,James Jordon,41,0,0,11,7,4,1,3,0,4,232,0,78,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Peter Ladhams,39,0,0,11,6,5,2,0,5,4,94,0,61,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Jake Lloyd,59,0,0,11,8,3,3,5,0,2,294,0,89,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Tom McCartin,104,0,0,20,18,2,11,3,0,0,376,0,100,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Justin McInerney,90,0,0,27,12,15,4,2,0,5,319,0,86,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Hayden McLean,43,2,0,11,7,4,1,0,0,0,153,0,76,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Lewis Melican,69,0,0,12,9,3,3,6,0,1,190,0,85,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Caleb Mitchell,51,0,0,13,8,5,4,2,0,1,40,0,92,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Dane Rampe,67,0,0,13,12,1,6,4,0,1,448,1,82,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Matt Roberts,98,0,0,21,18,3,8,3,0,1,423,0,74,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,James Rowbottom,86,0,1,20,12,8,1,9,0,4,343,0,82,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Angus Sheldrick,88,0,1,22,15,7,2,6,0,4,462,1,74,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Chad Warner,74,0,3,19,16,3,1,4,0,12,405,0,85,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Corey Warner,29,0,1,10,4,6,0,1,0,1,188,0,76,SCG,2.29,Night,Loss
+2025-05-31,Adelaide,Sydney,Sam Berry,66,1,0,16,10,6,0,5,0,8,389,0,73,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Jordon Butts,21,0,0,4,3,1,2,1,0,0,93,0,85,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Isaac Cumming,97,2,0,21,16,5,5,3,0,1,402,0,77,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Daniel Curtin,79,0,0,16,9,7,7,5,0,1,155,0,86,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Jordan Dawson,86,1,1,21,15,6,4,3,0,2,335,2,77,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Sid Draper,21,0,0,4,1,3,0,3,0,1,5,0,21,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Darcy Fogarty,42,2,0,7,4,3,3,3,0,0,108,1,83,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Mitchell Hinge,66,0,0,13,9,4,5,4,0,0,254,1,83,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Mark Keane,99,0,0,23,21,2,10,2,0,0,514,0,94,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Ben Keays,92,3,0,17,10,7,2,6,0,2,223,0,92,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Max Michalanney,57,0,0,10,4,6,0,8,0,0,129,0,88,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Wayne Milera,87,1,0,17,13,4,6,4,0,2,540,0,87,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Alex Neal-Bullen,99,1,0,25,14,11,6,4,0,0,352,2,80,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Reilly O'Brien,94,0,0,13,9,4,1,7,37,6,222,0,85,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,James Peatling,82,0,0,21,12,9,5,4,0,7,267,1,77,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Luke Pedlar,57,1,0,10,3,7,2,5,0,0,42,0,63,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Josh Rachele,65,3,1,13,12,1,3,1,0,1,345,2,81,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Izak Rankine,63,1,0,18,11,7,4,1,0,3,220,2,86,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Brodie Smith,69,1,0,17,14,3,2,2,0,1,522,0,82,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Jake Soligo,70,1,0,15,8,7,1,6,0,2,213,0,76,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Riley Thilthorpe,87,2,0,14,10,4,6,4,5,3,246,1,62,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Taylor Walker,44,1,0,9,6,3,3,1,3,1,215,1,81,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Josh Worrell,90,0,0,24,15,9,6,2,0,1,398,0,81,SCG,1.59,Night,Win
+2025-06-01,Dees,Saints,Jake Bowey,65,0,0,17,12,5,4,3,0,0,355,0,82,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Kade Chandler,78,1,1,12,11,1,7,4,0,3,284,0,80,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Bayley Fritsch,82,1,0,15,7,8,7,4,0,1,188,0,86,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Max Gawn,107,0,1,22,13,9,5,3,30,6,220,0,87,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Aidan Johnson,33,1,1,4,3,1,3,2,1,0,66,0,46,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Ed Langdon,64,0,0,13,10,3,4,4,0,3,293,0,84,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Harvey Langford,36,0,0,10,6,4,2,1,0,1,180,0,73,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Bailey Laurie,12,0,1,3,2,1,1,0,0,0,103,0,20,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Jake Lever,44,0,0,9,8,1,6,1,0,0,118,0,90,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Xavier Lindsay,58,0,3,14,6,8,4,2,0,1,322,0,83,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Steven May,99,0,0,21,18,3,10,2,0,0,446,0,96,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Judd McVee,76,0,2,20,12,8,6,1,0,0,373,0,85,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Jake Melksham,42,1,2,9,7,2,3,0,0,0,186,0,75,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Clayton Oliver,59,0,0,16,10,6,3,3,0,3,341,3,78,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Christian Petracca,75,2,1,22,11,11,3,1,0,5,448,0,87,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Harrison Petty,50,1,1,8,6,2,3,3,1,0,143,0,75,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Kysaiah Pickett,42,0,0,12,7,5,1,3,0,5,243,1,88,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Trent Rivers,75,0,0,14,7,7,5,6,0,1,186,0,75,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Christian Salem,77,0,1,14,10,4,6,5,0,0,163,0,85,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Harry Sharp,39,0,1,10,5,5,3,1,0,0,205,0,71,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Tom Sparrow,55,0,0,11,7,4,4,5,0,3,274,0,93,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Daniel Turner,75,0,1,14,12,2,10,1,0,0,433,0,86,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Caleb Windsor,31,0,0,9,8,1,0,1,0,0,259,0,75,Alice Springs,1.45,Day,Loss
+2025-06-01,Saints,Dees,Hugh Boxshall,30,0,0,9,3,6,1,3,0,0,141,1,49,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Dan Butler,67,4,0,12,9,3,3,0,0,0,169,0,66,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Ryan Byrnes,69,0,0,20,10,10,5,1,0,0,158,0,86,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Anthony Caminiti,78,0,0,17,14,3,8,2,0,0,297,0,100,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jack Carroll,39,0,0,11,8,3,3,2,0,1,298,1,59,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Hunter Clark,86,1,1,20,7,13,6,5,0,1,184,1,76,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Max Hall,73,2,0,15,6,9,4,4,0,2,101,1,82,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jack Higgins,46,1,1,10,5,5,3,1,0,0,128,1,83,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Bradley Hill,120,1,0,26,23,3,13,0,0,0,678,0,93,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Zak Jones,69,0,0,20,10,10,5,1,0,3,243,0,75,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Isaac Keeler,66,3,1,10,9,1,6,0,0,0,198,0,87,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Rowan Marshall,92,0,0,16,12,4,5,5,22,3,147,0,83,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Mitch Owens,62,1,1,13,5,8,4,3,3,0,242,2,86,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Mattaes Phillipou,2,0,0,1,0,1,0,0,0,1,3,0,4,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Cooper Sharman,63,0,2,14,10,4,8,1,0,0,310,0,97,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jack Sinclair,112,0,0,25,23,2,7,4,0,2,364,0,84,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jack Steele,105,0,0,23,12,11,8,6,0,5,152,0,83,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Tobie Travaglia,67,1,0,13,10,3,7,1,0,1,408,0,71,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Nasiah Wanganeen-Milera,117,0,0,29,27,2,7,3,0,2,795,1,69,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jimmy Webster,58,0,0,12,8,4,7,2,0,1,239,1,87,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Callum Wilkie,128,0,0,31,22,9,15,2,0,1,312,0,100,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Marcus Windhager,117,0,0,28,18,10,8,4,0,5,492,1,91,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Mason Wood,65,0,0,15,9,6,7,2,0,2,299,2,88,Alice Springs,2.65,Day,Win
+2025-06-01,Eagles,Geelong,Bo Allan,6,0,0,4,1,3,0,0,0,1,91,0,16,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Oscar Allen,63,4,0,8,5,3,3,2,0,0,159,1,87,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Liam Baker,82,0,0,29,13,16,1,3,0,2,462,1,87,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Sandy Brock,52,0,0,14,6,8,6,0,0,0,119,0,89,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Tyler Brockman,50,0,0,16,8,8,3,1,0,1,178,0,85,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Tom Cole,85,0,0,24,11,13,6,2,0,4,247,0,75,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Tyrell Dewar,51,0,1,18,11,7,2,0,0,0,322,0,82,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Liam Duggan,92,0,0,23,21,2,7,1,0,1,567,0,83,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Harry Edwards,66,0,0,13,7,6,4,5,0,1,336,0,90,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Matt Flynn,99,0,0,15,9,6,5,3,31,3,111,0,75,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Reuben Ginbey,45,0,0,16,8,8,1,1,0,1,263,0,86,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Jack Graham,58,0,0,19,8,11,2,3,0,1,175,0,76,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Elijah Hewett,75,1,1,20,11,9,1,4,0,7,354,1,79,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Brady Hough,40,0,0,9,3,6,1,4,0,2,121,0,84,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Jayden Hunt,44,0,0,12,6,6,2,2,0,1,203,0,84,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Jack Hutchinson,67,0,0,15,10,5,7,2,0,1,409,0,79,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Tim Kelly,81,1,0,19,8,11,7,2,0,0,193,0,84,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Noah Long,58,1,1,9,9,0,4,3,0,0,304,1,83,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Ryan Maric,63,0,0,15,10,5,6,2,0,0,264,0,65,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Archer Reid,32,0,0,6,4,2,2,0,8,2,174,3,69,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Harley Reid,73,1,1,19,9,10,3,4,0,7,348,0,79,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Liam Ryan,45,1,0,10,6,4,2,2,0,3,171,0,82,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Jack Williams,36,2,1,8,4,4,3,0,0,0,89,1,83,Perth,7.52,Twilight,Loss
+2025-06-01,Geelong,Eagles,Tom Atkins,92,0,0,15,13,2,6,10,0,4,164,0,75,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Mark Blicavs,41,0,0,8,3,5,2,2,7,2,-3,1,76,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Jeremy Cameron,102,5,2,14,12,2,7,3,0,0,351,1,86,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Ted Clohesy,17,0,0,4,2,2,1,1,0,2,61,0,6,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Brad Close,48,1,1,13,10,3,1,0,0,0,249,0,84,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Sam De Koning,42,0,0,12,8,4,3,1,0,0,251,0,89,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Oliver Dempsey,51,1,1,14,6,8,2,1,0,2,227,0,93,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Mitch Duncan,92,0,1,19,10,9,7,5,0,2,308,1,62,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Zach Guthrie,57,0,1,13,7,6,6,1,0,0,288,0,78,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Jack Henry,36,0,0,9,6,3,4,0,0,0,105,0,88,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Oliver Henry,50,2,0,6,5,1,2,4,0,1,135,1,82,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Max Holmes,108,0,2,27,19,8,7,3,0,7,853,0,76,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Lawson Humphries,61,0,0,12,10,2,4,3,0,0,253,1,79,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Shaun Mannagh,79,1,0,18,16,2,8,0,0,4,432,1,84,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Gryan Miers,137,2,1,26,21,5,13,3,0,1,552,0,86,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Oisin Mullin,54,0,0,9,5,4,2,6,0,2,103,0,66,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Shannon Neale,67,1,0,8,5,3,5,5,7,0,71,0,88,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Mark O'Connor,73,0,0,15,12,3,6,4,0,0,253,0,92,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Connor O'Sullivan,76,0,0,20,7,13,5,3,0,0,258,2,93,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Bailey Smith,147,1,1,38,27,11,7,4,0,5,834,0,86,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Rhys Stanley,60,1,0,9,1,8,1,3,26,4,49,0,70,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Tyson Stengle,88,2,1,18,11,7,5,4,0,0,315,3,81,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Tom Stewart,73,0,0,18,14,4,7,1,0,0,442,0,82,Perth,1.07,Twilight,Win
+2025-05-29,Brisbane,Essendon,Callum Ah Chee,59,1,0,13,5,8,3,3,0,1,117,2,78,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Harris Andrews,77,0,0,16,10,6,9,2,0,0,72,0,92,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Noah Answerth,89,1,0,20,14,6,6,3,0,1,401,1,81,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Levi Ashcroft,57,0,0,15,11,4,5,0,0,0,210,0,63,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Will Ashcroft,102,0,1,30,17,13,4,2,0,7,419,1,82,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Zac Bailey,94,0,2,20,13,7,10,2,0,1,315,0,80,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Jarrod Berry,110,0,1,25,17,8,9,3,0,1,392,0,80,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Charlie Cameron,44,1,0,8,5,3,3,2,0,0,110,0,83,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Josh Dunkley,82,0,0,20,7,13,3,7,0,2,202,0,77,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Jaspa Fletcher,105,1,0,21,17,4,12,1,0,1,345,0,89,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Darcy Fort,74,0,1,10,6,4,3,2,30,0,38,0,83,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Darcy Gardiner,50,1,0,9,5,4,4,2,1,0,143,1,69,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Eric Hipwood,60,1,0,12,7,5,5,2,2,1,215,0,75,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Ryan Lester,72,0,0,15,12,3,7,3,0,1,300,0,85,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Kai Lohmann,79,3,0,15,13,2,5,3,0,1,379,2,82,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Hugh McCluggage,152,0,1,41,20,21,11,4,0,7,557,2,85,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Logan Morris,85,2,3,11,11,0,9,3,0,0,236,0,76,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Lachie Neale,81,0,0,26,11,15,2,3,0,7,231,1,84,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Jack Payne,72,0,0,17,13,4,9,0,0,0,381,0,85,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Cam Rayner,56,1,0,14,7,7,3,3,0,0,240,0,88,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Deven Robertson,14,0,0,3,2,1,2,0,0,0,4,1,14,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Darcy Wilmot,68,1,0,14,7,7,6,3,0,0,156,0,79,Brisbane,1.06,Night,Win
+2025-05-29,Brisbane,Essendon,Dayne Zorko,90,0,1,23,22,1,6,2,0,0,345,0,89,Brisbane,1.06,Night,Win
+2025-05-29,Essendon,Brisbane,Nate Caddy,57,2,1,10,8,2,5,1,0,0,270,0,85,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Jye Caldwell,128,1,0,30,16,14,4,8,0,10,334,2,79,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Angus Clarke,42,0,0,11,5,6,3,3,0,1,228,1,79,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Archer Day-Wicks,41,0,0,9,4,5,2,4,0,0,109,0,66,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Sam Durham,33,1,0,8,2,6,1,2,0,0,27,1,76,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Xavier Duursma,52,0,0,12,7,5,4,3,0,2,210,0,78,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Todd Goldstein,65,1,0,8,3,5,1,0,39,3,96,0,77,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Jade Gresham,64,1,1,13,9,4,7,1,0,0,223,1,77,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Matt Guelfi,49,0,0,10,3,7,3,4,0,1,71,1,87,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Ben Hobbs,64,0,0,19,12,7,3,1,0,2,294,1,74,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Zak Johnson,34,0,0,11,5,6,1,1,0,0,204,0,64,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Isaac Kako,41,0,1,11,6,5,2,2,0,0,148,0,76,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Jayden Laverde,64,0,0,15,7,8,7,2,0,0,128,0,100,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Nic Martin,116,2,0,29,16,13,7,2,0,4,349,0,90,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Andrew McGrath,41,0,0,15,4,11,1,1,0,0,221,0,88,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Zach Merrett,94,0,0,28,17,11,4,2,0,2,562,0,93,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Archie Perkins,41,0,0,15,7,8,1,1,0,2,142,0,74,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Jaxon Prior,39,0,0,14,5,9,2,0,0,1,147,0,85,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Mason Redman,84,0,0,26,18,8,3,2,0,0,605,1,92,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Archie Roberts,76,0,1,20,12,8,8,1,0,2,390,0,81,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Will Setterfield,91,1,0,23,10,13,2,7,0,4,276,0,76,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Elijah Tsatas,19,0,0,6,3,3,0,1,0,2,66,0,16,Brisbane,8.07,Night,Loss
+2025-05-29,Essendon,Brisbane,Peter Wright,86,2,1,15,10,5,6,2,8,1,289,1,85,Brisbane,8.07,Night,Loss
+2025-05-30,Collingwood,Hawthorn,Edward Allan,80,0,0,23,11,12,5,2,0,3,330,0,78,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Darcy Cameron,108,0,0,16,11,5,4,6,32,6,264,0,81,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Jack Crisp,71,0,2,16,10,6,2,5,0,6,400,1,76,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Josh Daicos,100,0,1,24,15,9,8,3,0,2,357,0,88,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Nick Daicos,128,1,0,32,16,16,7,6,0,4,496,1,86,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Jamie Elliott,86,5,1,12,9,3,5,2,0,0,222,2,87,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Billy Frampton,16,0,0,4,2,2,1,0,3,0,5,0,93,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Bobby Hill,62,1,1,14,8,6,5,1,0,1,193,2,74,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Will Hoskin-Elliott,38,0,1,8,4,4,3,2,0,0,87,0,76,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Dan Houston,81,0,0,21,16,5,4,2,0,0,328,1,79,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Jeremy Howe,47,0,0,10,10,0,4,1,0,0,210,0,86,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Patrick Lipinski,61,2,0,11,6,5,3,3,0,0,264,2,49,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Ned Long,101,0,0,24,8,16,4,11,0,3,245,2,79,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Beau McCreery,51,0,0,11,4,7,0,6,0,0,145,0,80,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Tim Membrey,45,1,1,9,5,4,5,0,0,0,85,0,90,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Brody Mihocek,93,4,1,12,10,2,6,4,2,1,208,0,85,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Darcy Moore,28,0,0,7,3,4,2,2,0,0,63,0,91,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Scott Pendlebury,99,0,0,22,11,11,7,8,0,2,244,0,73,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Harry Perryman,65,0,0,13,11,2,7,4,0,0,417,0,84,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Isaac Quaynor,74,0,0,20,10,10,6,2,0,0,273,0,80,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Lachie Schultz,64,0,0,13,6,7,4,6,0,0,105,0,70,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Steele Sidebottom,129,2,1,27,18,9,8,5,0,2,594,1,89,MCG,1.59,Night,Win
+2025-05-30,Collingwood,Hawthorn,Lachlan Sullivan,23,0,0,5,3,2,2,1,0,0,140,0,27,MCG,1.59,Night,Win
+2025-05-30,Hawthorn,Collingwood,Karl Amon,66,0,0,22,16,6,3,0,0,2,507,0,85,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Tom Barrass,42,0,0,9,3,6,4,2,0,0,59,0,78,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Josh Battle,68,0,0,15,11,4,8,2,0,0,261,0,81,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Mabior Chol,62,0,0,11,9,2,6,2,4,1,274,1,88,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Massimo D'Ambrosio,71,0,0,18,15,3,4,2,0,4,390,0,78,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jack Ginnivan,115,3,0,31,18,13,4,1,0,0,418,0,82,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jack Gunston,52,2,0,10,8,2,5,0,0,0,208,2,82,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Blake Hardwick,41,0,1,9,5,4,4,1,0,0,135,0,77,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jarman Impey,66,0,0,16,12,4,6,1,0,2,189,0,86,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Changkuoth Jiath,40,0,0,12,7,5,4,0,0,0,217,0,82,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Connor Macdonald,50,0,0,15,7,8,3,1,0,1,136,0,72,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Finn Maginness,30,0,0,5,4,1,1,3,0,1,88,0,26,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Lloyd Meek,80,0,0,15,4,11,1,4,37,6,127,0,84,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Dylan Moore,87,0,2,18,12,6,8,3,0,0,283,1,87,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Harry Morrison,44,0,1,12,6,6,4,1,0,1,188,0,86,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Conor Nash,83,0,0,25,12,13,3,3,1,9,274,1,71,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jai Newcombe,63,0,1,18,10,8,3,3,0,3,355,1,80,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Jack Scrimshaw,28,0,0,8,3,5,3,0,0,0,54,0,62,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,James Sicily,20,0,0,6,4,2,3,1,0,0,92,0,89,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Josh Ward,85,0,0,26,11,15,3,3,0,4,301,0,76,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Nick Watson,35,1,0,9,4,5,2,0,0,1,105,0,83,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,Josh Weddle,63,1,0,12,8,4,7,1,0,0,194,0,89,MCG,2.27,Night,Loss
+2025-05-30,Hawthorn,Collingwood,James Worpel,81,1,0,21,14,7,2,4,0,5,314,0,74,MCG,2.27,Night,Loss
+2025-05-31,Suns,Fremantle,Ben Ainsworth,49,0,0,13,7,6,6,1,0,0,248,1,77,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Noah Anderson,116,0,1,39,22,17,4,1,0,12,840,1,84,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Mac Andrew,83,0,1,20,11,9,6,4,0,0,284,0,94,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Sam Clohesy,76,0,0,18,9,9,2,6,0,2,365,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Sam Collins,45,0,0,10,6,4,3,2,0,0,108,0,93,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Brayden Fiorini,62,0,0,19,10,9,0,3,0,3,299,0,89,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Sam Flanders,75,3,1,16,9,7,3,1,0,4,257,0,80,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Nick Holman,52,0,0,12,3,9,1,7,0,0,146,0,80,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Bailey Humphrey,61,0,0,12,4,8,1,9,0,1,220,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Joel Jeffrey,75,0,0,15,12,3,5,4,0,0,422,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Ben King,42,1,1,7,5,2,2,2,0,0,153,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Leonardo Lombard,28,1,0,8,2,6,0,1,0,3,38,0,54,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Ben Long,61,1,3,11,9,2,5,1,0,0,165,0,87,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Touk Miller,75,0,1,24,12,12,0,3,0,9,358,0,81,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Ned Moyle,35,0,0,3,1,2,1,2,15,0,65,0,54,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,John Noble,86,0,0,22,13,9,4,4,0,0,419,1,87,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Wil Powell,41,0,0,10,7,3,3,3,0,0,320,0,87,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Daniel Rioli,89,0,0,27,9,18,3,5,0,3,335,0,82,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Matt Rowell,117,0,0,27,15,12,1,13,0,8,448,0,84,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,David Swallow,13,0,0,3,3,0,0,1,0,0,13,0,23,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Bodhi Uwland,63,1,0,15,10,5,4,2,0,0,298,0,83,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Jed Walter,46,2,0,10,4,6,2,2,0,0,81,0,80,Gold Coast,1.38,Day,Loss
+2025-05-31,Suns,Fremantle,Jarrod Witts,86,0,0,10,3,7,1,6,40,1,63,1,71,Gold Coast,1.38,Day,Loss
+2025-05-31,Fremantle,Suns,Jye Amiss,33,1,0,9,3,6,3,0,0,1,127,0,87,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Bailey Banfield,42,0,0,13,6,7,3,0,0,2,194,0,80,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Shai Bolton,102,3,2,20,13,7,4,6,0,2,326,0,81,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Andrew Brayshaw,113,1,0,30,13,17,3,7,0,5,336,0,82,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Heath Chapman,58,0,0,13,7,6,1,6,0,0,218,0,79,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Jordan Clark,120,0,0,30,24,6,6,4,0,5,813,1,91,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Brennan Cox,21,0,0,10,3,7,1,1,0,0,72,0,86,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Sean Darcy,51,0,0,3,1,2,0,5,29,2,64,0,50,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Joshua Draper,5,0,0,3,1,2,0,1,0,1,32,0,92,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Neil Erasmus,80,0,0,19,10,9,1,7,0,2,313,1,68,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Michael Frederick,38,1,1,7,5,2,1,3,0,0,158,0,74,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Nat Fyfe,21,0,0,7,3,4,2,1,0,1,81,0,20,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Luke Jackson,116,0,0,27,12,15,2,7,21,4,373,1,81,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Matthew Johnson,65,0,0,18,5,13,1,5,0,3,237,0,82,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Murphy Reid,33,0,0,14,8,6,1,0,0,1,194,0,85,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Luke Ryan,60,0,0,18,14,4,4,1,0,1,461,0,97,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Caleb Serong,111,0,1,27,18,9,2,8,0,6,661,1,90,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Jeremy Sharp,27,0,0,4,3,1,1,3,0,0,74,0,87,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Sam Switkowski,82,1,0,17,7,10,2,7,0,2,215,2,83,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Josh Treacy,61,0,0,15,8,7,5,2,0,0,303,2,92,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Patrick Voss,77,3,1,7,7,0,3,9,0,0,247,0,78,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Corey Wagner,81,1,1,18,17,1,4,2,0,0,630,0,82,Gold Coast,2.94,Day,Win
+2025-05-31,Fremantle,Suns,Karl Worner,35,0,0,10,5,5,3,1,0,1,149,0,54,Gold Coast,2.94,Day,Win
+2025-05-31,GWS,Richmond,Leek Aleer,45,0,0,15,5,10,4,0,0,1,85,0,75,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Cody Angove,46,1,0,7,2,5,1,5,0,0,99,0,68,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Lachie Ash,112,0,0,36,25,11,6,0,0,1,797,1,77,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Toby Bedford,66,0,0,12,7,5,2,8,0,2,300,0,76,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Kieren Briggs,82,1,0,9,4,5,3,4,32,2,86,0,71,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Callum M. Brown,71,3,1,10,9,1,5,2,0,1,244,0,83,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Jack Buckley,56,0,0,17,10,7,6,0,0,0,241,0,100,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Aaron Cadman,75,2,1,10,8,2,7,4,0,0,177,0,71,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Joe Fonti,86,0,0,17,10,7,6,6,0,1,345,1,79,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Tom Green,112,1,1,30,14,16,3,7,0,6,567,1,84,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Toby Greene,62,1,0,12,7,5,3,4,0,2,228,0,87,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Harry Himmelberg,67,0,0,21,12,9,4,0,0,0,355,1,88,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Jesse Hogan,35,0,0,8,5,3,4,1,0,0,53,0,93,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Connor Idun,84,0,0,25,13,12,7,0,0,1,446,0,85,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Darcy Jones,55,0,1,17,5,12,1,3,0,4,194,0,90,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Josh Kelly,82,0,0,20,12,8,8,3,0,0,390,1,83,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Toby McMullin,72,1,0,20,11,9,5,0,0,3,370,1,68,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Xavier O'Halloran,58,0,0,19,10,9,2,1,0,3,414,0,80,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Jake Riccardi,108,2,0,17,12,5,8,5,6,2,225,0,66,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Sam Taylor,63,0,0,13,8,5,8,2,0,0,137,1,100,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Harvey Thomas,38,0,0,9,5,4,3,3,0,0,139,1,84,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Callan Ward,3,0,0,1,1,0,0,0,0,0,32,0,8,Engie,1.05,Twilight,Win
+2025-05-31,GWS,Richmond,Lachie Whitfield,119,0,0,28,16,12,9,5,0,0,519,0,85,Engie,1.05,Twilight,Win
+2025-05-31,Richmond,GWS,Sam Banks,87,0,0,25,16,9,7,0,0,2,491,0,85,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Nathan Broad,70,0,0,17,11,6,7,1,0,0,172,0,91,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Tom Brown,43,0,0,12,9,3,2,1,0,0,262,1,89,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Seth Campbell,55,0,0,13,6,7,2,4,0,1,241,0,80,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Jonty Faull,47,1,2,8,7,1,5,0,0,1,161,0,81,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Campbell Gray,50,0,0,13,9,4,5,0,0,0,206,0,77,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Steely Green,41,2,2,7,6,1,1,1,0,0,80,0,86,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Jacob Hopper,94,1,0,29,15,14,3,2,0,13,493,0,82,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Tom Lynch,65,2,1,10,8,2,5,2,0,0,183,0,86,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Rhyan Mansell,58,0,1,11,7,4,5,4,0,1,318,0,66,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Kane McAuliffe,55,0,0,18,5,13,2,2,0,4,225,1,62,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Kamdyn McIntosh,19,0,1,4,3,1,1,1,0,0,25,0,25,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Ben Miller,54,0,0,11,9,2,6,2,0,0,285,0,97,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Toby Nankervis,104,0,0,15,7,8,3,6,36,2,196,1,82,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Dion Prestia,111,1,1,31,15,16,2,5,0,7,381,0,74,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Hugo Ralphsmith,70,0,1,23,15,8,2,0,0,2,454,1,91,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Jack Ross,65,0,0,17,11,6,4,2,0,2,515,1,83,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Thomas Sims,69,0,1,13,9,4,7,1,4,0,316,1,70,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Kaleb Smith,59,0,0,13,10,3,5,2,0,0,204,0,75,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Tyler Sonsie,66,1,1,17,9,8,1,3,0,2,206,0,85,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Tim Taranto,89,2,0,23,11,12,4,2,0,5,361,0,87,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Luke Trainor,31,0,1,9,5,4,1,1,0,0,195,0,59,Engie,8.53,Twilight,Loss
+2025-05-31,Richmond,GWS,Nick Vlastuin,69,0,0,19,13,6,4,1,0,0,443,0,86,Engie,8.53,Twilight,Loss
+2025-05-31,Sydney,Adelaide,Taylor Adams,60,0,0,11,5,6,2,9,0,2,49,0,74,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Riley Bice,9,0,0,2,1,1,0,1,0,0,28,0,37,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Nick Blakey,36,0,0,11,5,6,0,3,0,0,237,0,85,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Braeden Campbell,45,1,2,8,6,2,2,3,0,0,150,0,84,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Caiden Cleary,8,0,0,4,0,4,0,0,0,1,-19,0,45,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Brodie Grundy,124,0,0,23,11,12,6,5,35,8,104,0,78,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Joel Hamling,38,0,0,9,4,5,2,3,0,0,23,0,90,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Will Hayward,60,1,0,10,6,4,2,7,0,1,90,1,81,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Isaac Heeney,81,1,1,23,13,10,0,4,0,3,365,0,83,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,James Jordon,41,0,0,11,7,4,1,3,0,4,232,0,78,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Peter Ladhams,39,0,0,11,6,5,2,0,5,4,94,0,61,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Jake Lloyd,59,0,0,11,8,3,3,5,0,2,294,0,89,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Tom McCartin,104,0,0,20,18,2,11,3,0,0,376,0,100,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Justin McInerney,90,0,0,27,12,15,4,2,0,5,319,0,86,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Hayden McLean,43,2,0,11,7,4,1,0,0,0,153,0,76,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Lewis Melican,69,0,0,12,9,3,3,6,0,1,190,0,85,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Caleb Mitchell,51,0,0,13,8,5,4,2,0,1,40,0,92,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Dane Rampe,67,0,0,13,12,1,6,4,0,1,448,1,82,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Matt Roberts,98,0,0,21,18,3,8,3,0,1,423,0,74,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,James Rowbottom,86,0,1,20,12,8,1,9,0,4,343,0,82,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Angus Sheldrick,88,0,1,22,15,7,2,6,0,4,462,1,74,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Chad Warner,74,0,3,19,16,3,1,4,0,12,405,0,85,SCG,2.29,Night,Loss
+2025-05-31,Sydney,Adelaide,Corey Warner,29,0,1,10,4,6,0,1,0,1,188,0,76,SCG,2.29,Night,Loss
+2025-05-31,Adelaide,Sydney,Sam Berry,66,1,0,16,10,6,0,5,0,8,389,0,73,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Jordon Butts,21,0,0,4,3,1,2,1,0,0,93,0,85,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Isaac Cumming,97,2,0,21,16,5,5,3,0,1,402,0,77,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Daniel Curtin,79,0,0,16,9,7,7,5,0,1,155,0,86,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Jordan Dawson,86,1,1,21,15,6,4,3,0,2,335,2,77,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Sid Draper,21,0,0,4,1,3,0,3,0,1,5,0,21,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Darcy Fogarty,42,2,0,7,4,3,3,3,0,0,108,1,83,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Mitchell Hinge,66,0,0,13,9,4,5,4,0,0,254,1,83,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Mark Keane,99,0,0,23,21,2,10,2,0,0,514,0,94,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Ben Keays,92,3,0,17,10,7,2,6,0,2,223,0,92,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Max Michalanney,57,0,0,10,4,6,0,8,0,0,129,0,88,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Wayne Milera,87,1,0,17,13,4,6,4,0,2,540,0,87,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Alex Neal-Bullen,99,1,0,25,14,11,6,4,0,0,352,2,80,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Reilly O'Brien,94,0,0,13,9,4,1,7,37,6,222,0,85,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,James Peatling,82,0,0,21,12,9,5,4,0,7,267,1,77,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Luke Pedlar,57,1,0,10,3,7,2,5,0,0,42,0,63,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Josh Rachele,65,3,1,13,12,1,3,1,0,1,345,2,81,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Izak Rankine,63,1,0,18,11,7,4,1,0,3,220,2,86,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Brodie Smith,69,1,0,17,14,3,2,2,0,1,522,0,82,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Jake Soligo,70,1,0,15,8,7,1,6,0,2,213,0,76,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Riley Thilthorpe,87,2,0,14,10,4,6,4,5,3,246,1,62,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Taylor Walker,44,1,0,9,6,3,3,1,3,1,215,1,81,SCG,1.59,Night,Win
+2025-05-31,Adelaide,Sydney,Josh Worrell,90,0,0,24,15,9,6,2,0,1,398,0,81,SCG,1.59,Night,Win
+2025-06-01,Dees,Saints,Jake Bowey,65,0,0,17,12,5,4,3,0,0,355,0,82,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Kade Chandler,78,1,1,12,11,1,7,4,0,3,284,0,80,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Bayley Fritsch,82,1,0,15,7,8,7,4,0,1,188,0,86,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Max Gawn,107,0,1,22,13,9,5,3,30,6,220,0,87,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Aidan Johnson,33,1,1,4,3,1,3,2,1,0,66,0,46,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Ed Langdon,64,0,0,13,10,3,4,4,0,3,293,0,84,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Harvey Langford,36,0,0,10,6,4,2,1,0,1,180,0,73,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Bailey Laurie,12,0,1,3,2,1,1,0,0,0,103,0,20,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Jake Lever,44,0,0,9,8,1,6,1,0,0,118,0,90,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Xavier Lindsay,58,0,3,14,6,8,4,2,0,1,322,0,83,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Steven May,99,0,0,21,18,3,10,2,0,0,446,0,96,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Judd McVee,76,0,2,20,12,8,6,1,0,0,373,0,85,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Jake Melksham,42,1,2,9,7,2,3,0,0,0,186,0,75,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Clayton Oliver,59,0,0,16,10,6,3,3,0,3,341,3,78,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Christian Petracca,75,2,1,22,11,11,3,1,0,5,448,0,87,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Harrison Petty,50,1,1,8,6,2,3,3,1,0,143,0,75,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Kysaiah Pickett,42,0,0,12,7,5,1,3,0,5,243,1,88,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Trent Rivers,75,0,0,14,7,7,5,6,0,1,186,0,75,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Christian Salem,77,0,1,14,10,4,6,5,0,0,163,0,85,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Harry Sharp,39,0,1,10,5,5,3,1,0,0,205,0,71,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Tom Sparrow,55,0,0,11,7,4,4,5,0,3,274,0,93,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Daniel Turner,75,0,1,14,12,2,10,1,0,0,433,0,86,Alice Springs,1.45,Day,Loss
+2025-06-01,Dees,Saints,Caleb Windsor,31,0,0,9,8,1,0,1,0,0,259,0,75,Alice Springs,1.45,Day,Loss
+2025-06-01,Saints,Dees,Hugh Boxshall,30,0,0,9,3,6,1,3,0,0,141,1,49,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Dan Butler,67,4,0,12,9,3,3,0,0,0,169,0,66,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Ryan Byrnes,69,0,0,20,10,10,5,1,0,0,158,0,86,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Anthony Caminiti,78,0,0,17,14,3,8,2,0,0,297,0,100,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jack Carroll,39,0,0,11,8,3,3,2,0,1,298,1,59,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Hunter Clark,86,1,1,20,7,13,6,5,0,1,184,1,76,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Max Hall,73,2,0,15,6,9,4,4,0,2,101,1,82,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jack Higgins,46,1,1,10,5,5,3,1,0,0,128,1,83,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Bradley Hill,120,1,0,26,23,3,13,0,0,0,678,0,93,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Zak Jones,69,0,0,20,10,10,5,1,0,3,243,0,75,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Isaac Keeler,66,3,1,10,9,1,6,0,0,0,198,0,87,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Rowan Marshall,92,0,0,16,12,4,5,5,22,3,147,0,83,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Mitch Owens,62,1,1,13,5,8,4,3,3,0,242,2,86,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Mattaes Phillipou,2,0,0,1,0,1,0,0,0,1,3,0,4,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Cooper Sharman,63,0,2,14,10,4,8,1,0,0,310,0,97,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jack Sinclair,112,0,0,25,23,2,7,4,0,2,364,0,84,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jack Steele,105,0,0,23,12,11,8,6,0,5,152,0,83,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Tobie Travaglia,67,1,0,13,10,3,7,1,0,1,408,0,71,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Nasiah Wanganeen-Milera,117,0,0,29,27,2,7,3,0,2,795,1,69,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Jimmy Webster,58,0,0,12,8,4,7,2,0,1,239,1,87,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Callum Wilkie,128,0,0,31,22,9,15,2,0,1,312,0,100,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Marcus Windhager,117,0,0,28,18,10,8,4,0,5,492,1,91,Alice Springs,2.65,Day,Win
+2025-06-01,Saints,Dees,Mason Wood,65,0,0,15,9,6,7,2,0,2,299,2,88,Alice Springs,2.65,Day,Win
+2025-06-01,Eagles,Geelong,Bo Allan,6,0,0,4,1,3,0,0,0,1,91,0,16,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Oscar Allen,63,4,0,8,5,3,3,2,0,0,159,1,87,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Liam Baker,82,0,0,29,13,16,1,3,0,2,462,1,87,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Sandy Brock,52,0,0,14,6,8,6,0,0,0,119,0,89,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Tyler Brockman,50,0,0,16,8,8,3,1,0,1,178,0,85,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Tom Cole,85,0,0,24,11,13,6,2,0,4,247,0,75,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Tyrell Dewar,51,0,1,18,11,7,2,0,0,0,322,0,82,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Liam Duggan,92,0,0,23,21,2,7,1,0,1,567,0,83,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Harry Edwards,66,0,0,13,7,6,4,5,0,1,336,0,90,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Matt Flynn,99,0,0,15,9,6,5,3,31,3,111,0,75,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Reuben Ginbey,45,0,0,16,8,8,1,1,0,1,263,0,86,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Jack Graham,58,0,0,19,8,11,2,3,0,1,175,0,76,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Elijah Hewett,75,1,1,20,11,9,1,4,0,7,354,1,79,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Brady Hough,40,0,0,9,3,6,1,4,0,2,121,0,84,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Jayden Hunt,44,0,0,12,6,6,2,2,0,1,203,0,84,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Jack Hutchinson,67,0,0,15,10,5,7,2,0,1,409,0,79,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Tim Kelly,81,1,0,19,8,11,7,2,0,0,193,0,84,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Noah Long,58,1,1,9,9,0,4,3,0,0,304,1,83,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Ryan Maric,63,0,0,15,10,5,6,2,0,0,264,0,65,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Archer Reid,32,0,0,6,4,2,2,0,8,2,174,3,69,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Harley Reid,73,1,1,19,9,10,3,4,0,7,348,0,79,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Liam Ryan,45,1,0,10,6,4,2,2,0,3,171,0,82,Perth,7.52,Twilight,Loss
+2025-06-01,Eagles,Geelong,Jack Williams,36,2,1,8,4,4,3,0,0,0,89,1,83,Perth,7.52,Twilight,Loss
+2025-06-01,Geelong,Eagles,Tom Atkins,92,0,0,15,13,2,6,10,0,4,164,0,75,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Mark Blicavs,41,0,0,8,3,5,2,2,7,2,-3,1,76,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Jeremy Cameron,102,5,2,14,12,2,7,3,0,0,351,1,86,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Ted Clohesy,17,0,0,4,2,2,1,1,0,2,61,0,6,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Brad Close,48,1,1,13,10,3,1,0,0,0,249,0,84,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Sam De Koning,42,0,0,12,8,4,3,1,0,0,251,0,89,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Oliver Dempsey,51,1,1,14,6,8,2,1,0,2,227,0,93,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Mitch Duncan,92,0,1,19,10,9,7,5,0,2,308,1,62,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Zach Guthrie,57,0,1,13,7,6,6,1,0,0,288,0,78,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Jack Henry,36,0,0,9,6,3,4,0,0,0,105,0,88,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Oliver Henry,50,2,0,6,5,1,2,4,0,1,135,1,82,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Max Holmes,108,0,2,27,19,8,7,3,0,7,853,0,76,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Lawson Humphries,61,0,0,12,10,2,4,3,0,0,253,1,79,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Shaun Mannagh,79,1,0,18,16,2,8,0,0,4,432,1,84,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Gryan Miers,137,2,1,26,21,5,13,3,0,1,552,0,86,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Oisin Mullin,54,0,0,9,5,4,2,6,0,2,103,0,66,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Shannon Neale,67,1,0,8,5,3,5,5,7,0,71,0,88,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Mark O'Connor,73,0,0,15,12,3,6,4,0,0,253,0,92,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Connor O'Sullivan,76,0,0,20,7,13,5,3,0,0,258,2,93,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Bailey Smith,147,1,1,38,27,11,7,4,0,5,834,0,86,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Rhys Stanley,60,1,0,9,1,8,1,3,26,4,49,0,70,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Tyson Stengle,88,2,1,18,11,7,5,4,0,0,315,3,81,Perth,1.07,Twilight,Win
+2025-06-01,Geelong,Eagles,Tom Stewart,73,0,0,18,14,4,7,1,0,0,442,0,82,Perth,1.07,Twilight,Win
