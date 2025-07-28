@@ -44,6 +44,41 @@ def enrich(df):
     df['is_home_game'] = df.apply(lambda row: row['Venue'] == home_ground_map.get(row['Team'], ''), axis=1)
     df['is_away_game'] = ~df['is_home_game']
 
+    # --- WET/DRY Weather Features ---
+    df['is_wet_game'] = df['Conditions'].str.lower() == 'wet'
+    df['is_dry_game'] = df['Conditions'].str.lower() == 'dry'
+
+    # Rolling average disposals in last 3 wet games for each player
+    df['wet_disposals_last_3'] = (
+        grouped.apply(lambda group: 
+            group['Disposals']
+            .where(group['is_wet_game'])
+            .shift(1)
+            .rolling(3, min_periods=1)
+            .mean()
+        ).reset_index(level=0, drop=True)
+    )
+
+    # Rolling average disposals in last 3 dry games for each player
+    df['dry_disposals_last_3'] = (
+        grouped.apply(lambda group: 
+            group['Disposals']
+            .where(group['is_dry_game'])
+            .shift(1)
+            .rolling(3, min_periods=1)
+            .mean()
+        ).reset_index(level=0, drop=True)
+    )
+
+    # Wet vs Dry disposals ratio (last 3 games of each, shift to avoid leakage)
+    df['wet_dry_disp_ratio_last_3'] = (
+        df['wet_disposals_last_3'] / df['dry_disposals_last_3']
+    )
+
+    # Boolean: is this game wet?
+    df['is_wet_game'] = df['is_wet_game'].astype(int)
+    df['is_dry_game'] = df['is_dry_game'].astype(int)
+
     df['timeslot_category'] = df['Timeslot'].str.lower().map({
         'day': 'day', 'twilight': 'twilight', 'night': 'night'
     }).fillna('unknown')

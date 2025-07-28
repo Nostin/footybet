@@ -9,14 +9,14 @@ with engine.begin() as conn:
     conn.execute(text("""
         DROP TABLE IF EXISTS player_stats_train;
         CREATE TABLE player_stats_train AS
-        SELECT * FROM player_stats WHERE "Date" < '2025-05-27';
+        SELECT * FROM player_stats WHERE "Date" < '2025-07-01';
     """))
 
     # Raw test set
     conn.execute(text("""
         DROP TABLE IF EXISTS player_stats_test_raw;
         CREATE TABLE player_stats_test_raw AS
-        SELECT * FROM player_stats WHERE "Date" >= '2025-05-27';
+        SELECT * FROM player_stats WHERE "Date" >= '2025-05-01';
     """))
 
 # Only use players with ≥7 games and ≥18 avg disposals
