@@ -1,5 +1,5 @@
 import pandas as pd
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from db_connect import get_engine
 import numpy as np
 
@@ -158,4 +158,7 @@ for player in df['Player'].unique():
 
 df_pre = pd.DataFrame(precomputes)
 df_pre.to_sql("player_precomputes", engine, if_exists="replace", index=False)
+with engine.connect() as conn:
+    conn.execute(text('CREATE INDEX IF NOT EXISTS idx_player_precomputes_player ON player_precomputes ("Player")'))
+
 print("✅ player_precomputes table written (2025 season splits + rolling windows from all years)")
