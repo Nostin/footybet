@@ -17,26 +17,50 @@ HOME_GROUNDS = {
     'Suns': ['Gold Coast', 'Darwin'],
     'GWS': ['Engie', 'Canberra'],
     'Hawthorn': ['MCG', 'Launceston'],
-    'North Melbourne': ['Docklands', 'Hobart'],
-    'Port Adelaide': ['Adelaide'],
+    'Norf': ['Docklands', 'Hobart'],
+    'Port': ['Adelaide'],
     'Richmond': ['MCG'],
     'Saints': ['Docklands'],
     'Sydney': ['SCG'],
-    'West Coast': ['Perth'],
-    'Western Bulldogs': ['Docklands', 'Ballarat'],
+    'Eagles': ['Perth'],
+    'Bulldogs': ['Docklands', 'Ballarat'],
 }
+
+# need this to work out days since last game
+upcoming_games_df = pd.read_sql('SELECT * FROM upcoming_games', engine)
+for col in ["Home Team", "Away Team", "Venue", "Timeslot"]:
+    if col in upcoming_games_df.columns:
+        upcoming_games_df[col] = upcoming_games_df[col].astype(str).str.strip()
+upcoming_games_df["Date"] = pd.to_datetime(upcoming_games_df["Date"], errors="coerce")
 
 df = pd.read_sql('SELECT * FROM player_stats ORDER BY "Date" DESC', engine)
 df['Date'] = pd.to_datetime(df['Date'])
 df_2025 = df[df['Date'] >= '2025-01-01']
 
 def summary_stats(s):
+    # avg = np.mean(s)
+    # var = np.var(s, ddof=0)
+    # cv = var / avg if avg > 0 else 0  # Coefficient of Variation
+
+    # Cap disposals at 35 to reduce impact of outlier highs
+    capped = s.clip(upper=35)
+
+    avg = np.mean(capped)
+    med = np.median(capped)
+    high = np.max(capped)
+    low = np.min(capped)
+    var = np.var(capped, ddof=0)
+
+    # Coefficient of Variation (unitless dispersion metric)
+    cv = round(var / avg, 3) if avg > 0 else 0
+
     return pd.Series({
-        'Avg': np.mean(s),
+        'Avg': avg,
         'Median': np.median(s),
         'High': np.max(s),
         'Low': np.min(s),
-        'Variance': np.var(s, ddof=0)
+        # 'Variance': var,
+        'Variance': cv
     })
 
 def compute_for_split(df, mask, prefix):
@@ -75,13 +99,45 @@ for player in df['Player'].unique():
     # 2025 and all games
     pgroup_2025 = df_2025[df_2025['Player'] == player]
     pgroup_all = df[df['Player'] == player]
+    row["Games_This_Season"] = len(pgroup_2025)
 
-    # Days since last game
+    # Days between last game and next game
+    # --- Find Next Opponent / Venue / Timeslot ---
     if not pgroup_all.empty:
         last_game_date = pgroup_all['Date'].max()
-        row['Days_since_last_game'] = (pd.Timestamp.now().normalize() - last_game_date).days
+
+        # Get team from latest game
+        team = (pgroup_2025['Team'].iloc[-1] if not pgroup_2025.empty else pgroup_all['Team'].iloc[-1]).strip()
+
+
+        # Find next game where this team is home or away
+        mask = (upcoming_games_df["Home Team"] == team) | (upcoming_games_df["Away Team"] == team)
+        next_games = upcoming_games_df[mask]
+        next_games = next_games[next_games["Date"] > last_game_date].sort_values("Date")
+
+        if not next_games.empty:
+            next_game = next_games.iloc[0]
+            row["Next_Venue"] = next_game["Venue"]
+            row["Next_Timeslot"] = next_game["Timeslot"]
+
+            # Work out opponent
+            if next_game["Home Team"] == team:
+                row["Next_Opponent"] = next_game["Away Team"]
+            else:
+                row["Next_Opponent"] = next_game["Home Team"]
+
+            # Also set days since last game (keep your existing behaviour)
+            row["Days_since_last_game"] = (next_game["Date"] - last_game_date).days
+        else:
+            row["Next_Opponent"] = ''
+            row["Next_Venue"] = ''
+            row["Next_Timeslot"] = ''
+            row["Days_since_last_game"] = np.nan
     else:
-        row['Days_since_last_game'] = np.nan
+        row["Next_Opponent"] = ''
+        row["Next_Venue"] = ''
+        row["Next_Timeslot"] = ''
+        row["Days_since_last_game"] = np.nan
 
     # ToG
     tog_col = 'Time on Ground %'
@@ -93,10 +149,29 @@ for player in df['Player'].unique():
         row['ToG_Last'] = np.nan
 
     # Missed game time
-    last_4 = pgroup_all.sort_values('Date').tail(4)
-    row['Missed_Game_Time'] = (
-        last_4.empty or last_4[tog_col].isnull().any() or (last_4[tog_col] < 50).any()
-    )
+    # Get team from latest game (2025 preferred)
+    team = pgroup_2025['Team'].iloc[-1] if not pgroup_2025.empty else pgroup_all['Team'].iloc[-1]
+
+    # Get last 4 matches that the team played
+    team_games = df[df['Team'] == team].drop_duplicates(subset='Date').sort_values('Date').tail(4)
+    missed_time = False
+
+    for game_date in team_games['Date']:
+        # Check if player played on that date for this team
+        played = (
+            (pgroup_all['Date'] == game_date) &
+            (pgroup_all['Team'] == team)
+        )
+        if not played.any():
+            missed_time = True
+            break
+        else:
+            tog = pgroup_all.loc[played, tog_col].iloc[0]
+            if pd.isna(tog) or tog < 50:
+                missed_time = True
+                break
+
+    row['Missed_Game_Time'] = missed_time
 
     # Team (assign to row, don't re-create row)
     team = pgroup_2025['Team'].iloc[-1] if not pgroup_2025.empty else pgroup_all['Team'].iloc[-1]
@@ -147,12 +222,37 @@ for player in df['Player'].unique():
         row.update(compute_for_split(last_n_away, last_n_away['Disposals'].notnull(), f"Disposal_{N}_Away"))
 
     # Add empty prediction fields (placeholders for now)
-    row["Prob_20_Disp_Dry"] = np.nan
-    row["Prob_20_Disp_Wet"] = np.nan
-    row["Prob_25_Disp_Dry"] = np.nan
-    row["Prob_25_Disp_Wet"] = np.nan
-    row["Prob_30_Disp_Dry"] = np.nan
-    row["Prob_30_Disp_Wet"] = np.nan
+    row["Prob_20_Disposals"] = np.nan
+    row["Prob_25_Disposals"] = np.nan
+    row["Prob_30_Disposals"] = np.nan
+
+    # Full 2025 season FloorScore
+    if not pgroup_2025.empty:
+        med = pgroup_2025['Disposals'].median()
+        floor_drops = med - pgroup_2025['Disposals']
+        floor_drops = floor_drops[floor_drops > 0]
+        mean_drop = floor_drops.mean() if not floor_drops.empty else 0
+        score = round(1 - (mean_drop / med), 3) if med > 0 else np.nan
+    else:
+        score = np.nan
+
+    row['Disposal_Season_DropConsistency'] = score
+
+    # --- Floor score: consistency against the median ---
+    for N in [3, 6, 10, 22]:
+        recent_games = pgroup_all.sort_values("Date").tail(N)
+        if not recent_games.empty:
+            med = recent_games['Disposals'].median()
+            floor_drops = med - recent_games['Disposals']
+            floor_drops = floor_drops[floor_drops > 0]
+            mean_drop = floor_drops.mean() if not floor_drops.empty else 0
+            score = round(1 - (mean_drop / med), 3) if med > 0 else np.nan
+        else:
+            score = np.nan
+
+        row[f'Disposal_{N}_DropConsistency'] = score
+
+
 
     precomputes.append(row)
 
@@ -160,5 +260,6 @@ df_pre = pd.DataFrame(precomputes)
 df_pre.to_sql("player_precomputes", engine, if_exists="replace", index=False)
 with engine.connect() as conn:
     conn.execute(text('CREATE INDEX IF NOT EXISTS idx_player_precomputes_player ON player_precomputes ("Player")'))
+    conn.execute(text('CREATE INDEX IF NOT EXISTS idx_player_precomputes_team ON player_precomputes ("Team")'))
 
 print("✅ player_precomputes table written (2025 season splits + rolling windows from all years)")

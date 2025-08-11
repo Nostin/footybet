@@ -2,22 +2,20 @@ import pandas as pd
 from sqlalchemy import text
 from db_connect import get_engine
 
-def create_player_stats_table():
-    # Get database engine
+def import_csv_to_table(csv_filename, table_name):
     engine = get_engine()
-    
-    # Drop table if exists
+
     with engine.connect() as conn:
-        conn.execute(text("DROP TABLE IF EXISTS player_stats"))
+        conn.execute(text(f"DROP TABLE IF EXISTS {table_name}"))
         conn.commit()
-    
-    # Read CSV file
-    df = pd.read_csv('2025_footy_player_stats.csv')
-    
-    # Create table and import data
-    df.to_sql('player_stats', engine, if_exists='replace', index=False)
-    
-    print("Table 'player_stats' created and data imported successfully!")
+
+    df = pd.read_csv(csv_filename)
+    df.to_sql(table_name, engine, if_exists='replace', index=False)
+    print(f"✅ Table '{table_name}' created and data from '{csv_filename}' imported successfully!")
+
+def main():
+    import_csv_to_table('2025_footy_player_stats.csv', 'player_stats')
+    import_csv_to_table('afl_upcoming_games.csv', 'upcoming_games')
 
 if __name__ == "__main__":
-    create_player_stats_table()
+    main()

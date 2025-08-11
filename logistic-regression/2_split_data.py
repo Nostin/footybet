@@ -4,19 +4,21 @@ from db_connect import get_engine
 
 engine = get_engine()
 
+CUTOFF_DATE = '2025-07-29'
+
 with engine.begin() as conn:
     # Training data
-    conn.execute(text("""
+    conn.execute(text(f"""
         DROP TABLE IF EXISTS player_stats_train;
         CREATE TABLE player_stats_train AS
-        SELECT * FROM player_stats WHERE "Date" < '2025-07-01';
+        SELECT * FROM player_stats WHERE "Date" < '{CUTOFF_DATE}';
     """))
 
     # Raw test set
-    conn.execute(text("""
-        DROP TABLE IF EXISTS player_stats_test_raw;
-        CREATE TABLE player_stats_test_raw AS
-        SELECT * FROM player_stats WHERE "Date" >= '2025-05-01';
+    conn.execute(text(f"""
+        DROP TABLE IF EXISTS player_stats_test;
+        CREATE TABLE player_stats_test AS
+        SELECT * FROM player_stats WHERE "Date" >= '{CUTOFF_DATE}';
     """))
 
 # Only use players with ≥7 games and ≥18 avg disposals
@@ -29,7 +31,7 @@ eligible_players_query = """
 eligible_players = pd.read_sql(eligible_players_query, engine)
 
 # Filter test data to eligible players
-test_raw = pd.read_sql("SELECT * FROM player_stats_test_raw", engine)
+test_raw = pd.read_sql("SELECT * FROM player_stats_test", engine)
 test_filtered = test_raw.merge(eligible_players, on=["Team", "Player"], how="inner")
 
 # Save targets separately for evaluation

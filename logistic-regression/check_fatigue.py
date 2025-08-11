@@ -1,3 +1,4 @@
+# this script just checks what goes on with player rest between games - see if 5 day breaks have an effect or not
 import pandas as pd
 import numpy as np
 from db_connect import get_engine
