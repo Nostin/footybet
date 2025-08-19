@@ -1,11 +1,12 @@
 # 501_build_team_ratings_fastest.py
 # Builds team ratings and season summary from player-level table.
-# - One row per match -> Elo + Glicko2 updates
+# - One row per match -> Elo + Glicko2 updates (robust bisection; bounded iters)
 # - Home-ground advantage, Elo start-of-season regression, Glicko RD inflation
-# - Robust Glicko2 (pure bisection; bounded iterations)
-# - Date coalescing: handles Date/date/match_date columns gracefully
+# - Optional between-game RD drift (captures uncertainty between fixtures)
+# - Logs Glicko expected winprob and volatility (sigma), enabling a "season_surprise" metric
+# - Finals (EF/QF/SF/PF/GF) are EXCLUDED from ladder points, percentage, and ladder position
 # - Outputs:
-#     * team_games   (per-game audit)
+#     * team_games   (per-game audit with expectations & post-ratings)
 #     * --dest table (season summary: one row per team)
 
 import math, time, argparse
@@ -18,13 +19,23 @@ from db_connect import get_engine
 ap = argparse.ArgumentParser()
 ap.add_argument("--source", default="player_stats", help="Input table with player-level rows")
 ap.add_argument("--dest", default="teams", help="Output table for season summary (one row per team)")
+
+# Elo knobs
 ap.add_argument("--k-elo", type=float, default=24.0, help="Elo K-factor")
-ap.add_argument("--home-adv", type=float, default=0.0, help="Home-ground advantage in Elo points (applied when venue/team mapping says home)")
-ap.add_argument("--elo-regress", type=float, default=0.0, help="Start-of-season Elo regression weight to mean 1500.0 (0..1)")
+ap.add_argument("--home-adv", type=float, default=0.0, help="Home-ground advantage in Elo points")
+ap.add_argument("--elo-regress", type=float, default=0.0, help="Start-of-season Elo regression weight towards 1500 (0..1)")
+
+# Glicko knobs
 ap.add_argument("--skip-glicko", action="store_true", help="Skip Glicko-2 (Elo only)")
-ap.add_argument("--glicko-tau", type=float, default=0.5, help="Glicko-2 volatility constraint tau")
-ap.add_argument("--glicko-tol", type=float, default=1e-5, help="Glicko-2 root-solve tolerance (bisection)")
-ap.add_argument("--g2-rd-inflate", type=float, default=0.0, help="Start-of-season RD inflation factor, e.g. 0.30 -> RD *= 1.30 (clamped to [30,350])")
+ap.add_argument("--glicko-tau", type=float, default=0.9, help="Glicko-2 volatility constraint tau (higher = more responsive sigma)")
+ap.add_argument("--glicko-tol", type=float, default=1e-5, help="Glicko-2 solve tolerance (bisection)")
+ap.add_argument("--g2-init-rd", type=float, default=350.0, help="Initial Glicko RD")
+ap.add_argument("--g2-init-vol", type=float, default=0.12, help="Initial Glicko volatility (sigma)")
+ap.add_argument("--g2-rd-inflate", type=float, default=0.0, help="Start-of-season RD inflation, e.g. 0.30 => RD *= 1.30 (clamped [30,350])")
+ap.add_argument("--g2-rd-decay-per-day", type=float, default=0.6,
+                help="Between-game RD drift (per day) added in quadrature; e.g. 0.6 ~ 4 RD per idle week")
+
+# IO / filters
 ap.add_argument("--only-after", default=None, help="YYYY-MM-DD filter to only process games after this date")
 ap.add_argument("--chunksize", type=int, default=20000, help="DB write chunk size")
 args = ap.parse_args()
@@ -40,13 +51,14 @@ engine = get_engine()
 
 # ---------- Ratings constants ----------
 INIT_ELO = 1500.0
-G2_INIT_R, G2_INIT_RD, G2_INIT_VOL = 1500.0, 350.0, 0.06
+G2_INIT_R  = 1500.0
+G2_INIT_RD = float(args.g2_init_rd)
+G2_INIT_VOL= float(args.g2_init_vol)
 G2_Q = math.log(10)/400.0
 G2_SCALE = 173.7178
 
 # ---------- Optional alias normalization ----------
 ALIASES = {
-    # Nicknames -> canonical
     "Dees": "Melbourne",
     "GWS": "GWS Giants",
     "Bulldogs": "Western Bulldogs",
@@ -61,20 +73,18 @@ ALIASES = {
     "Lions": "Brisbane",
 }
 
-# ---------- Optional venue -> home team map (fill in what you know) ----------
-# If a venue has multiple home tenants (MCG, Marvel, Adelaide), we leave it blank and no HGA is applied.
+# ---------- Venue -> home team map (extend as needed) ----------
 VENUE_HOME = {
     "SCG": "Sydney",
     "Gabba": "Brisbane",
     "Brisbane": "Brisbane",
     "Geelong": "Geelong",     # GMHBA
     "Gold Coast": "Gold Coast",
-    "Perth": None,            # Optus: West Coast & Fremantle -> ambiguous
-    "Adelaide": None,         # Adelaide Oval: Adelaide & Port -> ambiguous
-    "MCG": None,              # shared
-    "Marvel": None,           # shared
-    "Engie": "GWS Giants",    # Sydney Showground (name may vary in your data)
-    # add others as needed
+    "Perth": None,            # Optus: West Coast & Fremantle (ambiguous)
+    "Adelaide": None,         # Adelaide Oval: Adelaide & Port (ambiguous)
+    "MCG": None,
+    "Marvel": None,
+    "Engie": "GWS Giants",    # Showground (name may vary)
 }
 
 def is_home(team: str, venue: str) -> bool:
@@ -91,7 +101,7 @@ def E_glicko(mu, mu_j, phi_j):
     return 1.0 / (1.0 + math.exp(-g_glicko(phi_j) * (mu - mu_j)))
 
 def glicko2_one_match(r, RD, vol, s, r_op, RD_op, tau=0.5, tol=1e-5, max_iter=60):
-    """Robust single-opponent Glicko-2 update (pure bisection, bounded iterations)."""
+    """Robust single-opponent Glicko-2 update (pure bisection, bounded iterations). Returns (r', RD', vol', expected_prob)."""
     mu,  phi  = (r - 1500.0) / G2_SCALE, RD / G2_SCALE
     muj, phij = (r_op - 1500.0) / G2_SCALE, RD_op / G2_SCALE
 
@@ -127,10 +137,10 @@ def glicko2_one_match(r, RD, vol, s, r_op, RD_op, tau=0.5, tol=1e-5, max_iter=60
 
     fa, fb = f(A), f(B)
     if not np.isfinite(fa) or not np.isfinite(fb) or fa * fb > 0:
-        # fallback: keep volatility; still update rating deviation & rating lightly
+        # fallback: keep volatility; still move lightly
         phi_star = math.sqrt(phi**2 + vol**2)
         phi_new  = phi_star
-        mu_new   = mu + (phi_new**2) * gj * (s - e) * 0.0
+        mu_new   = mu  # no movement if we can't solve reliably
         r_new  = 1500.0 + G2_SCALE * mu_new
         RD_new = G2_SCALE * phi_new
         return r_new, RD_new, vol, e
@@ -161,25 +171,28 @@ def glicko2_one_match(r, RD, vol, s, r_op, RD_op, tau=0.5, tol=1e-5, max_iter=60
     RD_new = G2_SCALE * phi_new
     return r_new, RD_new, sigma_prime, e
 
+def inflate_rd_for_gap(RD, days_gap, per_day):
+    """Glicko-1 style drift: RD' = sqrt(RD^2 + (per_day * days_gap)^2), clamped to [30,350]."""
+    if per_day <= 0 or days_gap <= 0:
+        return RD
+    RDp = math.sqrt(RD*RD + (per_day * days_gap)**2)
+    return min(350.0, max(30.0, RDp))
+
 def coalesce_dates(df) -> pd.Series:
     """Return a single datetime series from any of ['Date','date','match_date']."""
     candidates = [c for c in df.columns if c.lower() in ("date", "match_date")]
     if "Date" not in df.columns and candidates:
-        # merge multiple candidates left-to-right
         s = None
         for c in candidates:
             tmp = pd.to_datetime(df[c], errors="coerce")
             s = tmp if s is None else s.fillna(tmp)
         return s
-    # default: use 'Date'
     return pd.to_datetime(df["Date"], errors="coerce")
 
+# ---------- Load & collapse to one row per team–game ----------
 t0 = time.perf_counter()
 print("▶︎ Stage 1/5: reading ONE ROW PER TEAM–GAME from DB...")
 
-# ---------- 1) ONE ROW PER TEAM–GAME ----------
-# Approach: pick the first row per (Date, Team, Opponent) from player table.
-# We try a PG DISTINCT ON variant; fall back to a portable window; fall back to pandas.
 team_game_sql_pg = f"""
 SELECT DISTINCT ON ("Date","Team","Opponent")
   "Date","Team","Opponent","Round","Venue","Timeslot",
@@ -202,7 +215,6 @@ if args.only_after:
     team_game_sql_pg  = team_game_sql_pg.replace(
         "ORDER BY", 'WHERE "Date" > :after\nORDER BY'
     )
-    # portable variant: filter inside subquery
     team_game_sql_win = f"""
     SELECT
       "Date","Team","Opponent","Round","Venue","Timeslot","Team Score" AS team_score
@@ -216,14 +228,13 @@ if args.only_after:
     """
     params = {"after": args.only_after}
 
-# try PG path, else window path, else last-resort Pandas
+# try PG path, else window path, else portable pandas
 try:
     tg = pd.read_sql(text(team_game_sql_pg), engine, params=params)
 except Exception:
     try:
         tg = pd.read_sql(text(team_game_sql_win), engine, params=params)
     except Exception:
-        # portable fallback: read minimal columns then dedupe in pandas
         cols = '"Date","Team","Opponent","Round","Venue","Timeslot","Team Score" AS team_score'
         where_clause = 'WHERE "Date" > :after' if args.only_after else ''
         q = text(f'SELECT {cols} FROM {args.source} {where_clause}')
@@ -232,7 +243,7 @@ except Exception:
                 .drop_duplicates(subset=["Date","Team","Opponent"])
                 .drop(columns=["Player"], errors="ignore"))
 
-# Date coalescing & cleaning
+# date clean
 tg["Date"] = coalesce_dates(tg)
 nat_count = tg["Date"].isna().sum()
 if nat_count:
@@ -250,23 +261,20 @@ tg = tg.dropna(subset=["team_score"])
 
 print(f"   ✓ team-game rows: {len(tg):,} (took {time.perf_counter()-t0:.2f}s)")
 
-# ---------- 2) ONE ROW PER MATCH ----------
+# ---------- Pair to one row per match ----------
 t1 = time.perf_counter()
 print("▶︎ Stage 2/5: pairing team-games into matches...")
 
-# key by (date, unordered teams)
 tg["_pair_key"] = (
     tg["Date"].dt.strftime("%Y-%m-%d") + "|" +
     tg[["Team","Opponent"]].apply(lambda x: "|".join(sorted(x)), axis=1)
 )
 
-# sanity on malformed pairs
 counts = tg["_pair_key"].value_counts()
 bad_keys = counts[counts != 2]
 if len(bad_keys):
     print(f"   ⚠️ {len(bad_keys)} malformed matches (not 2 rows) — they will be skipped.")
     dbg = tg[tg["_pair_key"].isin(bad_keys.index)].sort_values(["Date","Team","Opponent"])
-    # print a few to help fix data
     print(dbg[["Date","Team","Opponent","Round","Venue","Timeslot","team_score"]].head(12).to_string(index=False))
 
 pairs = []
@@ -285,7 +293,7 @@ matches = pd.DataFrame(pairs).sort_values(["Date","team_a","team_b"]).reset_inde
 matches["season"] = matches["Date"].dt.year.astype(int)
 print(f"   ✓ matches: {len(matches):,} (took {time.perf_counter()-t1:.2f}s)")
 
-# ---------- 3) Per-team frame + tallies (vectorised) ----------
+# ---------- Build per-team rows + tallies ----------
 t2 = time.perf_counter()
 print("▶︎ Stage 3/5: computing percentage & season tallies...")
 
@@ -317,12 +325,13 @@ lookup = teams_rows.set_index(["Date","Team","Opponent"])[[
 ]]
 print(f"   ✓ tallies built in {time.perf_counter()-t2:.2f}s")
 
-# ---------- 4) Iterate matches -> Elo + Glicko2 (bounded, fast) ----------
+# ---------- Iterate matches -> Elo + Glicko2 ----------
 print("▶︎ Stage 4/5: updating Elo + Glicko2...")
 
-elo = {}                                 # team -> rating
-g2  = {}                                 # team -> (r, RD, vol)
-last_season_seen = {}                    # team -> season (for start-of-season logic)
+elo = {}              # team -> rating
+g2  = {}              # team -> (r, RD, vol)
+last_season_seen = {} # team -> season
+last_played = {}      # team -> last match date (for RD drift)
 
 rows = []
 
@@ -332,18 +341,15 @@ for row in pbar(matches.itertuples(index=False), total=len(matches), desc="Match
     teamA, teamB = row.team_a, row.team_b
     scA, scB     = float(row.score_a), float(row.score_b)
 
-    # outcomes
     SA = 1.0 if scA>scB else 0.0 if scA<scB else 0.5
     SB = 1.0 - SA if SA in (0.0,1.0) else 0.5
 
-    # pre states
     RA = elo.get(teamA, INIT_ELO); RB = elo.get(teamB, INIT_ELO)
     rA, rdA, volA = g2.get(teamA, (G2_INIT_R, G2_INIT_RD, G2_INIT_VOL))
     rB, rdB, volB = g2.get(teamB, (G2_INIT_R, G2_INIT_RD, G2_INIT_VOL))
 
-    # start-of-season adjustments
+    # start-of-season adjustments (Elo regression + RD inflation)
     if last_season_seen.get(teamA) not in (None, season):
-        # new season for A
         if args.elo_regress > 0:
             RA = (1.0 - args.elo_regress)*RA + args.elo_regress*INIT_ELO
         if args.g2_rd_inflate > 0:
@@ -354,32 +360,39 @@ for row in pbar(matches.itertuples(index=False), total=len(matches), desc="Match
         if args.g2_rd_inflate > 0:
             rdB = min(350.0, max(30.0, rdB * (1.0 + args.g2_rd_inflate)))
 
-    # determine home advantage (per venue mapping)
+    # between-game RD drift (days since last match)
+    gapA = (date - last_played.get(teamA, date)).days if teamA in last_played else 0
+    gapB = (date - last_played.get(teamB, date)).days if teamB in last_played else 0
+    rdA = inflate_rd_for_gap(rdA, gapA, args.g2_rd_decay_per_day)
+    rdB = inflate_rd_for_gap(rdB, gapB, args.g2_rd_decay_per_day)
+
+    # home advantage
     H_A = args.home_adv if is_home(teamA, row.Venue) else 0.0
     H_B = args.home_adv if is_home(teamB, row.Venue) else 0.0
 
-    # Elo expectation (allow both sides to have HGA if venue ambiguous = 0.0 for both)
+    # Elo expectation and update
     EA = 1.0 / (1.0 + 10.0 ** (-((RA + H_A) - (RB + H_B)) / 400.0))
     EB = 1.0 - EA
-
     RA_post = RA + args.k_elo * (SA - EA)
     RB_post = RB + args.k_elo * (SB - EB)
 
-    # Glicko-2
+    # Glicko-2 (also capture expectations EA_g/EB_g)
     if not args.skip_glicko:
-        rA_post, rdA_post, volA_post, _ = glicko2_one_match(rA, rdA, volA, SA, rB, rdB,
-                                                            tau=args.glicko_tau, tol=args.glicko_tol)
-        rB_post, rdB_post, volB_post, _ = glicko2_one_match(rB, rdB, volB, SB, rA, rdA,
-                                                            tau=args.glicko_tau, tol=args.glicko_tol)
+        rA_post, rdA_post, volA_post, EA_g = glicko2_one_match(
+            rA, rdA, volA, SA, rB, rdB, tau=args.glicko_tau, tol=args.glicko_tol
+        )
+        rB_post, rdB_post, volB_post, EB_g = glicko2_one_match(
+            rB, rdB, volB, SB, rA, rdA, tau=args.glicko_tau, tol=args.glicko_tol
+        )
     else:
-        rA_post, rdA_post, volA_post = rA, rdA, volA
-        rB_post, rdB_post, volB_post = rB, rdB, volB
+        rA_post, rdA_post, volA_post, EA_g = rA, rdA, volA, EA
+        rB_post, rdB_post, volB_post, EB_g = rB, rdB, volB, EB
 
     # tallies for this match
     A_info = lookup.loc[(date, teamA, teamB)]
     B_info = lookup.loc[(date, teamB, teamA)]
 
-    def pack(team, opp, pf, pa, info, pre, post, exp, r_pre, rd_pre, vol_pre, r_po, rd_po, vol_po):
+    def pack(team, opp, pf, pa, info, pre, post, exp, r_pre, rd_pre, vol_pre, r_po, rd_po, vol_po, g2exp):
         return {
             "Date": date, "season": season,
             "Round": getattr(row, "Round", None),
@@ -395,10 +408,11 @@ for row in pbar(matches.itertuples(index=False), total=len(matches), desc="Match
             "elo_pre": pre, "elo_exp_winprob": exp, "elo_post": post,
             "g2_rating_pre": r_pre, "g2_rd_pre": rd_pre, "g2_vol_pre": vol_pre,
             "g2_rating_post": r_po, "g2_rd_post": rd_po, "g2_vol_post": vol_po,
+            "g2_exp_winprob": g2exp,
         }
 
-    rows.append(pack(teamA, teamB, scA, scB, A_info, RA, RA_post, EA, rA, rdA, volA, rA_post, rdA_post, volA_post))
-    rows.append(pack(teamB, teamA, scB, scA, B_info, RB, RB_post, EB, rB, rdB, volB, rB_post, rdB_post, volB_post))
+    rows.append(pack(teamA, teamB, scA, scB, A_info, RA, RA_post, EA, rA, rdA, volA, rA_post, rdA_post, volA_post, EA_g))
+    rows.append(pack(teamB, teamA, scB, scA, B_info, RB, RB_post, EB, rB, rdB, volB, rB_post, rdB_post, volB_post, EB_g))
 
     # commit states
     elo[teamA], elo[teamB] = RA_post, RB_post
@@ -406,11 +420,13 @@ for row in pbar(matches.itertuples(index=False), total=len(matches), desc="Match
     g2[teamB] = (rB_post, rdB_post, volB_post)
     last_season_seen[teamA] = season
     last_season_seen[teamB] = season
+    last_played[teamA] = date
+    last_played[teamB] = date
 
 team_table = pd.DataFrame(rows).sort_values(["Date","Team"]).reset_index(drop=True)
 print(f"   ✓ ratings computed for {len(matches):,} matches")
 
-# ---------- 5) Write per-game audit + season summary (finals excluded) ----------
+# ---------- Write per-game audit + season summary (finals excluded for ladder) ----------
 t3 = time.perf_counter()
 print("▶︎ Stage 5/5: writing tables...")
 
@@ -418,18 +434,22 @@ print("▶︎ Stage 5/5: writing tables...")
 team_table.to_sql("team_games", engine, if_exists="replace", index=False,
                   method="multi", chunksize=args.chunksize)
 
-# finals filter
+# Finals filter for ladder stats
 FINALS = {"EF", "QF", "SF", "PF", "GF"}
 def is_finals_round(x):
-    if x is None: 
+    if x is None:
         return False
     s = str(x).strip().upper()
     return s in FINALS
 
 team_table["is_finals"] = team_table["Round"].apply(is_finals_round)
 
-# ---- Regular-season only for ladder stats ----
+# Regular-season slice for ladder metrics & surprise
 reg = team_table[~team_table["is_finals"]].copy()
+res_map = {"Win":1.0, "Loss":0.0, "Draw":0.5}
+reg["S"] = reg["result"].map(res_map).astype(float)
+# Surprise = |actual - expected by Glicko|
+reg["g2_surprise"] = (reg["S"] - reg["g2_exp_winprob"]).abs()
 
 # season totals (regular season)
 season_totals = (
@@ -440,38 +460,38 @@ season_totals = (
            season_draws  = ("result", lambda s: (s=="Draw").sum()),
            pf            = ("points_for", "sum"),
            pa            = ("points_against", "sum"),
+           season_surprise = ("g2_surprise", "mean"),
        )
 )
-
-# percentage from regular-season PF/PA
 season_totals["season_percentage"] = 100.0 * season_totals["pf"] / season_totals["pa"].replace(0, np.nan)
 
-# final post-ratings after last game (can be finals as well)
+# last post-ratings (may include finals; that's okay for strength going forward)
 last_posts = (team_table
               .sort_values(["season","Team","Date"])
               .groupby(["season","Team"], as_index=False)
               .tail(1)
-              [["season","Team","elo_post","g2_rating_post","g2_rd_post"]]
+              [["season","Team","elo_post","g2_rating_post","g2_rd_post","g2_vol_post"]]
               .rename(columns={
                   "elo_post":"elo",
                   "g2_rating_post":"glicko",
-                  "g2_rd_post":"glicko_rd"
+                  "g2_rd_post":"glicko_rd",
+                  "g2_vol_post":"glicko_vol",
               }))
 
 summary = season_totals.merge(last_posts, on=["season","Team"], how="left")
 
 # ladder points/position (AFL: 4 for win, 2 for draw) — regular season only
 summary["ladder_points"] = 4*summary["season_wins"] + 2*summary["season_draws"]
-
 summary = summary.sort_values(["season","ladder_points","season_percentage","pf"],
                               ascending=[True, False, False, False])
 summary["ladder_position"] = summary.groupby("season").cumcount() + 1
 
 summary = summary[[
     "season", "Team",
-    "elo", "glicko", "glicko_rd",
+    "elo", "glicko", "glicko_rd", "glicko_vol",
     "season_wins", "season_losses", "season_draws",
-    "season_percentage", "ladder_points", "ladder_position"
+    "season_percentage", "ladder_points", "ladder_position",
+    "season_surprise"
 ]]
 
 summary.to_sql(args.dest, engine, if_exists="replace", index=False,
