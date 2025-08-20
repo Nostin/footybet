@@ -269,10 +269,29 @@ col_list = ", ".join([f'"{c}"' for c in cols])  # 'cols' is from above (tg_out.c
 # Overall latest per team (≈18 rows)
 ddl_latest_overall_drop = f'DROP VIEW IF EXISTS {dest}_latest CASCADE;'
 ddl_latest_overall = f'''
-CREATE VIEW {dest}_latest AS
-SELECT DISTINCT ON ("Team") {col_list}
-FROM "{dest}"
-ORDER BY "Team", "Date" DESC;
+    CREATE VIEW {dest}_latest AS
+    WITH latest AS (
+        SELECT DISTINCT ON (tp."Team")
+                {col_list}
+        FROM "{dest}" tp
+        ORDER BY tp."Team", tp."Date" DESC
+    )
+    SELECT
+        l.*,
+        t."elo"                 AS elo_rating,
+        t."glicko"              AS glicko_rating,
+        t."glicko_rd"           AS glicko_rd,
+        t."glicko_vol"          AS glicko_vol,
+        t."season_wins"         AS season_wins,
+        t."season_losses"       AS season_losses,
+        t."season_draws"        AS season_draws,
+        t."season_percentage"   AS season_percentage,
+        t."ladder_points"       AS ladder_points,
+        t."ladder_position"     AS ladder_position,
+        t."season_surprise"     AS surprise_results
+    FROM latest l
+    LEFT JOIN teams t
+        ON t."Team" = l."Team" AND t."season" = l."season";
 '''
 
 # Latest per team in CURRENT season

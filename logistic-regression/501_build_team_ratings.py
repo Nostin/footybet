@@ -1,8 +1,8 @@
 # 501_build_team_ratings_fastest.py
 # Builds team ratings and season summary from player-level table.
 # - One row per match -> Elo + Glicko2 updates (robust bisection; bounded iters)
-# - Home-ground advantage, Elo start-of-season regression, Glicko RD inflation
-# - Optional between-game RD drift (captures uncertainty between fixtures)
+# - Home-ground advantage via HOME_GROUNDS mapping (no aliasing)
+# - Elo start-of-season regression, Glicko RD inflation + optional between-game RD drift
 # - Logs Glicko expected winprob and volatility (sigma), enabling a "season_surprise" metric
 # - Finals (EF/QF/SF/PF/GF) are EXCLUDED from ladder points, percentage, and ladder position
 # - Outputs:
@@ -57,41 +57,34 @@ G2_INIT_VOL= float(args.g2_init_vol)
 G2_Q = math.log(10)/400.0
 G2_SCALE = 173.7178
 
-# ---------- Optional alias normalization ----------
-ALIASES = {
-    "Dees": "Melbourne",
-    "GWS": "GWS Giants",
-    "Bulldogs": "Western Bulldogs",
-    "Eagles": "West Coast",
-    "Dockers": "Fremantle",
-    "Saints": "St Kilda",
-    "Suns": "Gold Coast",
-    "Port": "Port Adelaide",
-    "North": "North Melbourne",
-    "Crows": "Adelaide",
-    "Swans": "Sydney",
-    "Lions": "Brisbane",
-}
-
-# ---------- Venue -> home team map (extend as needed) ----------
-VENUE_HOME = {
-    "SCG": "Sydney",
-    "Gabba": "Brisbane",
-    "Brisbane": "Brisbane",
-    "Geelong": "Geelong",     # GMHBA
-    "Gold Coast": "Gold Coast",
-    "Perth": None,            # Optus: West Coast & Fremantle (ambiguous)
-    "Adelaide": None,         # Adelaide Oval: Adelaide & Port (ambiguous)
-    "MCG": None,
-    "Marvel": None,
-    "Engie": "GWS Giants",    # Showground (name may vary)
+# ---------- Exact home-ground mapping (no aliasing) ----------
+HOME_GROUNDS = {
+    'Adelaide': ['Adelaide'],
+    'Brisbane': ['Brisbane'],
+    'Carlton': ['MCG', 'Docklands'],
+    'Collingwood': ['MCG'],
+    'Dees': ['MCG'],
+    'Essendon': ['Docklands'],
+    'Fremantle': ['Perth'],
+    'Geelong': ['Geelong'],
+    'Suns': ['Gold Coast', 'Darwin'],
+    'GWS': ['Engie', 'Canberra'],
+    'Hawthorn': ['MCG', 'Launceston'],
+    'Norf': ['Docklands', 'Hobart'],
+    'Port': ['Adelaide'],
+    'Richmond': ['MCG'],
+    'Saints': ['Docklands'],
+    'Sydney': ['SCG'],
+    'Eagles': ['Perth'],
+    'Bulldogs': ['Docklands', 'Ballarat'],
 }
 
 def is_home(team: str, venue: str) -> bool:
-    if not venue:
+    if team is None or venue is None:
         return False
-    home_team = VENUE_HOME.get(str(venue), None)
-    return (home_team is not None) and (team == home_team)
+    team_key = str(team).strip()
+    venue_key = str(venue).strip()
+    return venue_key in HOME_GROUNDS.get(team_key, [])
 
 # ---------- Helpers ----------
 def g_glicko(phi):
@@ -105,7 +98,6 @@ def glicko2_one_match(r, RD, vol, s, r_op, RD_op, tau=0.5, tol=1e-5, max_iter=60
     mu,  phi  = (r - 1500.0) / G2_SCALE, RD / G2_SCALE
     muj, phij = (r_op - 1500.0) / G2_SCALE, RD_op / G2_SCALE
 
-    # guard-rails
     phij = max(phij, 1e-12)
     phi  = max(phi,  1e-12)
 
@@ -125,7 +117,7 @@ def glicko2_one_match(r, RD, vol, s, r_op, RD_op, tau=0.5, tol=1e-5, max_iter=60
         den = 2.0 * (phi**2 + v + ex)**2
         return (num / den) - ((x - a) / (tau**2))
 
-    # bracket a root
+    # bracket
     A = a
     if delta**2 > (phi**2 + v):
         B = math.log(delta**2 - phi**2 - v)
@@ -137,15 +129,13 @@ def glicko2_one_match(r, RD, vol, s, r_op, RD_op, tau=0.5, tol=1e-5, max_iter=60
 
     fa, fb = f(A), f(B)
     if not np.isfinite(fa) or not np.isfinite(fb) or fa * fb > 0:
-        # fallback: keep volatility; still move lightly
+        # fallback: keep sigma, minimal movement
         phi_star = math.sqrt(phi**2 + vol**2)
-        phi_new  = phi_star
-        mu_new   = mu  # no movement if we can't solve reliably
-        r_new  = 1500.0 + G2_SCALE * mu_new
-        RD_new = G2_SCALE * phi_new
+        r_new  = 1500.0 + G2_SCALE * mu
+        RD_new = G2_SCALE * phi_star
         return r_new, RD_new, vol, e
 
-    # pure bisection
+    # bisection
     for _ in range(max_iter):
         C = 0.5 * (A + B)
         fc = f(C)
@@ -162,7 +152,6 @@ def glicko2_one_match(r, RD, vol, s, r_op, RD_op, tau=0.5, tol=1e-5, max_iter=60
     A_star = 0.5 * (A + B)
     sigma_prime = math.exp(A_star / 2.0)
 
-    # update RD and rating
     phi_star = math.sqrt(phi**2 + sigma_prime**2)
     phi_new  = 1.0 / math.sqrt((1.0 / (phi_star**2)) + (1.0 / v))
     mu_new   = mu + (phi_new**2) * gj * (s - e)
@@ -250,11 +239,9 @@ if nat_count:
     print(f"   ⚠️ dropping {nat_count} rows with invalid dates")
 tg = tg.dropna(subset=["Date"]).copy()
 
-# normalize names
+# strip only (NO aliasing)
 for col in ("Team","Opponent","Venue"):
     tg[col] = tg[col].astype(str).str.strip()
-tg["Team"] = tg["Team"].replace(ALIASES)
-tg["Opponent"] = tg["Opponent"].replace(ALIASES)
 
 tg["team_score"] = pd.to_numeric(tg["team_score"], errors="coerce")
 tg = tg.dropna(subset=["team_score"])
@@ -366,7 +353,7 @@ for row in pbar(matches.itertuples(index=False), total=len(matches), desc="Match
     rdA = inflate_rd_for_gap(rdA, gapA, args.g2_rd_decay_per_day)
     rdB = inflate_rd_for_gap(rdB, gapB, args.g2_rd_decay_per_day)
 
-    # home advantage
+    # home advantage via HOME_GROUNDS mapping
     H_A = args.home_adv if is_home(teamA, row.Venue) else 0.0
     H_B = args.home_adv if is_home(teamB, row.Venue) else 0.0
 
@@ -493,6 +480,10 @@ summary = summary[[
     "season_percentage", "ladder_points", "ladder_position",
     "season_surprise"
 ]]
+
+ddl_latest_overall_drop = f'DROP VIEW IF EXISTS team_precompute_latest CASCADE;'
+with engine.begin() as con:
+    con.execute(text(ddl_latest_overall_drop))
 
 summary.to_sql(args.dest, engine, if_exists="replace", index=False,
                method="multi", chunksize=args.chunksize)
