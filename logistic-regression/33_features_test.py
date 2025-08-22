@@ -1,6 +1,7 @@
+# 33_features_build.py
 import pandas as pd
 import numpy as np
-from sqlalchemy import create_engine
+from sqlalchemy import text
 from db_connect import get_engine
 
 engine = get_engine()
@@ -26,10 +27,15 @@ HOME_GROUNDS = {
     'Bulldogs': ['Docklands', 'Ballarat'],
 }
 
-def enrich(df):
+def enrich(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
     df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
-    df = df.sort_values(by=['Player', 'Date'])
+    df = df.dropna(subset=['Date']).sort_values(['Player', 'Date']).reset_index(drop=True)
+
+    # Clean string keys (vectorized .str.strip)
+    for c in ['Team', 'Opponent', 'Venue', 'Timeslot', 'Conditions']:
+        if c in df.columns:
+            df[c] = df[c].astype(str).str.strip()
 
     # --- Helpers ---
     def capped_arr(x):
@@ -83,14 +89,14 @@ def enrich(df):
     df['is_away_game'] = ~df['is_home_game']
 
     # --- Wet / Dry / Timeslot flags ---
-    cond = df['Conditions'].astype(str).str.lower()
+    cond = df['Conditions'].astype(str).str.lower() if 'Conditions' in df.columns else ''
     df['is_wet_game'] = (cond == 'wet')
     df['is_dry_game'] = (cond == 'dry')
     df['timeslot_category'] = df['Timeslot'].astype(str).str.lower().map(
         {'day': 'day', 'twilight': 'twilight', 'night': 'night'}
     ).fillna('unknown')
 
-    # Rebuild groupby AFTER creating the flags (avoids KeyError in apply)
+    # Rebuild groupby AFTER creating the flags
     grouped_p = df.groupby('Player', sort=False)
 
     # --- Conditional last-N windows (wet/dry/home/away/day/night/twilight), capped ---
@@ -134,34 +140,40 @@ def enrich(df):
     df['season_to_date_median'] = grouped_p['Disposals'].transform(lambda x: x.expanding().median().shift(1))
     df['form_minus_season_med_last_3'] = df['disp_cap_avg_last_3'] - df['season_to_date_median']
 
-    # --- Team pace (pre-game) ---
-    df['shifted_disposals'] = grouped_p['Disposals'].shift(1)
-    team_disp = df.groupby(['Date', 'Team'], as_index=False)['shifted_disposals'].sum()
-    team_disp.rename(columns={'shifted_disposals': 'team_total_disposals_pre'}, inplace=True)
-    team_disp['avg_team_disposals_last_4'] = team_disp.groupby('Team')['team_total_disposals_pre'] \
-        .transform(lambda x: x.rolling(4, min_periods=1).mean())
-    df = df.merge(team_disp[['Date', 'Team', 'avg_team_disposals_last_4']],
-                  on=['Date', 'Team'], how='left')
+    # --- Team pace & opponent concessions (from INCLUSIVE team_precompute -> shift to PRE) ---
+    tp = pd.read_sql(
+        'SELECT "Date","Team","disposals_avg_last_5","concede_disposals_avg_last_5" '
+        'FROM team_precompute',
+        engine
+    )
+    tp["Date"] = pd.to_datetime(tp["Date"], errors="coerce")
+    tp["Team"] = tp["Team"].astype(str).str.strip()
+    tp = tp.dropna(subset=["Date"]).sort_values(["Team", "Date"]).reset_index(drop=True)
 
-    # --- Opponent concessions (pre-game), guarded if Opponent column exists ---
-    if 'Opponent' in df.columns:
-        team_vs = df.groupby(['Date', 'Team', 'Opponent'], as_index=False)['shifted_disposals'].sum()
-        # "Allowed by Team" == opponent's total disposals vs them on that date
-        allowed = team_vs.rename(columns={
-            'Team': 'OppFaced',
-            'Opponent': 'Team',
-            'shifted_disposals': 'disposals_allowed_pre'
-        }).sort_values(['Team', 'Date'])
-        allowed['opp_concessions_last_5'] = allowed.groupby('Team')['disposals_allowed_pre'] \
-            .transform(lambda x: x.rolling(5, min_periods=1).mean())
-        df = df.merge(allowed[['Date', 'Team', 'opp_concessions_last_5']],
-                      on=['Date', 'Team'], how='left')
+    # Shift inclusive rolling means back one game per team so they become pre-game features
+    tp["avg_team_disposals_last_5_pre"] = tp.groupby("Team")["disposals_avg_last_5"].shift(1)
+    tp["opp_concessions_last_5_pre"]    = tp.groupby("Team")["concede_disposals_avg_last_5"].shift(1)
+
+    # Merge team pace by player's Team & Date
+    df = df.merge(
+        tp[["Date", "Team", "avg_team_disposals_last_5_pre"]]
+          .rename(columns={"avg_team_disposals_last_5_pre": "avg_team_disposals_last_5"}),
+        on=["Date", "Team"], how="left"
+    )
+
+    # Merge opponent concessions by player's Opponent & Date (if Opponent exists)
+    if "Opponent" in df.columns:
+        df = df.merge(
+            tp[["Date", "Team", "opp_concessions_last_5_pre"]]
+              .rename(columns={"Team": "Opponent",
+                               "opp_concessions_last_5_pre": "opp_concessions_last_5"}),
+            on=["Date", "Opponent"], how="left"
+        )
     else:
-        df['opp_concessions_last_5'] = np.nan
+        df["opp_concessions_last_5"] = np.nan
 
     # --- Missed-time proxy in last 4 team games (pre-game only) ---
     def missed_time_last4(g):
-        # For each row: look back at last 4 team dates and see if player absent or ToG<50
         dates = g['Date'].values
         team = g['Team'].iloc[0]
         team_dates = df[df['Team'] == team][['Date']].drop_duplicates().sort_values('Date')
@@ -198,8 +210,8 @@ def enrich(df):
     # --- One-hot-ish flags (ints) ---
     df['is_home_game'] = df['is_home_game'].astype(int)
     df['is_away_game'] = df['is_away_game'].astype(int)
-    df['is_wet_game'] = df['is_wet_game'].astype(int)
-    df['is_dry_game'] = df['is_dry_game'].astype(int)
+    df['is_wet_game']  = df['is_wet_game'].astype(int)
+    df['is_dry_game']  = df['is_dry_game'].astype(int)
 
     # --- Targets (binary) ---
     df['target_20'] = (df['Disposals'] >= 20).astype(int)
@@ -208,27 +220,27 @@ def enrich(df):
 
     # --- Clean-up ---
     df = df.drop(columns=['shifted_disposals'], errors='ignore')
-    df = df.drop_duplicates(subset=['Player', 'Date'])
-
+    df = df.drop_duplicates(subset=['Player', 'Date']).reset_index(drop=True)
     return df
 
 
 # 👇 Combine before enriching
 train_df = pd.read_sql('SELECT * FROM player_stats_train', engine)
-test_df = pd.read_sql('SELECT * FROM player_stats_test', engine)
-test_df['is_test'] = True
+test_df  = pd.read_sql('SELECT * FROM player_stats_test',  engine)
 train_df['is_test'] = False
+test_df['is_test']  = True
 
-combined = pd.concat([train_df, test_df], ignore_index=True)
-enriched = enrich(combined)
+combined  = pd.concat([train_df, test_df], ignore_index=True)
+enriched  = enrich(combined)
 
-train_enriched = enriched[enriched['is_test'] == False].copy()
-test_enriched = enriched[enriched['is_test'] == True].copy()
+train_enriched = enriched[~enriched['is_test']].copy()
+test_enriched  = enriched[ enriched['is_test']].copy()
 
 # Drop leakage fields
-leakage_cols = ['Disposals', 'Goals', 'Behinds', 'Kicks', 'Handballs', 'Game Result', 'Time on Ground %', 'is_test']
+leakage_cols = ['Disposals', 'Goals', 'Behinds', 'Kicks', 'Handballs',
+                'Game Result', 'Time on Ground %', 'is_test']
 train_enriched = train_enriched.drop(columns=leakage_cols, errors='ignore')
-test_enriched = test_enriched.drop(columns=leakage_cols, errors='ignore')
+test_enriched  = test_enriched.drop(columns=leakage_cols,  errors='ignore')
 
 # Save
 train_enriched.to_sql("model_feed_train", con=engine, if_exists="replace", index=False)

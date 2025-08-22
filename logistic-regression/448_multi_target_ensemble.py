@@ -60,7 +60,7 @@ df_test  = pd.get_dummies(df_test,  columns=["days_bin"], drop_first=True)
 exact_wishlist = [
     'disposals_trend_last_5','disposals_delta_5',
     'disposals_max_last_5','disposals_min_last_5','disposals_std_last_5',
-    'is_home_game','avg_team_disposals_last_4',
+    'is_home_game','avg_team_disposals_last_5',
     'form_minus_season_med_last_3','season_to_date_median',
     'opp_concessions_last_5',
 ]
