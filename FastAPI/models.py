@@ -14,6 +14,8 @@ class PlayerPrecompute(Base):
     ToG_Last = Column("ToG_Last", Float, nullable=True)
     ToG_Season_Avg = Column("ToG_Season_Avg", Float, nullable=True)
     Games_This_Season = Column("Games_This_Season", Integer, nullable=True)
+    Next_Opponent = Column("Next_Opponent", String, nullable=True)
+    Next_Venue_Home = Column("Next_Venue_Home", Boolean, nullable=True)
 
     Prob_20_Disposals = Column("Prob_20_Disposals", Float, nullable=True)
     Prob_25_Disposals = Column("Prob_25_Disposals", Float, nullable=True)
