@@ -54,6 +54,46 @@ for col in ["Home Team", "Away Team", "Venue", "Timeslot"]:
         upcoming_games_df[col] = upcoming_games_df[col].astype(str).str.strip()
 upcoming_games_df["Date"] = pd.to_datetime(upcoming_games_df["Date"], errors="coerce")
 
+# --- Compute next opponent per TEAM from today forward ---
+today = pd.Timestamp.today().normalize()
+
+def _clean(s): 
+    return str(s).strip()
+
+# explode upcoming_games so each fixture yields two rows (home & away perspective)
+games_long = []
+for _, g in upcoming_games_df.iterrows():
+    if pd.isna(g["Date"]):
+        continue
+    home = _clean(g["Home Team"]); away = _clean(g["Away Team"])
+    games_long.append({
+        "Team": home,
+        "Opponent": away,
+        "Date": g["Date"],
+        "Venue": _clean(g["Venue"]),
+        "Timeslot": _clean(g["Timeslot"]),
+    })
+    games_long.append({
+        "Team": away,
+        "Opponent": home,
+        "Date": g["Date"],
+        "Venue": _clean(g["Venue"]),
+        "Timeslot": _clean(g["Timeslot"]),
+    })
+
+games_long_df = pd.DataFrame(games_long)
+
+if not games_long_df.empty:
+    # normalise to your HOME_GROUNDS keys to survive naming differences
+    games_long_df["TeamKey"] = games_long_df["Team"].map(normalize_team_key)
+    # keep only fixtures today or later, then take the earliest per team
+    games_long_df = games_long_df[games_long_df["Date"] >= today].sort_values("Date")
+    next_by_team_df = games_long_df.drop_duplicates(subset=["TeamKey"], keep="first")
+    NEXT_GAME_BY_TEAM = next_by_team_df.set_index("TeamKey")[["Opponent", "Date", "Venue", "Timeslot"]].to_dict("index")
+else:
+    NEXT_GAME_BY_TEAM = {}
+
+
 # --- Load full player stats ---
 df = pd.read_sql('SELECT * FROM player_stats ORDER BY "Date" DESC', engine)
 df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
@@ -99,23 +139,17 @@ for player in df['Player'].dropna().unique():
     # Games this season
     row["Games_This_Season"] = int(len(p_season))
 
-    # Next game + days since last game
-    if team:
-        last_game_date = p_all['Date'].max() if not p_all.empty else pd.NaT
-        mask_team_next = (upcoming_games_df["Home Team"] == team) | (upcoming_games_df["Away Team"] == team)
-        next_games = upcoming_games_df[mask_team_next].copy()
+    # Next game (team-level, from today), plus delta from player's last game if you want that metric
+    last_game_date = p_all['Date'].max() if not p_all.empty else pd.NaT
+
+    info = NEXT_GAME_BY_TEAM.get(team_key)
+    if info:
+        row["Next_Opponent"] = info["Opponent"]
+        row["Next_Venue"] = info["Venue"]
+        row["Next_Timeslot"] = info["Timeslot"]
         if pd.notna(last_game_date):
-            next_games = next_games[next_games["Date"] > last_game_date]
-        next_games = next_games.sort_values("Date")
+            row["Days_since_last_game"] = int((info["Date"] - last_game_date).days)
 
-        if not next_games.empty:
-            ng = next_games.iloc[0]
-            row["Next_Venue"] = str(ng["Venue"])
-            row["Next_Timeslot"] = str(ng["Timeslot"])
-            row["Next_Opponent"] = str(ng["Away Team"] if ng["Home Team"] == team else ng["Home Team"])
-
-            if pd.notna(last_game_date):
-                row["Days_since_last_game"] = int((ng["Date"] - last_game_date).days)
 
     # Next_Venue_Home flag
     if row["Next_Venue"]:
