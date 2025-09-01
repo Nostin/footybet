@@ -1,4 +1,3 @@
-# 1_create_data.py (root)
 from pathlib import Path
 import os
 import subprocess
