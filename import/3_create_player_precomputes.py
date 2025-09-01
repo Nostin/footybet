@@ -1,51 +1,21 @@
-# build_player_precomputes_basic.py
+from pathlib import Path
+import sys
 import pandas as pd
 import numpy as np
 from sqlalchemy import text
+
+ROOT = Path(__file__).resolve().parents[1]   # /.../root
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from db_connect import get_engine
+from util import HOME_GROUNDS, TEAM_ALIASES
 
 engine = get_engine()
 
-# Home-ground lookup (keep whatever naming your data actually uses)
-HOME_GROUNDS = {
-    'Adelaide': ['Adelaide'],
-    'Brisbane': ['Brisbane'],
-    'Carlton': ['MCG', 'Docklands'],
-    'Collingwood': ['MCG'],
-    'Dees': ['MCG'],
-    'Essendon': ['Docklands'],
-    'Fremantle': ['Perth'],
-    'Geelong': ['Geelong'],
-    'Suns': ['Gold Coast', 'Darwin'],
-    'GWS': ['Engie', 'Canberra'],
-    'Hawthorn': ['MCG', 'Launceston'],
-    'Norf': ['Docklands', 'Hobart'],
-    'Port': ['Adelaide'],
-    'Richmond': ['MCG'],
-    'Saints': ['Docklands'],
-    'Sydney': ['SCG'],
-    'Eagles': ['Perth'],
-    'Bulldogs': ['Docklands', 'Ballarat'],
-}
-
-# Optional: map canonical names -> keys used in HOME_GROUNDS (helps if your DB uses official names)
-ALIASES = {
-    'North Melbourne': 'Norf',
-    'Port Adelaide': 'Port',
-    'West Coast': 'Eagles',
-    'West Coast Eagles': 'Eagles',
-    'Gold Coast': 'Suns',
-    'Gold Coast Suns': 'Suns',
-    'Melbourne': 'Dees',
-    'Western Bulldogs': 'Bulldogs',
-    'St Kilda': 'Saints',
-    'GWS Giants': 'GWS',
-    'Greater Western Sydney': 'GWS',
-}
-
 def normalize_team_key(team: str) -> str:
     t = (team or "").strip()
-    return t if t in HOME_GROUNDS else ALIASES.get(t, t)
+    return t if t in HOME_GROUNDS else TEAM_ALIASES.get(t, t)
 
 # --- Load upcoming games and normalise strings ---
 upcoming_games_df = pd.read_sql('SELECT * FROM upcoming_games', engine)

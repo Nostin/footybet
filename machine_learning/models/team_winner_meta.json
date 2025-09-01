@@ -1,0 +1,76 @@
+{
+  "feature_cols": [
+    "elo_diff",
+    "glicko_diff",
+    "rd_diff",
+    "vol_diff",
+    "home_edge",
+    "ts_day",
+    "ts_night",
+    "ts_twilight",
+    "ts_unknown",
+    "elo_exp",
+    "score_avg_last_5_diff5",
+    "inside50_avg_last_5_diff5",
+    "turnovers_avg_last_5_diff5",
+    "free_kicks_avg_last_5_diff5",
+    "disposals_avg_last_5_diff5",
+    "clearances_avg_last_5_diff5",
+    "tackles_avg_last_5_diff5",
+    "marks_avg_last_5_diff5",
+    "disp_matchup5",
+    "tack_matchup5",
+    "marks_matchup5",
+    "clear_matchup5",
+    "rest_diff",
+    "interstate_edge",
+    "secondary_home_edge"
+  ],
+  "cv": [
+    {
+      "fold": 1,
+      "logloss": 0.7852731387890358,
+      "brier": 0.2594556609804799,
+      "roc_auc": 0.6357142857142858,
+      "acc@0.5": 0.6470588235294118,
+      "n_val": 68
+    },
+    {
+      "fold": 2,
+      "logloss": 0.648365438850432,
+      "brier": 0.22725009744419303,
+      "roc_auc": 0.6909090909090909,
+      "acc@0.5": 0.6470588235294118,
+      "n_val": 68
+    },
+    {
+      "fold": 3,
+      "logloss": 0.7896503726515868,
+      "brier": 0.22283350112543662,
+      "roc_auc": 0.7229437229437229,
+      "acc@0.5": 0.6911764705882353,
+      "n_val": 68
+    },
+    {
+      "fold": 4,
+      "logloss": 0.6322645990099172,
+      "brier": 0.22281911222509534,
+      "roc_auc": 0.6892502258355917,
+      "acc@0.5": 0.5882352941176471,
+      "n_val": 68
+    },
+    {
+      "fold": 5,
+      "logloss": 0.4553568114392085,
+      "brier": 0.14822922074766276,
+      "roc_auc": 0.8544642857142857,
+      "acc@0.5": 0.7941176470588235,
+      "n_val": 68
+    }
+  ],
+  "rows": 410,
+  "from_table": "team_games",
+  "used_team_precompute": true,
+  "exclude_finals": true,
+  "n_splits": 5
+}

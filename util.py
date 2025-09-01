@@ -1,0 +1,54 @@
+HOME_GROUNDS = {
+    'Adelaide': ['Adelaide'],
+    'Brisbane': ['Brisbane'],
+    'Carlton': ['MCG', 'Docklands'],
+    'Collingwood': ['MCG'],
+    'Dees': ['MCG'],
+    'Essendon': ['Docklands'],
+    'Fremantle': ['Perth'],
+    'Geelong': ['Geelong'],
+    'Suns': ['Gold Coast', 'Darwin'],
+    'GWS': ['Engie', 'Canberra'],
+    'Hawthorn': ['MCG', 'Launceston'],
+    'Norf': ['Docklands', 'Hobart'],
+    'Port': ['Adelaide'],
+    'Richmond': ['MCG'],
+    'Saints': ['Docklands'],
+    'Sydney': ['SCG'],
+    'Eagles': ['Perth'],
+    'Bulldogs': ['Docklands', 'Ballarat'],
+}
+
+TEAM_ALIASES = {
+    'North Melbourne': 'Norf',
+    'Port Adelaide': 'Port',
+    'West Coast': 'Eagles',
+    'West Coast Eagles': 'Eagles',
+    'Gold Coast': 'Suns',
+    'Gold Coast Suns': 'Suns',
+    'Melbourne': 'Dees',
+    'Western Bulldogs': 'Bulldogs',
+    'St Kilda': 'Saints',
+    'GWS Giants': 'GWS',
+    'Greater Western Sydney': 'GWS',
+}
+
+TEAM_STATE = {
+    "Adelaide":"SA","Port":"SA",
+    "Brisbane":"QLD","Suns":"QLD",
+    "Carlton":"VIC","Collingwood":"VIC","Essendon":"VIC","Dees":"VIC",
+    "Geelong":"VIC","Hawthorn":"VIC","Norf":"VIC","Bulldogs":"VIC",
+    "Richmond":"VIC","Saints":"VIC",
+    "Sydney":"NSW","GWS":"NSW",
+    "Fremantle":"WA","Eagles":"WA",
+}
+
+VENUE_STATE = {
+    "MCG":"VIC","Docklands":"VIC","Geelong":"VIC","Ballarat":"VIC",
+    "SCG":"NSW","Engie":"NSW","Canberra":"NSW",
+    "Brisbane":"QLD","Gold Coast":"QLD",
+    "Adelaide":"SA","Norwood":"SA","Barossa": "SA","Mt Barker":"SA",
+    "Perth":"WA","Bunbury":"WA",
+    "Launceston":"TAS","Hobart":"TAS",
+    "Darwin":"NT","Alice Springs":"NT",
+}

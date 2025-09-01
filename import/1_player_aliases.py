@@ -23,6 +23,7 @@ NICKNAMES = [
     ("Jake Stringer", "package"),
     ("Jake Stringer", "parcel"),
     ("Mitch McGovern", "brackets"),
+    ("Nick Blakey", "lizard"),
 ]
 
 DROP_SQL = 'DROP TABLE IF EXISTS player_nicknames;'

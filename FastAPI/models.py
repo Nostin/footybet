@@ -236,6 +236,9 @@ class TeamPrecompute(Base):
     __tablename__ = "team_precompute_latest"
 
     Team = Column("Team", String, primary_key=True,nullable=True)
+    elo_rating = Column("elo_rating", Float, nullable=True)
+    glicko_rating = Column("glicko_rating", Float, nullable=True)
+    ladder_position = Column("ladder_position", Integer, nullable=True)
 
     season_avg_score = Column("season_avg_score", Integer, nullable=True)
     season_min_score = Column("season_min_score", Integer, nullable=True)
@@ -276,6 +279,7 @@ class TeamPrecompute(Base):
     season_avg_away_clearances = Column("season_avg_away_clearances", Integer, nullable=True)
     season_min_away_clearances = Column("season_min_away_clearances", Integer, nullable=True)
     season_max_away_clearances = Column("season_max_away_clearances", Integer, nullable=True)
+    season_avg_concede_clearances = Column("season_avg_concede_clearances", Integer, nullable=True)
 
     season_avg_tackles = Column("season_avg_tackles", Integer, nullable=True)
     season_min_tackles = Column("season_min_tackles", Integer, nullable=True)

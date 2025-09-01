@@ -100,7 +100,7 @@ async def get_players_by_names(names: str = Query(..., description="Comma-separa
     
 # get all players by team name eg: /player-by-team/Carlton
 @app.get("/player-by-team/{team_name}")
-async def get_player(team_name: str):
+async def get_players_by_team_path(team_name: str):
     async with async_session() as session:
         stmt = select(PlayerPrecompute).where(PlayerPrecompute.Team == team_name)
         result = await session.execute(stmt)
