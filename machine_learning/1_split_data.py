@@ -33,7 +33,7 @@ eligible_players_query = """
     SELECT "Team", "Player"
     FROM player_stats_train
     GROUP BY "Player", "Team"
-    HAVING COUNT(*) >= 7 AND AVG("Disposals") >= 18;
+    HAVING COUNT(*) >= 7;
 """
 eligible_players = pd.read_sql(eligible_players_query, engine)
 
