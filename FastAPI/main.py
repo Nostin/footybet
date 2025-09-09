@@ -1,5 +1,5 @@
 # main.py - uvicorn main:app --reload
-from typing import Dict
+from typing import Any, Dict, Optional
 from fastapi import FastAPI, HTTPException, Query, Depends
 from sqlalchemy import select, text as sqtext
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,7 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-STAT_COLUMN_MAP: Dict[str, any] = {
+STAT_COLUMN_MAP: Dict[str, Any] = {
     "disposals":  PlayerStats.Disposals,
     "goals":      PlayerStats.Goals,
     "marks":      PlayerStats.Marks,
@@ -26,12 +26,29 @@ STAT_COLUMN_MAP: Dict[str, any] = {
     "kicks":      PlayerStats.Kicks,
     "handballs":  PlayerStats.Handballs,
 }
+
+async def _get_opponent_score(
+    session: AsyncSession,
+    opponent_team: str,
+    date_value: str,
+) -> Optional[int]:
+    stmt = (
+        select(PlayerStats.TeamScore)
+        .where(
+            PlayerStats.Team == opponent_team,
+            PlayerStats.Date == date_value,
+        )
+        .limit(1)
+    )
+    res = await session.execute(stmt)
+    return res.scalar_one_or_none()
+
 async def _get_player_stat_game_by_col(
     col,
     player_name: str,
     value: int,
     session: AsyncSession,
-    latest: bool = True,  # set False to return earliest match
+    latest: bool = True,  # False = earliest match
 ):
     stmt = (
         select(PlayerStats)
@@ -43,15 +60,34 @@ async def _get_player_stat_game_by_col(
     row = result.scalars().first()
     if row is None:
         raise HTTPException(status_code=404, detail="Game not found")
-    return row.to_dict()
 
-# helper to create simple endpoints without copy/paste
+    data = row.to_dict()
+
+    opp = row.Opponent
+    dt  = row.Date
+    opp_score = await _get_opponent_score(session, opp, dt)
+    if opp_score is not None:
+        data["Opponent Score"] = int(opp_score)
+        try:
+            team_score = int(data.get("Team Score")) if data.get("Team Score") is not None else None
+        except Exception:
+            team_score = None
+        if team_score is not None:
+            data["Margin"] = team_score - opp_score
+
+    return data
+
 def register_stat_route(stat_name: str, col):
     path = f"/{stat_name}/" + "{player_name}/{value}"
 
     @app.get(path)
-    async def _route(player_name: str, value: int, session: AsyncSession = Depends(get_session)):
-        return await _get_player_stat_game_by_col(col, player_name, value, session)
+    async def _route(
+        player_name: str,
+        value: int,
+        session: AsyncSession = Depends(get_session),
+        _col=col,  # bind default to avoid late-binding issues
+    ):
+        return await _get_player_stat_game_by_col(_col, player_name, value, session)
 
 for name, col in STAT_COLUMN_MAP.items():
     register_stat_route(name, col)
