@@ -1,6 +1,13 @@
-# create_or_replace_player_nicknames.py
+from pathlib import Path
+import sys
+import pandas as pd
 from sqlalchemy import text
-from db_connect import get_engine  # your project helper
+
+ROOT = Path(__file__).resolve().parents[1]   # /.../root
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from db_connect import get_engine
 
 engine = get_engine()
 

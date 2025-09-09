@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.inspection import inspect
 
 Base = declarative_base()
 
@@ -231,6 +232,53 @@ class PlayerNickname(Base):
 
     def to_dict(self):
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
+class PlayerStats(Base):
+    __tablename__ = "player_stats"
+
+    Date = Column("Date", String, primary_key=True)
+    Team = Column("Team", String, primary_key=False)
+    Opponent = Column("Opponent", String, primary_key=False)
+    Player = Column("Player", String, primary_key=True)
+    Fantasy = Column("Fantasy", Integer, primary_key=False)
+    Goals = Column("Goals", Integer, primary_key=False)
+    Behinds = Column("Behinds", Integer, primary_key=False)
+    Disposals = Column("Disposals", Integer, primary_key=False)
+    Kicks = Column("Kicks", Integer, primary_key=False)
+    Handballs = Column("Handballs", Integer, primary_key=False)
+    Marks = Column("Marks", Integer, primary_key=False)
+    Tackles = Column("Tackles", Integer, primary_key=False)
+    HitOuts = Column("Hit Outs", Integer, primary_key=False)
+    Clearances = Column("Clearances", Integer, primary_key=False)
+    MetresGained = Column("Metres Gained", Integer, primary_key=False)
+    GoalAssists = Column("Goal Assists", Integer, primary_key=False)
+    TimeonGround = Column("Time on Ground %", Integer, primary_key=False)
+    Venue = Column("Venue", String, primary_key=False)
+    TeamWinOdds = Column("Team Win Odds", Float, primary_key=False)
+    Timeslot = Column("Timeslot", String, primary_key=False)
+    GameResult = Column("Game Result", String, primary_key=False)
+    Conditions = Column("Conditions", String, primary_key=False)
+    Final = Column("Final", String, primary_key=False)
+    Round = Column("Round", String, primary_key=False)
+    TeamFreeKicks = Column("Team Free Kicks", Integer, primary_key=False)
+    TeamTurnovers = Column("Team Turnovers", Integer, primary_key=False)
+    TeamInside50 = Column("Team Inside 50", Integer, primary_key=False)
+    TeamScore = Column("Team Score", Integer, primary_key=False)
+
+    def to_dict(self, use_db_names: bool = True):
+        """
+        If use_db_names=True -> keys like 'Hit Outs' (DB names).
+        If False -> keys like 'HitOuts' (Python attribute names).
+        """
+        insp = inspect(self)
+        out = {}
+        for attr in insp.mapper.column_attrs:
+            orm_name = attr.key                # e.g. HitOuts
+            db_name  = attr.columns[0].name    # e.g. "Hit Outs"
+            key = db_name if use_db_names else orm_name
+            out[key] = getattr(self, orm_name)
+        return out
+
     
 class TeamPrecompute(Base):
     __tablename__ = "team_precompute_latest"
