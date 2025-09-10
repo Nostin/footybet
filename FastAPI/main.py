@@ -17,6 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Add/keep your stat map as-is
 STAT_COLUMN_MAP: Dict[str, Any] = {
     "disposals":  PlayerStats.Disposals,
     "goals":      PlayerStats.Goals,
@@ -27,13 +28,19 @@ STAT_COLUMN_MAP: Dict[str, Any] = {
     "handballs":  PlayerStats.Handballs,
 }
 
-async def _get_opponent_score(
+# NEW: return a dict of opponent team stats for that game
+async def _get_opponent_team_stats(
     session: AsyncSession,
     opponent_team: str,
     date_value: str,
-) -> Optional[int]:
+) -> Optional[dict]:
     stmt = (
-        select(PlayerStats.TeamScore)
+        select(
+            PlayerStats.TeamScore.label("opp_score"),
+            PlayerStats.TeamInside50.label("opp_inside50"),
+            PlayerStats.TeamTurnovers.label("opp_turnovers"),
+            PlayerStats.TeamFreeKicks.label("opp_free_kicks"),
+        )
         .where(
             PlayerStats.Team == opponent_team,
             PlayerStats.Date == date_value,
@@ -41,7 +48,7 @@ async def _get_opponent_score(
         .limit(1)
     )
     res = await session.execute(stmt)
-    return res.scalar_one_or_none()
+    return res.mappings().first()  # dict-like row or None
 
 async def _get_player_stat_game_by_col(
     col,
@@ -63,19 +70,32 @@ async def _get_player_stat_game_by_col(
 
     data = row.to_dict()
 
+    # attach opponent team metrics
     opp = row.Opponent
     dt  = row.Date
-    opp_score = await _get_opponent_score(session, opp, dt)
-    if opp_score is not None:
-        data["Opponent Score"] = int(opp_score)
+    opp_stats = await _get_opponent_team_stats(session, opp, dt)
+    if opp_stats:
+        # add with camelCase-style keys you asked for
+        if opp_stats.get("opp_inside50") is not None:
+            data["OpponentInside50"]  = int(opp_stats["opp_inside50"])
+        if opp_stats.get("opp_free_kicks") is not None:
+            data["OpponentFreeKicks"] = int(opp_stats["opp_free_kicks"])
+        if opp_stats.get("opp_turnovers") is not None:
+            data["OpponentTurnovers"] = int(opp_stats["opp_turnovers"])
+        if opp_stats.get("opp_score") is not None:
+            data["OpponentScore"]     = int(opp_stats["opp_score"])
+
+        # margin if both sides' scores are present
         try:
             team_score = int(data.get("Team Score")) if data.get("Team Score") is not None else None
         except Exception:
             team_score = None
-        if team_score is not None:
-            data["Margin"] = team_score - opp_score
+        opp_score = opp_stats.get("opp_score")
+        if team_score is not None and opp_score is not None:
+            data["Margin"] = team_score - int(opp_score)
 
     return data
+
 
 def register_stat_route(stat_name: str, col):
     path = f"/{stat_name}/" + "{player_name}/{value}"

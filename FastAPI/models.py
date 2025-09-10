@@ -287,6 +287,9 @@ class TeamPrecompute(Base):
     elo_rating = Column("elo_rating", Float, nullable=True)
     glicko_rating = Column("glicko_rating", Float, nullable=True)
     ladder_position = Column("ladder_position", Integer, nullable=True)
+    Next_Opponent = Column("Next_Opponent", String, nullable=True)
+    Win_Probability = Column("Win_Probability", Boolean, nullable=True)
+    Next_Venue = Column("Next_Venue", String, nullable=True)
 
     season_avg_score = Column("season_avg_score", Integer, nullable=True)
     season_min_score = Column("season_min_score", Integer, nullable=True)
