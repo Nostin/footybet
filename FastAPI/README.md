@@ -2,6 +2,11 @@
 
 First, open a virtual environment:
 
+if you haven't created one yet
+```bash
+python3 -m venv venv
+```
+
 ```bash
 source venv/bin/activate
 ```

@@ -19,6 +19,27 @@ HOME_GROUNDS = {
     'Bulldogs': ['Docklands', 'Ballarat'],
 }
 
+SECONDARY_HOME_GROUNDS = {
+    'Adelaide': [''],
+    'Brisbane': [''],
+    'Carlton': [''],
+    'Collingwood': ['Docklands'],
+    'Dees': ['Docklands'],
+    'Essendon': ['MCG'],
+    'Fremantle': [''],
+    'Geelong': ['Docklands', 'MCG'],
+    'Suns': ['Brisbane'],
+    'GWS': ['SCG'],
+    'Hawthorn': ['Docklands'],
+    'Norf': ['MCG'],
+    'Port': [''],
+    'Richmond': ['Docklands'],
+    'Saints': ['MCG'],
+    'Sydney': ['Engie'],
+    'Eagles': [''],
+    'Bulldogs': ['MCG'],
+}
+
 TEAM_ALIASES = {
     'North Melbourne': 'Norf',
     'Port Adelaide': 'Port',

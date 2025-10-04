@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from db_connect import get_engine
-from util import HOME_GROUNDS, TEAM_STATE, VENUE_STATE, TEAM_ALIASES
+from util import HOME_GROUNDS, SECONDARY_HOME_GROUNDS, TEAM_STATE, VENUE_STATE, TEAM_ALIASES
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--source", default="player_stats")
@@ -36,11 +36,30 @@ def normalize_team_key(team: str) -> str:
         return t
     return TEAM_ALIASES.get(t, t)
 
-def compute_is_home(team: str, venue: str) -> int:
+# --- Primary/Secondary home-ground helpers ------------------------------
+
+# Clean SECONDARY_HOME_GROUNDS (original mapping may contain empty strings)
+SECONDARY_CLEAN = {
+    k: [v.strip() for v in vs if v and str(v).strip()]
+    for k, vs in SECONDARY_HOME_GROUNDS.items()
+}
+
+def compute_is_primary_home(team: str, venue: str) -> int:
     if pd.isna(team) or pd.isna(venue):
         return 0
     tkey = normalize_team_key(team)
     return int(str(venue).strip() in HOME_GROUNDS.get(tkey, []))
+
+def compute_is_home(team: str, venue: str) -> int:
+    """Home = primary ∪ secondary."""
+    if pd.isna(team) or pd.isna(venue):
+        return 0
+    tkey = normalize_team_key(team)
+    v = str(venue).strip()
+    return int(
+        (v in HOME_GROUNDS.get(tkey, [])) or
+        (v in SECONDARY_CLEAN.get(tkey, []))
+    )
 
 def team_state(team: str) -> str:
     return TEAM_STATE.get((team or "").strip(), "")
@@ -53,9 +72,11 @@ def is_interstate(team: str, venue: str) -> int:
     return int(bool(ts) and bool(vs) and ts != vs)
 
 def is_secondary_home(team: str, venue: str) -> int:
-    # host + different state than the club’s base
+    """Explicit secondary home grounds per mapping (can be same-state)."""
+    if pd.isna(team) or pd.isna(venue):
+        return 0
     tkey = normalize_team_key(team)
-    return int(is_interstate(team, venue) and (venue or "").strip() in HOME_GROUNDS.get(tkey, []))
+    return int(str(venue).strip() in SECONDARY_CLEAN.get(tkey, []))
 
 # ------------ Discover columns safely ------------
 sample = pd.read_sql(text(f'SELECT * FROM {args.source} LIMIT 0'), engine)
@@ -120,14 +141,18 @@ tg = (df.sort_values(["Date","Team"])
         .rename(columns={**PLAYER_SUM_COLS, **TEAM_FIRST_COLS}))
 
 tg["season"]  = tg["Date"].dt.year.astype(int)
-tg["is_home"] = tg.apply(lambda r: compute_is_home(r.get("Team"), r.get("Venue")), axis=1).astype(int)
-tg["is_away"] = 1 - tg["is_home"]
+
+# New: explicit primary/secondary, and home as their union
+tg["is_primary_home"]   = tg.apply(lambda r: compute_is_primary_home(r.get("Team"), r.get("Venue")), axis=1).astype(int)
+tg["is_secondary_home"] = tg.apply(lambda r: is_secondary_home(r.get("Team"), r.get("Venue")), axis=1).astype(int)
+tg["is_home"]           = tg.apply(lambda r: compute_is_home(r.get("Team"), r.get("Venue")), axis=1).astype(int)
+tg["is_away"]           = 1 - tg["is_home"]
+
 tg["points_for"] = pd.to_numeric(tg.get("team_score"), errors="coerce")
 
 tg["Team_State"]   = tg["Team"].map(team_state)
 tg["Venue_State"]  = tg["Venue"].map(venue_state)
 tg["is_interstate"] = tg.apply(lambda r: is_interstate(r.get("Team"), r.get("Venue")), axis=1).astype(int)
-tg["is_secondary_home"] = tg.apply(lambda r: is_secondary_home(r.get("Team"), r.get("Venue")), axis=1).astype(int)
 
 # Optional Yes/No string (if you want it for easy display)
 tg["interstate"] = np.where(tg["is_interstate"] == 1, "Yes", "No")
@@ -285,7 +310,6 @@ tg_out = (
       .reset_index(drop=True)
 )
 
-
 # ------------ Save (staging -> drop & swap) ------------
 dest = args.dest
 staging = f"{dest}__staging"
@@ -358,5 +382,6 @@ with engine.begin() as con:
 
 print(f"✅ Wrote {len(tg_out):,} rows to '{dest}' and added concede_* metrics "
       f"(windows={WIN_SIZES}, stats_mode={args.stats_mode}).")
+print(f"🏟️ Added home-ground columns: is_primary_home, is_secondary_home, is_home, is_away.")
 print(f"🔎 Created indexes: {idx_team_season_date}, {idx_team_date}")
 print(f"🔎 Created views: {dest}_latest (overall), {dest}_latest_current (current season)")
