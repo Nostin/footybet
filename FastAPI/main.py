@@ -1,11 +1,12 @@
 # main.py - uvicorn main:app --reload
 from typing import Any, Dict, Optional
 from fastapi import FastAPI, HTTPException, Query, Depends
-from sqlalchemy import select, text as sqtext
+from sqlalchemy import select, text as sqtext, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from models import PlayerPrecompute, PlayerNickname, PlayerStats, TeamPrecompute
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_session
+from datetime import date, datetime
 
 app = FastAPI()
 
@@ -28,12 +29,25 @@ STAT_COLUMN_MAP: Dict[str, Any] = {
     "handballs":  PlayerStats.Handballs,
 }
 
-# NEW: return a dict of opponent team stats for that game
+def _to_date_str(value) -> Optional[str]:
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return value  # assume already like 'YYYY-MM-DD'
+    if isinstance(value, datetime):
+        return value.date().isoformat()
+    if isinstance(value, date):
+        return value.isoformat()
+    # fallback
+    return str(value)
+
 async def _get_opponent_team_stats(
     session: AsyncSession,
     opponent_team: str,
-    date_value: str,
+    date_value,  # accept any, we'll normalize
 ) -> Optional[dict]:
+    dt_str = _to_date_str(date_value)
+
     stmt = (
         select(
             PlayerStats.TeamScore.label("opp_score"),
@@ -43,12 +57,12 @@ async def _get_opponent_team_stats(
         )
         .where(
             PlayerStats.Team == opponent_team,
-            PlayerStats.Date == date_value,
+            PlayerStats.Date == dt_str,   # string-to-string compare
         )
         .limit(1)
     )
     res = await session.execute(stmt)
-    return res.mappings().first()  # dict-like row or None
+    return res.mappings().first()
 
 async def _get_player_stat_game_by_col(
     col,
@@ -109,8 +123,69 @@ def register_stat_route(stat_name: str, col):
     ):
         return await _get_player_stat_game_by_col(_col, player_name, value, session)
 
+async def _get_team_stat_game_from_team_precompute(
+    stat_col: str,                 # e.g. "team_score"
+    team_name: str,
+    value: int,
+    session: AsyncSession,
+    latest: bool = True,
+):
+    order = "DESC" if latest else "ASC"
+    q = sqtext(f'''
+        SELECT *
+        FROM team_precompute
+        WHERE "Team" = :team AND {stat_col} = :val
+        ORDER BY "Date" {order}
+        LIMIT 1
+    ''')
+    res = await session.execute(q, {"team": team_name, "val": value})
+    row = res.mappings().first()
+    if not row:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    data = dict(row)
+
+    # --- Optional: enrich with opponent team metrics & margin (same as before) ---
+    opp = data.get("Opponent")
+    dt  = data.get("Date")
+    if opp and dt:
+        opp_stats = await _get_opponent_team_stats(session, opp, dt)
+        if opp_stats:
+            if opp_stats.get("opp_inside50") is not None:
+                data["OpponentInside50"]  = int(opp_stats["opp_inside50"])
+            if opp_stats.get("opp_free_kicks") is not None:
+                data["OpponentFreeKicks"] = int(opp_stats["opp_free_kicks"])
+            if opp_stats.get("opp_turnovers") is not None:
+                data["OpponentTurnovers"] = int(opp_stats["opp_turnovers"])
+            if opp_stats.get("opp_score") is not None:
+                data["OpponentScore"]     = int(opp_stats["opp_score"])
+            try:
+                if data.get("Team Score") is not None and opp_stats.get("opp_score") is not None:
+                    data["Margin"] = int(data["Team Score"]) - int(opp_stats["opp_score"])
+            except Exception:
+                pass
+
+    return data
+
+def register_team_precompute_stat_route(stat_name: str, stat_col: str):
+    # e.g. /team-score/Hawthorn/150?latest=true
+    path = f"/team-{stat_name}/" + "{team_name}/{value}"
+
+    @app.get(path)
+    async def _route(
+        team_name: str,
+        value: int,
+        latest: bool = True,
+        session: AsyncSession = Depends(get_session),
+        _stat_col=stat_col,
+    ):
+        return await _get_team_stat_game_from_team_precompute(_stat_col, team_name, value, session, latest)
+
 for name, col in STAT_COLUMN_MAP.items():
     register_stat_route(name, col)
+
+register_team_precompute_stat_route("score", "team_score")
+register_team_precompute_stat_route("disposals", "team_disposals")
 
 @app.get("/player/{player_name}")
 async def get_player(player_name: str, session: AsyncSession = Depends(get_session)):

@@ -266,7 +266,8 @@ for _, r in base.iterrows():
 
 future_df = pd.DataFrame(future_rows)
 if future_df.empty:
-    raise RuntimeError("No eligible players had Days_since_last_game and history; nothing to predict.")
+    print("ℹ️ No eligible players with Days_since_last_game & history; nothing to predict. Leaving prior predictions untouched.")
+    sys.exit(0)  # or return cleanly if you wrap this in a main()
 
 # 3) Enrich combined (player-level rolling)
 combined = pd.concat(
