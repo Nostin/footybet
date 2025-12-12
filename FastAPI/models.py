@@ -288,7 +288,7 @@ class TeamPrecompute(Base):
     glicko_rating = Column("glicko_rating", Float, nullable=True)
     ladder_position = Column("ladder_position", Integer, nullable=True)
     Next_Opponent = Column("Next_Opponent", String, nullable=True)
-    Win_Probability = Column("Win_Probability", Boolean, nullable=True)
+    Win_Probability = Column("Win_Probability", Float, nullable=True)
     Next_Venue = Column("Next_Venue", String, nullable=True)
 
     season_avg_score = Column("season_avg_score", Integer, nullable=True)
@@ -374,3 +374,22 @@ class TeamPrecompute(Base):
 
     def to_dict(self):
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
+class UpcomingGame(Base):
+    __tablename__ = "upcoming_games"
+
+    # Composite PK: Date + Home + Away is "good enough" here
+    Date = Column("Date", String, primary_key=True, nullable=True)
+    Venue = Column("Venue", String, nullable=True)
+    HomeTeam = Column("Home Team", String, primary_key=True, nullable=True)
+    AwayTeam = Column("Away Team", String, primary_key=True, nullable=True)
+    Timeslot = Column("Timeslot", String, nullable=True)
+
+    def to_dict(self):
+        return {
+            "Date": self.Date,
+            "Venue": self.Venue,
+            "HomeTeam": self.HomeTeam,
+            "AwayTeam": self.AwayTeam,
+            "Timeslot": self.Timeslot,
+        }

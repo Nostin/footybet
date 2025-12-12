@@ -1,9 +1,9 @@
 # main.py - uvicorn main:app --reload
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 from fastapi import FastAPI, HTTPException, Query, Depends
 from sqlalchemy import select, text as sqtext, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import PlayerPrecompute, PlayerNickname, PlayerStats, TeamPrecompute
+from models import PlayerPrecompute, PlayerNickname, PlayerStats, TeamPrecompute, UpcomingGame
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_session
 from datetime import date, datetime
@@ -110,6 +110,78 @@ async def _get_player_stat_game_by_col(
 
     return data
 
+async def _get_team_record_and_form(
+    session: AsyncSession,
+    team_name: str,
+    last_n: int = 5,
+) -> dict:
+    """
+    Returns current-year W/L/D record and last N results for a team.
+    Assumes PlayerStats.Date is stored as 'YYYY-MM-DD' text.
+    """
+
+    current_year = date.today().year
+    year_prefix = f"{current_year}-"  # e.g. '2025-'
+
+    # Base filter: this team, this year
+    base_filters = (
+        PlayerStats.Team == team_name,
+        PlayerStats.Date.like(f"{year_prefix}%"),
+    )
+
+    # Overall record for current year
+    record_stmt = (
+        select(
+            PlayerStats.GameResult,
+            func.count(func.distinct(PlayerStats.Date)).label("games"),
+        )
+        .where(*base_filters)
+        .group_by(PlayerStats.GameResult)
+    )
+    record_res = await session.execute(record_stmt)
+
+    wins = losses = draws = 0
+    for game_result, games in record_res.all():
+        if not game_result:
+            continue
+        gr = game_result.lower()
+        if gr.startswith("win"):
+            wins += games
+        elif gr.startswith("loss"):
+            losses += games
+        else:
+            draws += games
+
+    # Last N results within current year
+    last_stmt = (
+        select(
+            PlayerStats.Date,
+            PlayerStats.GameResult,
+            PlayerStats.Opponent,
+        )
+        .where(*base_filters)
+        .group_by(PlayerStats.Date, PlayerStats.GameResult, PlayerStats.Opponent)
+        .order_by(PlayerStats.Date.desc())
+        .limit(last_n)
+    )
+    last_res = await session.execute(last_stmt)
+    last_rows = last_res.all()
+
+    last_results: List[dict] = [
+        {
+            "date": row[0],
+            "result": row[1],
+            "opponent": row[2],
+        }
+        for row in last_rows
+    ]
+
+    return {
+        "wins": wins,
+        "losses": losses,
+        "draws": draws,
+        "last_results": last_results,
+    }
 
 def register_stat_route(stat_name: str, col):
     path = f"/{stat_name}/" + "{player_name}/{value}"
@@ -320,3 +392,92 @@ async def get_teams_by_names(names: str = Query(..., description="Comma-separate
     ]
 
     return ordered_players
+
+@app.get("/upcoming_games")
+async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
+    # 1. Filter using Postgres date conversion: 'DD/MM/YYYY' → date
+    stmt_games = (
+        select(UpcomingGame)
+        .where(
+            func.to_date(UpcomingGame.Date, 'DD/MM/YYYY') > func.current_date()
+            # If you want to include today as well, use >= instead
+            # func.to_date(UpcomingGame.Date, 'DD/MM/YYYY') >= func.current_date()
+        )
+        .order_by(
+            func.to_date(UpcomingGame.Date, 'DD/MM/YYYY'),
+            UpcomingGame.Timeslot,
+        )
+    )
+
+    res_games = await session.execute(stmt_games)
+    games = res_games.scalars().all()
+
+    if not games:
+        return []
+
+    # 2. Collect unique teams involved
+    team_names: set[str] = set()
+    for g in games:
+        if g.HomeTeam:
+            team_names.add(g.HomeTeam)
+        if g.AwayTeam:
+            team_names.add(g.AwayTeam)
+
+    # 3. Fetch precomputed team-level data in bulk
+    stmt_teams = select(TeamPrecompute).where(TeamPrecompute.Team.in_(team_names))
+    res_teams = await session.execute(stmt_teams)
+    team_rows = res_teams.scalars().all()
+    team_map = {t.Team: t for t in team_rows}
+
+    # 4. For each team, get record + last 5
+    team_form_cache: dict[str, dict] = {}
+    for name in team_names:
+        team_form_cache[name] = await _get_team_record_and_form(session, name, last_n=5)
+
+    # 5. Build response
+    output = []
+    for g in games:
+        home_name = g.HomeTeam
+        away_name = g.AwayTeam
+
+        home_team = team_map.get(home_name)
+        away_team = team_map.get(away_name)
+
+        home_form = team_form_cache.get(home_name, {})
+        away_form = team_form_cache.get(away_name, {})
+
+        game_payload = {
+            "date": g.Date,        # still the original "d/m/yyyy" string
+            "venue": g.Venue,
+            "timeslot": g.Timeslot,
+            "home_team": {
+                "name": home_name,
+                "ladder_position": getattr(home_team, "ladder_position", None) if home_team else None,
+                "elo_rating": getattr(home_team, "elo_rating", None) if home_team else None,
+                "glicko_rating": getattr(home_team, "glicko_rating", None) if home_team else None,
+                "ml_win_probability": getattr(home_team, "Win_Probability", None) if home_team else None,
+                "record": {
+                    "wins": home_form.get("wins"),
+                    "losses": home_form.get("losses"),
+                    "draws": home_form.get("draws"),
+                },
+                "last_5_results": home_form.get("last_results"),
+            },
+            "away_team": {
+                "name": away_name,
+                "ladder_position": getattr(away_team, "ladder_position", None) if away_team else None,
+                "elo_rating": getattr(away_team, "elo_rating", None) if away_team else None,
+                "glicko_rating": getattr(away_team, "glicko_rating", None) if away_team else None,
+                "ml_win_probability": getattr(away_team, "Win_Probability", None) if away_team else None,
+                "record": {
+                    "wins": away_form.get("wins"),
+                    "losses": away_form.get("losses"),
+                    "draws": away_form.get("draws"),
+                },
+                "last_5_results": away_form.get("last_results"),
+            },
+        }
+
+        output.append(game_payload)
+
+    return output
