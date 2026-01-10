@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models import PlayerPrecompute, PlayerNickname, PlayerStats, TeamPrecompute, UpcomingGame
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_session
-from datetime import date, datetime
+from datetime import date as DateType, datetime as DateTime
 
 app = FastAPI()
 
@@ -29,24 +29,34 @@ STAT_COLUMN_MAP: Dict[str, Any] = {
     "handballs":  PlayerStats.Handballs,
 }
 
-def _to_date_str(value) -> Optional[str]:
+def _to_date(value) -> Optional[DateType]:
     if value is None:
         return None
+
+    # Already a date (but not a datetime)
+    if isinstance(value, DateType) and not isinstance(value, DateTime):
+        return value
+
+    # Datetime → take the date part
+    if isinstance(value, DateTime):
+        return value.date()
+
+    # ISO string like '2025-07-26'
     if isinstance(value, str):
-        return value  # assume already like 'YYYY-MM-DD'
-    if isinstance(value, datetime):
-        return value.date().isoformat()
-    if isinstance(value, date):
-        return value.isoformat()
-    # fallback
-    return str(value)
+        try:
+            return DateType.fromisoformat(value)
+        except ValueError:
+            return None
+
+    # Fallback – you can make this stricter if you want
+    return None
 
 async def _get_opponent_team_stats(
     session: AsyncSession,
     opponent_team: str,
     date_value,  # accept any, we'll normalize
 ) -> Optional[dict]:
-    dt_str = _to_date_str(date_value)
+    dt = _to_date(date_value)
 
     stmt = (
         select(
@@ -57,7 +67,7 @@ async def _get_opponent_team_stats(
         )
         .where(
             PlayerStats.Team == opponent_team,
-            PlayerStats.Date == dt_str,   # string-to-string compare
+            PlayerStats.Date == dt,
         )
         .limit(1)
     )
@@ -117,27 +127,28 @@ async def _get_team_record_and_form(
 ) -> dict:
     """
     Returns current-year W/L/D record and last N results for a team.
-    Assumes PlayerStats.Date is stored as 'YYYY-MM-DD' text.
     """
 
     current_year = date.today().year
-    year_prefix = f"{current_year}-"  # e.g. '2025-'
+    start_of_year = date(current_year, 1, 1)
+    end_of_year = date(current_year, 12, 31)
 
-    # Base filter: this team, this year
-    base_filters = (
+    # ---------- 1) CURRENT-YEAR RECORD ----------
+    record_filters = (
         PlayerStats.Team == team_name,
-        PlayerStats.Date.like(f"{year_prefix}%"),
+        PlayerStats.Date >= start_of_year,
+        PlayerStats.Date <= end_of_year,
     )
 
-    # Overall record for current year
     record_stmt = (
         select(
             PlayerStats.GameResult,
             func.count(func.distinct(PlayerStats.Date)).label("games"),
         )
-        .where(*base_filters)
+        .where(*record_filters)
         .group_by(PlayerStats.GameResult)
     )
+
     record_res = await session.execute(record_stmt)
 
     wins = losses = draws = 0
@@ -152,26 +163,39 @@ async def _get_team_record_and_form(
         else:
             draws += games
 
-    # Last N results within current year
+    # ---------- 2) LAST N RESULTS (ALL TIME) ----------
+    last_filters = (PlayerStats.Team == team_name,)
+
     last_stmt = (
         select(
             PlayerStats.Date,
             PlayerStats.GameResult,
             PlayerStats.Opponent,
+            PlayerStats.Round,
+            PlayerStats.Venue,
         )
-        .where(*base_filters)
-        .group_by(PlayerStats.Date, PlayerStats.GameResult, PlayerStats.Opponent)
+        .where(*last_filters)
+        .group_by(
+            PlayerStats.Date,
+            PlayerStats.GameResult,
+            PlayerStats.Opponent,
+            PlayerStats.Round,
+            PlayerStats.Venue,
+        )
         .order_by(PlayerStats.Date.desc())
         .limit(last_n)
     )
+
     last_res = await session.execute(last_stmt)
     last_rows = last_res.all()
 
-    last_results: List[dict] = [
+    last_results = [
         {
             "date": row[0],
             "result": row[1],
             "opponent": row[2],
+            "round": row[3],
+            "venue": row[4],
         }
         for row in last_rows
     ]
@@ -395,18 +419,10 @@ async def get_teams_by_names(names: str = Query(..., description="Comma-separate
 
 @app.get("/upcoming_games")
 async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
-    # 1. Filter using Postgres date conversion: 'DD/MM/YYYY' → date
     stmt_games = (
         select(UpcomingGame)
-        .where(
-            func.to_date(UpcomingGame.Date, 'DD/MM/YYYY') > func.current_date()
-            # If you want to include today as well, use >= instead
-            # func.to_date(UpcomingGame.Date, 'DD/MM/YYYY') >= func.current_date()
-        )
-        .order_by(
-            func.to_date(UpcomingGame.Date, 'DD/MM/YYYY'),
-            UpcomingGame.Timeslot,
-        )
+        .where(UpcomingGame.Date >= func.current_date())
+        .order_by(UpcomingGame.Date, UpcomingGame.Timeslot)
     )
 
     res_games = await session.execute(stmt_games)
@@ -415,7 +431,6 @@ async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
     if not games:
         return []
 
-    # 2. Collect unique teams involved
     team_names: set[str] = set()
     for g in games:
         if g.HomeTeam:
@@ -423,18 +438,15 @@ async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
         if g.AwayTeam:
             team_names.add(g.AwayTeam)
 
-    # 3. Fetch precomputed team-level data in bulk
     stmt_teams = select(TeamPrecompute).where(TeamPrecompute.Team.in_(team_names))
     res_teams = await session.execute(stmt_teams)
     team_rows = res_teams.scalars().all()
     team_map = {t.Team: t for t in team_rows}
 
-    # 4. For each team, get record + last 5
     team_form_cache: dict[str, dict] = {}
     for name in team_names:
         team_form_cache[name] = await _get_team_record_and_form(session, name, last_n=5)
 
-    # 5. Build response
     output = []
     for g in games:
         home_name = g.HomeTeam
@@ -446,13 +458,34 @@ async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
         home_form = team_form_cache.get(home_name, {})
         away_form = team_form_cache.get(away_name, {})
 
+        # --- derive ladder position, but reset if no games this season ---
+        def ladder_for_team(team_obj, form: Optional[dict]):
+            if not team_obj:
+                return None
+            base_ladder = getattr(team_obj, "ladder_position", None)
+            if base_ladder is None:
+                return None
+
+            w = (form or {}).get("wins") or 0
+            l = (form or {}).get("losses") or 0
+            d = (form or {}).get("draws") or 0
+
+            # If team has no games in current season, ignore last year's ladder
+            if w + l + d == 0:
+                return None
+
+            return base_ladder
+
+        home_ladder = ladder_for_team(home_team, home_form)
+        away_ladder = ladder_for_team(away_team, away_form)
+
         game_payload = {
-            "date": g.Date,        # still the original "d/m/yyyy" string
+            "date": g.Date,        # now a date; stringify on frontend if needed
             "venue": g.Venue,
             "timeslot": g.Timeslot,
             "home_team": {
                 "name": home_name,
-                "ladder_position": getattr(home_team, "ladder_position", None) if home_team else None,
+                "ladder_position": home_ladder,
                 "elo_rating": getattr(home_team, "elo_rating", None) if home_team else None,
                 "glicko_rating": getattr(home_team, "glicko_rating", None) if home_team else None,
                 "ml_win_probability": getattr(home_team, "Win_Probability", None) if home_team else None,
@@ -465,7 +498,7 @@ async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
             },
             "away_team": {
                 "name": away_name,
-                "ladder_position": getattr(away_team, "ladder_position", None) if away_team else None,
+                "ladder_position": away_ladder,
                 "elo_rating": getattr(away_team, "elo_rating", None) if away_team else None,
                 "glicko_rating": getattr(away_team, "glicko_rating", None) if away_team else None,
                 "ml_win_probability": getattr(away_team, "Win_Probability", None) if away_team else None,
