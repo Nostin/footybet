@@ -129,9 +129,9 @@ async def _get_team_record_and_form(
     Returns current-year W/L/D record and last N results for a team.
     """
 
-    current_year = date.today().year
-    start_of_year = date(current_year, 1, 1)
-    end_of_year = date(current_year, 12, 31)
+    current_year = DateType.today().year
+    start_of_year = DateType(current_year, 1, 1)
+    end_of_year = DateType(current_year, 12, 31)
 
     # ---------- 1) CURRENT-YEAR RECORD ----------
     record_filters = (
