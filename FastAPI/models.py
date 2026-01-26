@@ -384,6 +384,7 @@ class UpcomingGame(Base):
     HomeTeam = Column("Home Team", String, primary_key=True, nullable=True)
     AwayTeam = Column("Away Team", String, primary_key=True, nullable=True)
     Timeslot = Column("Timeslot", String, nullable=True)
+    Round = Column("Round", String, nullable=True)
 
     def to_dict(self):
         return {
@@ -392,4 +393,5 @@ class UpcomingGame(Base):
             "HomeTeam": self.HomeTeam,
             "AwayTeam": self.AwayTeam,
             "Timeslot": self.Timeslot,
+            "Round": self.Round,
         }

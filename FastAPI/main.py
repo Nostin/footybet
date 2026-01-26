@@ -483,6 +483,7 @@ async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
             "date": g.Date,        # now a date; stringify on frontend if needed
             "venue": g.Venue,
             "timeslot": g.Timeslot,
+            "round": g.Round,
             "home_team": {
                 "name": home_name,
                 "ladder_position": home_ladder,

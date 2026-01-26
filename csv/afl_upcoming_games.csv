@@ -1,52 +1,6 @@
-﻿Date,Venue,Home Team,Away Team,Timeslot
-31/07/2025,Docklands,Bulldogs,GWS,Night
-1/08/2025,Adelaide,Adelaide,Hawthorn,Night
-2/08/2025,Docklands,Dees,Eagles,Day
-2/08/2025,Gold Coast,Suns,Richmond,Twilight
-2/08/2025,SCG,Sydney,Essendon,Twilight
-2/08/2025,MCG,Collingwood,Brisbane,Night
-3/08/2025,Docklands,Saints,Norf,Day
-3/08/2025,Geelong,Geelong,Port,Day
-3/08/2025,Perth,Fremantle,Carlton,Day
-7/08/2025,MCG,Hawthorn,Collingwood,Night
-8/08/2025,Geelong,Geelong,Essendon,Night
-9/08/2025,MCG,Richmond,Saints,Day
-9/08/2025,Brisbane,Brisbane,Sydney,Twilight
-9/08/2025,Docklands,Carlton,Suns,Night
-9/08/2025,Adelaide,Port,Fremantle,Night
-10/08/2025,Canberra,GWS,Norf,Day
-10/08/2025,MCG,Dees,Bulldogs,Day
-10/08/2025,Perth,Eagles,Adelaide,Day
-15/08/2025,Docklands,Essendon,Saints,Night
-15/08/2025,Perth,Fremantle,Brisbane,Twilight
-16/08/2025,Gold Coast,Suns,GWS,Day
-16/08/2025,Docklands,Carlton,Port,Day
-16/08/2025,MCG,Hawthorn,Dees,Twilight
-16/08/2025,Adelaide,Adelaide,Collingwood,Night
-17/08/2025,Hobart,Norf,Richmond,Day
-17/08/2025,SCG,Sydney,Geelong,Day
-17/08/2025,Docklands,Bulldogs,Eagles,Twilight
-21/08/2025,MCG,Essendon,Carlton,Night
-22/08/2025,MCG,Collingwood,Dees,Night
-22/08/2025,Adelaide,Port,Suns,Night
-23/08/2025,Docklands,Norf,Adelaide,Day
-23/08/2025,MCG,Richmond,Geelong,Twilight
-23/08/2025,Perth,Eagles,Sydney,Night
-24/08/2025,Engie,GWS,Saints,Day
-24/08/2025,Docklands,Bulldogs,Fremantle,Day
-24/08/2025,Brisbane,Brisbane,Hawthorn,Night
-27/08/2025,Gold Coast,Suns,Essendon,Night
-4/09/2025,Adelaide,Adelaide,Collingwood,Night
-5/09/2025,MCG,Geelong,Brisbane,Night
-6/09/2025,Engie,GWS,Hawthorn,Day
-6/09/2025,Perth,Fremantle,Suns,Night
-12/09/2025,Adelaide,Adelaide,Hawthorn,Night
-13/09/2025,Brisbane,Brisbane,Suns,Night
-19/09/2025,MCG,Hawthorn,Geelong,Night
-20/09/2025,MCG,Collingwood,Brisbane,Night
-27/09/2025,MCG,Geelong,Brisbane,Day
-5/03/2026,SCG,Sydney,Carlton,Night
-6/03/2026,Gold Coast,Suns,Geelong,Night
-7/03/2026,Engie,GWS,Hawthorn,Twilight
-7/03/2026,Brisbane,Brisbane,Bulldogs,Night
-8/03/2026,MCG,Saints,Collingwood,Night
+﻿Date,Venue,Home Team,Away Team,Timeslot,Round
+5/03/2026,SCG,Sydney,Carlton,Night,OR
+6/03/2026,Gold Coast,Suns,Geelong,Night,OR
+7/03/2026,Engie,GWS,Hawthorn,Twilight,OR
+7/03/2026,Brisbane,Brisbane,Bulldogs,Night,OR
+8/03/2026,MCG,Saints,Collingwood,Night,OR
