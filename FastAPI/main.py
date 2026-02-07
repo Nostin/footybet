@@ -374,7 +374,7 @@ async def get_players_by_team_path(team_name: str, session: AsyncSession = Depen
 # get single team by team name eg: /team/Carlton
 @app.get("/team/{team_name}")
 async def get_team(team_name: str, session: AsyncSession = Depends(get_session)):
-    # latest precompute row (current season if you store season on it)
+    # latest precompute row
     pre_stmt = (
         select(TeamPrecompute)
         .where(TeamPrecompute.Team == team_name)
@@ -389,6 +389,7 @@ async def get_team(team_name: str, session: AsyncSession = Depends(get_session))
 
     season = getattr(pre, "season", None) or pre.Date.year  # fallback
 
+    # season summary from teams table
     teams_stmt = (
         select(Teams)
         .where(Teams.Team == team_name, Teams.season == season)
@@ -397,9 +398,22 @@ async def get_team(team_name: str, session: AsyncSession = Depends(get_session))
     teams_res = await session.execute(teams_stmt)
     season_row = teams_res.scalar_one_or_none()
 
+    # record + last N results (reused helper; uses team_games)
+    form = await _get_team_record_and_form(session, team_name, last_n=5)
+
     payload = pre.to_dict()
     payload["season_summary"] = season_row.to_dict() if season_row else None
+
+    # attach last results + record
+    payload["record"] = {
+        "wins": form.get("wins"),
+        "losses": form.get("losses"),
+        "draws": form.get("draws"),
+    }
+    payload["last_results"] = form.get("last_results")  # or call it last_5_results if you prefer
+
     return payload
+
     
 # get all teams
 @app.get("/teams")

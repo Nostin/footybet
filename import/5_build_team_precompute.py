@@ -353,10 +353,12 @@ SELECT
     t."season_wins"       AS season_wins,
     t."season_losses"     AS season_losses,
     t."season_draws"      AS season_draws,
+    t."season_points_for"      AS season_points_for,
+    t."season_points_against"  AS season_points_against,
     t."season_percentage" AS season_percentage,
     t."ladder_points"     AS ladder_points,
     t."ladder_position"   AS ladder_position,
-    t."season_surprise"   AS surprise_results
+    t."season_surprise"   AS season_surprise
 FROM latest l
 LEFT JOIN teams t
   ON t."Team" = l."Team" AND t."season" = l."season";

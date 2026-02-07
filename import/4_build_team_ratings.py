@@ -470,13 +470,34 @@ summary = summary.sort_values(
 )
 summary["ladder_position"] = summary.groupby("season").cumcount() + 1
 
+# --- Elo/Glicko ranks within each season (1 = best) ---
+# Use dense ranking so ties share the same rank without gaps: 1,2,2,3...
+summary["elo_rank"] = (
+    summary.groupby("season")["elo"]
+           .rank(method="dense", ascending=False)
+           .astype(int)
+)
+
+summary["glicko_rank"] = (
+    summary.groupby("season")["glicko"]
+           .rank(method="dense", ascending=False)
+           .astype(int)
+)
+
+summary["percentage_rank"] = (
+    summary.groupby("season")["season_percentage"]
+           .rank(method="dense", ascending=False)
+           .astype(int)
+)
+
+
 summary = summary[[
     "season", "Team",
-    "elo", "glicko", "glicko_rd", "glicko_vol",
+    "elo", "elo_rank", "glicko", "glicko_rank", "glicko_rd", "glicko_vol",
     "season_wins", "season_losses", "season_draws",
     "season_points_for","season_points_against",
     "season_home_wins", "season_home_losses", "season_away_wins", "season_away_losses",
-    "season_percentage", "ladder_points", "ladder_position",
+    "season_percentage", "percentage_rank", "ladder_points", "ladder_position",
     "season_surprise"
 ]]
 
