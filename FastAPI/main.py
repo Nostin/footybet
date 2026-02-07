@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional, List
 from fastapi import FastAPI, HTTPException, Query, Depends
 from sqlalchemy import select, text as sqtext, func
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import PlayerPrecompute, PlayerNickname, PlayerStats, TeamPrecompute, UpcomingGame
+from models import PlayerPrecompute, PlayerNickname, PlayerStats, TeamPrecompute, UpcomingGame, TeamGame
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_session
 from datetime import date as DateType, datetime as DateTime
@@ -33,30 +33,33 @@ def _to_date(value) -> Optional[DateType]:
     if value is None:
         return None
 
-    # Already a date (but not a datetime)
     if isinstance(value, DateType) and not isinstance(value, DateTime):
         return value
 
-    # Datetime → take the date part
     if isinstance(value, DateTime):
         return value.date()
 
-    # ISO string like '2025-07-26'
     if isinstance(value, str):
+        s = value.strip()
+        # Accept ISO: YYYY-MM-DD
         try:
-            return DateType.fromisoformat(value)
+            return DateType.fromisoformat(s)
         except ValueError:
+            pass
+
+        # Accept D/M/YYYY (your old CSV style)
+        try:
+            d, m, y = s.split("/")
+            return DateType(int(y), int(m), int(d))
+        except Exception:
             return None
 
-    # Fallback – you can make this stricter if you want
     return None
 
-async def _get_opponent_team_stats(
-    session: AsyncSession,
-    opponent_team: str,
-    date_value,  # accept any, we'll normalize
-) -> Optional[dict]:
+async def _get_opponent_team_stats(session: AsyncSession, opponent_team: str, date_value) -> Optional[dict]:
     dt = _to_date(date_value)
+    if not dt:
+        return None
 
     stmt = (
         select(
@@ -71,6 +74,7 @@ async def _get_opponent_team_stats(
         )
         .limit(1)
     )
+
     res = await session.execute(stmt)
     return res.mappings().first()
 
@@ -126,27 +130,23 @@ async def _get_team_record_and_form(
     last_n: int = 5,
 ) -> dict:
     """
-    Returns current-year W/L/D record and last N results for a team.
+    Returns current-season W/L/D record and last N results for a team,
+    sourced from team_games (proper timestamp column).
     """
 
     current_year = DateType.today().year
-    start_of_year = DateType(current_year, 1, 1)
-    end_of_year = DateType(current_year, 12, 31)
 
-    # ---------- 1) CURRENT-YEAR RECORD ----------
-    record_filters = (
-        PlayerStats.Team == team_name,
-        PlayerStats.Date >= start_of_year,
-        PlayerStats.Date <= end_of_year,
-    )
-
+    # ---------- 1) CURRENT-SEASON RECORD (team_games) ----------
     record_stmt = (
         select(
-            PlayerStats.GameResult,
-            func.count(func.distinct(PlayerStats.Date)).label("games"),
+            TeamGame.result,
+            func.count().label("games"),
         )
-        .where(*record_filters)
-        .group_by(PlayerStats.GameResult)
+        .where(
+            TeamGame.Team == team_name,
+            TeamGame.season == current_year,
+        )
+        .group_by(TeamGame.result)
     )
 
     record_res = await session.execute(record_stmt)
@@ -155,34 +155,27 @@ async def _get_team_record_and_form(
     for game_result, games in record_res.all():
         if not game_result:
             continue
-        gr = game_result.lower()
+        gr = str(game_result).lower()
         if gr.startswith("win"):
             wins += games
         elif gr.startswith("loss"):
             losses += games
-        else:
+        elif gr.startswith("draw"):
             draws += games
 
-    # ---------- 2) LAST N RESULTS (ALL TIME) ----------
-    last_filters = (PlayerStats.Team == team_name,)
-
+    # ---------- 2) LAST N RESULTS (team_games, all time) ----------
     last_stmt = (
         select(
-            PlayerStats.Date,
-            PlayerStats.GameResult,
-            PlayerStats.Opponent,
-            PlayerStats.Round,
-            PlayerStats.Venue,
+            TeamGame.Date,
+            TeamGame.result,
+            TeamGame.Opponent,
+            TeamGame.Round,
+            TeamGame.Venue,
+            TeamGame.points_for,
+            TeamGame.points_against,
         )
-        .where(*last_filters)
-        .group_by(
-            PlayerStats.Date,
-            PlayerStats.GameResult,
-            PlayerStats.Opponent,
-            PlayerStats.Round,
-            PlayerStats.Venue,
-        )
-        .order_by(PlayerStats.Date.desc())
+        .where(TeamGame.Team == team_name)
+        .order_by(TeamGame.Date.desc())
         .limit(last_n)
     )
 
@@ -191,11 +184,14 @@ async def _get_team_record_and_form(
 
     last_results = [
         {
-            "date": row[0],
+            "date": row[0].date() if row[0] else None,  # return date instead of datetime (optional)
             "result": row[1],
             "opponent": row[2],
             "round": row[3],
             "venue": row[4],
+            "margin": (row[5] - row[6]) if (row[5] is not None and row[6] is not None) else None,
+            "points_for": row[5],
+            "points_against": row[6],
         }
         for row in last_rows
     ]

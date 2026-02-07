@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Float
+from sqlalchemy import Column, Integer, String, Boolean, Float, Date, DateTime, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.inspection import inspect
 
@@ -236,7 +236,7 @@ class PlayerNickname(Base):
 class PlayerStats(Base):
     __tablename__ = "player_stats"
 
-    Date = Column("Date", String, primary_key=True)
+    Date = Column("Date", Date, primary_key=True, nullable=True)
     Team = Column("Team", String, primary_key=False)
     Opponent = Column("Opponent", String, primary_key=False)
     Player = Column("Player", String, primary_key=True)
@@ -395,3 +395,18 @@ class UpcomingGame(Base):
             "Timeslot": self.Timeslot,
             "Round": self.Round,
         }
+
+class TeamGame(Base):
+    __tablename__ = "team_games"
+
+    Date = Column("Date", DateTime, primary_key=True)
+    season = Column("season", BigInteger, nullable=True)
+    Round = Column("Round", String, nullable=True)
+    Team = Column("Team", String, nullable=True)
+    Opponent = Column("Opponent", String, nullable=True)
+    Venue = Column("Venue", String, nullable=True)
+    Timeslot = Column("Timeslot", String, nullable=True)
+
+    points_for = Column("points_for", Float, nullable=True)
+    points_against = Column("points_against", Float, nullable=True)
+    result = Column("result", String, nullable=True)  # Win/Loss/Draw
