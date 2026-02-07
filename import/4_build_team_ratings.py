@@ -423,20 +423,29 @@ res_map = {"Win":1.0, "Loss":0.0, "Draw":0.5}
 reg["S"] = reg["result"].map(res_map).astype(float)
 # Surprise = |actual - expected by Glicko|
 reg["g2_surprise"] = (reg["S"] - reg["g2_exp_winprob"]).abs()
-
+reg["is_home"] = reg.apply(lambda r: is_home(r["Team"], r["Venue"]), axis=1)
+reg["home_win"]  = ((reg["result"]=="Win")  & (reg["is_home"]==True)).astype(int)
+reg["home_loss"] = ((reg["result"]=="Loss") & (reg["is_home"]==True)).astype(int)
+reg["away_win"]  = ((reg["result"]=="Win")  & (reg["is_home"]==False)).astype(int)
+reg["away_loss"] = ((reg["result"]=="Loss") & (reg["is_home"]==False)).astype(int)
 # season totals (regular season)
 season_totals = (
     reg.groupby(["season","Team"], as_index=False)
        .agg(
-           season_wins   = ("result", lambda s: (s=="Win").sum()),
-           season_losses = ("result", lambda s: (s=="Loss").sum()),
-           season_draws  = ("result", lambda s: (s=="Draw").sum()),
-           pf            = ("points_for", "sum"),
-           pa            = ("points_against", "sum"),
-           season_surprise = ("g2_surprise", "mean"),
+            season_wins   = ("result", lambda s: (s=="Win").sum()),
+            season_losses = ("result", lambda s: (s=="Loss").sum()),
+            season_draws  = ("result", lambda s: (s=="Draw").sum()),
+            pf            = ("points_for", "sum"),
+            pa            = ("points_against", "sum"),
+            season_surprise = ("g2_surprise", "mean"),
+            season_home_wins=("home_win","sum"),
+            season_home_losses=("home_loss","sum"),
+            season_away_wins=("away_win","sum"),
+            season_away_losses=("away_loss","sum"),
        )
 )
 season_totals["season_percentage"] = 100.0 * season_totals["pf"] / season_totals["pa"].replace(0, np.nan)
+season_totals = season_totals.rename(columns={"pf":"season_points_for", "pa":"season_points_against"})
 
 # last post-ratings (may include finals; that's okay for strength going forward)
 last_posts = (team_table
@@ -455,14 +464,18 @@ summary = season_totals.merge(last_posts, on=["season","Team"], how="left")
 
 # ladder points/position (AFL: 4 for win, 2 for draw) — regular season only
 summary["ladder_points"] = 4*summary["season_wins"] + 2*summary["season_draws"]
-summary = summary.sort_values(["season","ladder_points","season_percentage","pf"],
-                              ascending=[True, False, False, False])
+summary = summary.sort_values(
+    ["season", "ladder_points", "season_percentage", "season_points_for"],
+    ascending=[True, False, False, False]
+)
 summary["ladder_position"] = summary.groupby("season").cumcount() + 1
 
 summary = summary[[
     "season", "Team",
     "elo", "glicko", "glicko_rd", "glicko_vol",
     "season_wins", "season_losses", "season_draws",
+    "season_points_for","season_points_against",
+    "season_home_wins", "season_home_losses", "season_away_wins", "season_away_losses",
     "season_percentage", "ladder_points", "ladder_position",
     "season_surprise"
 ]]

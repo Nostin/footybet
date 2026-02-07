@@ -1,9 +1,9 @@
 # main.py - uvicorn main:app --reload
 from typing import Any, Dict, Optional, List
 from fastapi import FastAPI, HTTPException, Query, Depends
-from sqlalchemy import select, text as sqtext, func
+from sqlalchemy import select, text as sqtext, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import PlayerPrecompute, PlayerNickname, PlayerStats, TeamPrecompute, UpcomingGame, TeamGame
+from models import PlayerPrecompute, PlayerNickname, PlayerStats, Teams, TeamPrecompute, UpcomingGame, TeamGame
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_session
 from datetime import date as DateType, datetime as DateTime
@@ -374,14 +374,32 @@ async def get_players_by_team_path(team_name: str, session: AsyncSession = Depen
 # get single team by team name eg: /team/Carlton
 @app.get("/team/{team_name}")
 async def get_team(team_name: str, session: AsyncSession = Depends(get_session)):
-    stmt = select(TeamPrecompute).where(TeamPrecompute.Team == team_name)
-    result = await session.execute(stmt)
-    team = result.scalar_one_or_none()
+    # latest precompute row (current season if you store season on it)
+    pre_stmt = (
+        select(TeamPrecompute)
+        .where(TeamPrecompute.Team == team_name)
+        .order_by(desc(TeamPrecompute.Date))
+        .limit(1)
+    )
+    pre_res = await session.execute(pre_stmt)
+    pre = pre_res.scalar_one_or_none()
 
-    if not team:
+    if not pre:
         raise HTTPException(status_code=404, detail="Team not found")
 
-    return team.to_dict()
+    season = getattr(pre, "season", None) or pre.Date.year  # fallback
+
+    teams_stmt = (
+        select(Teams)
+        .where(Teams.Team == team_name, Teams.season == season)
+        .limit(1)
+    )
+    teams_res = await session.execute(teams_stmt)
+    season_row = teams_res.scalar_one_or_none()
+
+    payload = pre.to_dict()
+    payload["season_summary"] = season_row.to_dict() if season_row else None
+    return payload
     
 # get all teams
 @app.get("/teams")

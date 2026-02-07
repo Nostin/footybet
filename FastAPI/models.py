@@ -279,11 +279,38 @@ class PlayerStats(Base):
             out[key] = getattr(self, orm_name)
         return out
 
-    
+class Teams(Base):
+    __tablename__ = "teams"
+
+    season = Column("season", BigInteger, primary_key=True)
+    Team = Column("Team", String, primary_key=True)
+    elo = Column("elo", Float, nullable=True)
+    glicko = Column("glicko", Float, nullable=True)
+    glicko_rd = Column("glicko_rd", Float, nullable=True)
+    glicko_vol = Column("glicko_vol", Float, nullable=True)
+    season_wins = Column("season_wins", Integer, nullable=True)
+    season_losses = Column("season_losses", Integer, nullable=True)
+    season_draws = Column("season_draws", Integer, nullable=True)
+    season_points_for = Column("season_points_for", Float, nullable=True)
+    season_points_against = Column("season_points_against", Float, nullable=True)
+    season_home_wins = Column("season_home_wins", Integer, nullable=True)
+    season_home_losses = Column("season_home_losses", Integer, nullable=True)
+    season_away_wins = Column("season_away_wins", Integer, nullable=True)
+    season_away_losses = Column("season_away_losses", Integer, nullable=True)
+    season_percentage = Column("season_percentage", Float, nullable=True)
+    ladder_points = Column("ladder_points", Integer, nullable=True)
+    ladder_position = Column("ladder_position", Integer, nullable=True)
+    season_surprise = Column("season_surprise", Float, nullable=True) # how closely did the results match Glicko's predictions.  0 = exactly right, 1 = exactly wrong
+
+    def to_dict(self):
+        insp = inspect(self)
+        return {attr.key: getattr(self, attr.key) for attr in insp.mapper.column_attrs}
+
 class TeamPrecompute(Base):
     __tablename__ = "team_precompute_latest"
 
     Team = Column("Team", String, primary_key=True,nullable=True)
+    Date = Column("Date", Date, primary_key=True, nullable=True)
     elo_rating = Column("elo_rating", Float, nullable=True)
     glicko_rating = Column("glicko_rating", Float, nullable=True)
     ladder_position = Column("ladder_position", Integer, nullable=True)
