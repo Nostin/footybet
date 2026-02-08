@@ -453,6 +453,23 @@ class UpcomingGame(Base):
             "Round": self.Round,
         }
 
+class UpcomingGameWithTips(Base):
+    __tablename__ = "upcoming_games_with_tips"
+
+    Date = Column(Date, primary_key=True)
+    Venue = Column(String, primary_key=True)
+    HomeTeam = Column("Home Team", String, primary_key=True)
+    AwayTeam = Column("Away Team", String, primary_key=True)
+
+    Timeslot = Column(String)
+    Round = Column(String)
+
+    Tip = Column(String, nullable=True)
+    TipConfidence = Column("Tip Confidence", String, nullable=True)
+    TipMargin = Column("Tip Margin", Integer, nullable=True)
+    Correct = Column(String, nullable=True) # "Yes" / "No" / NULL
+    ActualMargin = Column("Actual Margin", String, nullable=True)
+
 class TeamGame(Base):
     __tablename__ = "team_games"
 

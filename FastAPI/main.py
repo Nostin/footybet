@@ -445,12 +445,14 @@ async def get_teams_by_names(names: str = Query(..., description="Comma-separate
 
     return ordered_players
 
+from models import UpcomingGameWithTips
+
 @app.get("/upcoming_games")
 async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
     stmt_games = (
-        select(UpcomingGame)
-        .where(UpcomingGame.Date >= func.current_date())
-        .order_by(UpcomingGame.Date, UpcomingGame.Timeslot)
+        select(UpcomingGameWithTips)
+        .where(UpcomingGameWithTips.Date >= func.current_date())
+        .order_by(UpcomingGameWithTips.Date, UpcomingGameWithTips.Timeslot)
     )
 
     res_games = await session.execute(stmt_games)
@@ -486,32 +488,32 @@ async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
         home_form = team_form_cache.get(home_name, {})
         away_form = team_form_cache.get(away_name, {})
 
-        # --- derive ladder position, but reset if no games this season ---
         def ladder_for_team(team_obj, form: Optional[dict]):
             if not team_obj:
                 return None
             base_ladder = getattr(team_obj, "ladder_position", None)
             if base_ladder is None:
                 return None
-
             w = (form or {}).get("wins") or 0
             l = (form or {}).get("losses") or 0
             d = (form or {}).get("draws") or 0
-
-            # If team has no games in current season, ignore last year's ladder
-            if w + l + d == 0:
-                return None
-
-            return base_ladder
+            return None if (w + l + d == 0) else base_ladder
 
         home_ladder = ladder_for_team(home_team, home_form)
         away_ladder = ladder_for_team(away_team, away_form)
 
         game_payload = {
-            "date": g.Date,        # now a date; stringify on frontend if needed
+            "date": g.Date,
             "venue": g.Venue,
             "timeslot": g.Timeslot,
             "round": g.Round,
+            "tip": {
+                "team": g.Tip,
+                "confidence": g.TipConfidence,
+                "margin": g.TipMargin,
+                "correct": g.Correct,
+                "actual_margin": g.ActualMargin,
+            } if g.Tip is not None else None,
             "home_team": {
                 "name": home_name,
                 "ladder_position": home_ladder,
@@ -543,3 +545,4 @@ async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
         output.append(game_payload)
 
     return output
+
