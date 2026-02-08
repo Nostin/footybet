@@ -1,9 +1,9 @@
 # main.py - uvicorn main:app --reload
 from typing import Any, Dict, Optional, List
 from fastapi import FastAPI, HTTPException, Query, Depends
-from sqlalchemy import select, text as sqtext, func, desc
+from sqlalchemy import select, text as sqtext, func, desc, cast, Integer, extract
 from sqlalchemy.ext.asyncio import AsyncSession
-from models import PlayerPrecompute, PlayerNickname, PlayerStats, Teams, TeamPrecompute, UpcomingGame, TeamGame
+from models import PlayerPrecompute, PlayerNickname, PlayerStats, Teams, TeamPrecompute, UpcomingGame, TeamGame, Tips, TipRanks
 from fastapi.middleware.cors import CORSMiddleware
 from db import get_session
 from datetime import date as DateType, datetime as DateTime
@@ -546,3 +546,179 @@ async def get_upcoming_games(session: AsyncSession = Depends(get_session)):
 
     return output
 
+@app.get("/tips")
+async def get_tips(
+    season: Optional[int] = Query(None, description="Season year, e.g. 2026"),
+    session: AsyncSession = Depends(get_session),
+):
+    tips_stmt = select(Tips).order_by(Tips.Date, Tips.Round, Tips.Venue, Tips.HomeTeam)
+
+    # If season is provided, filter tips in SQL (fast + less data)
+    if season is not None:
+        tips_stmt = tips_stmt.where(extract("year", Tips.Date) == season)
+
+    tips_rows = (await session.execute(tips_stmt)).scalars().all()
+    if not tips_rows:
+        return {"seasons": []}
+
+    ranks_stmt = select(TipRanks)
+    # Optional: filter ranks too (nice + consistent)
+    if season is not None:
+        ranks_stmt = ranks_stmt.where(TipRanks.Season == season)
+
+    ranks_rows = (await session.execute(ranks_stmt)).scalars().all()
+
+    FINAL_ORDER = {"QF": 100, "EF": 101, "SF": 102, "PF": 103, "GF": 104}
+
+    def normalize_round_key(raw) -> str:
+        if raw is None:
+            return ""
+        k = str(raw).strip().upper()
+        if k in {"OPENING ROUND", "OPEN ROUND"}:
+            return "OR"
+        if k.startswith("ROUND "):
+            k = k.replace("ROUND ", "").strip()
+        if k.startswith("R") and k[1:].isdigit():
+            return k[1:]
+        long_map = {
+            "QUALIFYING FINAL": "QF",
+            "ELIMINATION FINAL": "EF",
+            "SEMI FINAL": "SF",
+            "PRELIMINARY FINAL": "PF",
+            "GRAND FINAL": "GF",
+        }
+        return long_map.get(k, k)
+
+    def round_sort_key(raw):
+        k = normalize_round_key(raw)
+        if k == "OR":
+            return (0, 0)
+        if k.isdigit():
+            return (1, int(k))
+        if k in FINAL_ORDER:
+            return (2, FINAL_ORDER[k])
+        return (3, k)
+
+    rank_map: Dict[tuple[int, str], Dict[str, Any]] = {}
+    for r in ranks_rows:
+        if r.Season is None or r.Round is None:
+            continue
+        rank_map[(int(r.Season), normalize_round_key(r.Round))] = {
+            "overall_rank": r.Rank,
+            "total_players": r.Total,
+        }
+
+    seasons: Dict[int, Dict[str, Any]] = {}
+
+    def ensure_season(season: int) -> Dict[str, Any]:
+        if season not in seasons:
+            seasons[season] = {"season": season, "rounds": {}, "summary": {}}
+        return seasons[season]
+
+    def ensure_round(season_obj: Dict[str, Any], round_key: str) -> Dict[str, Any]:
+        rounds = season_obj["rounds"]
+        if round_key not in rounds:
+            rounds[round_key] = {"round": round_key, "matches": [], "summary": {}}
+        return rounds[round_key]
+
+    for t in tips_rows:
+        if not t.Date:
+            continue
+        season = t.Date.year
+        round_key = normalize_round_key(t.Round)
+
+        season_obj = ensure_season(season)
+        round_obj = ensure_round(season_obj, round_key)
+
+        round_obj["matches"].append({
+            "date": t.Date.isoformat(),
+            "venue": t.Venue,
+            "home_team": t.HomeTeam,
+            "away_team": t.AwayTeam,
+            "timeslot": t.Timeslot,
+            "round": round_key,
+            "season": season,
+            "tip": t.Tip,
+            "confidence": t.TipConfidence,
+            "tip_margin": t.TipMargin,
+            "correct": t.Correct,
+            "actual_margin": t.ActualMargin,
+        })
+
+    def summarize_matches(matches: list[dict], season: int, round_key: Optional[str]):
+        total_tips = sum(1 for m in matches if m.get("tip") is not None)
+
+        decided = [m for m in matches if m.get("correct") in ("Yes", "No")]
+        total_decided = len(decided)
+        total_correct = sum(1 for m in decided if m.get("correct") == "Yes")
+        accuracy = (total_correct / total_decided) if total_decided else None
+
+        diffs = []
+        for m in matches:
+            tm = m.get("tip_margin")
+            am = m.get("actual_margin")
+            if tm is None or am is None:
+                continue
+            try:
+                diffs.append(abs(int(tm) - int(am)))  # cumulative absolute error
+            except Exception:
+                continue
+
+        margin_error_total = sum(diffs) if diffs else None
+        margin_error_avg = (margin_error_total / len(diffs)) if diffs else None
+
+        def conf_correct(level: str):
+            mm = [m for m in decided if (m.get("confidence") or "").strip().lower() == level.lower()]
+            return {"tips": len(mm), "correct": sum(1 for x in mm if x["correct"] == "Yes")}
+
+        summary: Dict[str, Any] = {
+            "total_tips": total_tips,
+            "total_correct": total_correct,
+            "accuracy": accuracy,
+            "margin_error_total": margin_error_total,
+            "margin_error_avg": margin_error_avg,
+            "confidence_breakdown": {
+                "high": conf_correct("High"),
+                "moderate": conf_correct("Moderate"),
+                "low": conf_correct("Low"),
+            },
+        }
+
+        if round_key is not None:
+            nrk = normalize_round_key(round_key)
+            rk = rank_map.get((season, nrk))
+            if rk:
+                summary.update(rk)
+                if rk.get("overall_rank") and rk.get("total_players"):
+                    summary["rank_fraction"] = rk["overall_rank"] / rk["total_players"]
+                    summary["top_percent"] = 100.0 * summary["rank_fraction"]
+
+        return summary
+
+    for season, season_obj in seasons.items():
+        # round summaries
+        for rk, round_obj in season_obj["rounds"].items():
+            round_obj["summary"] = summarize_matches(round_obj["matches"], season, rk)
+
+        # season summary across all rounds
+        all_matches: List[Dict[str, Any]] = []
+        for r in season_obj["rounds"].values():
+            all_matches.extend(r["matches"])
+
+        ranked_round_keys = []
+        for rk in season_obj["rounds"].keys():
+            nrk = normalize_round_key(rk)
+            if (season, nrk) in rank_map:
+                ranked_round_keys.append(nrk)
+
+        latest_rank_round = None
+        if ranked_round_keys:
+            latest_rank_round = sorted(ranked_round_keys, key=round_sort_key)[-1]
+
+        season_obj["summary"] = summarize_matches(all_matches, season, latest_rank_round)
+
+        # ORDER ROUNDS for frontend: OR, 1.., finals...
+        ordered_round_keys = sorted(season_obj["rounds"].keys(), key=round_sort_key)
+        season_obj["rounds"] = [season_obj["rounds"][k] for k in ordered_round_keys]
+
+    return {"seasons": [seasons[s] for s in sorted(seasons.keys())]}

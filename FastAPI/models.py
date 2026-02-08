@@ -484,3 +484,26 @@ class TeamGame(Base):
     points_for = Column("points_for", Float, nullable=True)
     points_against = Column("points_against", Float, nullable=True)
     result = Column("result", String, nullable=True)  # Win/Loss/Draw
+
+class Tips(Base):
+    __tablename__ = "tips"
+
+    Date = Column("Date", Date, primary_key=True)
+    Venue = Column("Venue", String, nullable=True, primary_key=True)
+    HomeTeam = Column("Home Team", String, nullable=True, primary_key=True)
+    AwayTeam = Column("Away Team", String, nullable=True, primary_key=True)
+    Timeslot = Column("Timeslot", String, nullable=True)
+    Round = Column("Round", String, nullable=True)
+    Tip = Column("Tip", String, nullable=True)
+    TipConfidence = Column("Tip Confidence", String, nullable=True)
+    TipMargin = Column("Tip Margin", Integer, nullable=True)
+    Correct = Column("Correct", String, nullable=True)
+    ActualMargin = Column("Actual Margin", Integer, nullable=True)
+
+class TipRanks(Base):
+    __tablename__ = "tip_ranks"
+
+    Season = Column("Season", Integer, nullable=True, primary_key=True)
+    Round = Column("Round", String, nullable=True, primary_key=True)
+    Rank = Column("Rank", Integer, nullable=True)
+    Total = Column("Total", Integer, nullable=True)

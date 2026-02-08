@@ -172,6 +172,7 @@ def main():
     import_csv_to_table("2025_footy_player_stats.csv", "player_stats")
     import_csv_to_table("afl_upcoming_games.csv", "upcoming_games")
     import_csv_to_table("afl_tips.csv", "tips")
+    import_csv_to_table("tip_ranks.csv", "tip_ranks")
     refresh_upcoming_games_with_tips_view()
 
 if __name__ == "__main__":
