@@ -26,7 +26,7 @@ def import_csv_to_table(csv_filename: str, table_name: str):
     if table_name == "upcoming_games" and "Date" in df.columns:
         # Be tolerant of both DD/MM/YYYY and YYYY-MM-DD
         # dayfirst=True handles e.g. 31/07/2025; ISO still parses fine
-        df["Date"] = pd.to_datetime(df["Date"], errors="raise", dayfirst=True).dt.date
+        df["Date"] = pd.to_datetime(df["Date"], errors="raise").dt.date
 
     df.to_sql(table_name, engine, if_exists="replace", index=False)
     print(f"✅ '{table_name}' created from '{csv_path.relative_to(ROOT)}'")

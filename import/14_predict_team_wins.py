@@ -12,7 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from db_connect import get_engine
-from util import HOME_GROUNDS, TEAM_ALIASES, TEAM_STATE, VENUE_STATE
+from util import HOME_GROUNDS, SECONDARY_HOME_GROUNDS, TEAM_ALIASES, TEAM_STATE, VENUE_STATE
 
 engine = get_engine()
 
@@ -54,7 +54,7 @@ def is_interstate(team: str, venue: str) -> int:
     return int(bool(ts) and bool(vs) and ts != vs)
 
 def is_secondary_home(team: str, venue: str) -> int:
-    return int(is_interstate(team, venue) and (venue or "").strip() in HOME_GROUNDS.get((team or "").strip(), []))
+    return int(is_interstate(team, venue) and (venue or "").strip() in SECONDARY_HOME_GROUNDS.get((team or "").strip(), []))
 
 def safe_num(x, default=0.0):
     try:
@@ -95,21 +95,27 @@ up["home_key"] = up["Home Team"].map(normalize_team_key)
 up["away_key"] = up["Away Team"].map(normalize_team_key)
 
 today = pd.Timestamp.today().normalize()
+
+# ---------- Build per-team next fixture (FIXED) ----------
 up_future = up[up["Date"] >= today].sort_values("Date")
 
-next_rows = []
-next_rows.extend(
+home_rows = (
     up_future[["Date","Venue","Timeslot","home_key","away_key"]]
     .rename(columns={"home_key":"Team","away_key":"Opponent"})
-    .to_dict("records")
-)
-next_rows.extend(
-    up_future[["Date","Venue","Timeslot","away_key","home_key"]]
-    .rename(columns={"away_key":"Team","home_key":"Opponent"})
-    .to_dict("records")
 )
 
-ng_df = pd.DataFrame(next_rows).drop_duplicates(subset=["Team"], keep="first").reset_index(drop=True)
+away_rows = (
+    up_future[["Date","Venue","Timeslot","away_key","home_key"]]
+    .rename(columns={"away_key":"Team","home_key":"Opponent"})
+)
+
+ng_df = (
+    pd.concat([home_rows, away_rows], ignore_index=True)
+      .sort_values(["Team", "Date"])          # critical
+      .drop_duplicates(subset=["Team"], keep="first")
+      .reset_index(drop=True)
+)
+
 if ng_df.empty:
     raise RuntimeError("No future fixtures found in upcoming_games.")
 

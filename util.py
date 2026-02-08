@@ -20,23 +20,23 @@ HOME_GROUNDS = {
 }
 
 SECONDARY_HOME_GROUNDS = {
-    'Adelaide': [''],
-    'Brisbane': [''],
-    'Carlton': [''],
+    'Adelaide': [],
+    'Brisbane': [],
+    'Carlton': [],
     'Collingwood': ['Docklands'],
     'Dees': ['Docklands'],
     'Essendon': ['MCG'],
-    'Fremantle': [''],
+    'Fremantle': [],
     'Geelong': ['Docklands', 'MCG'],
     'Suns': ['Brisbane'],
     'GWS': ['SCG'],
     'Hawthorn': ['Docklands'],
     'Norf': ['MCG'],
-    'Port': [''],
+    'Port': [],
     'Richmond': ['Docklands'],
     'Saints': ['MCG'],
     'Sydney': ['Engie'],
-    'Eagles': [''],
+    'Eagles': [],
     'Bulldogs': ['MCG'],
 }
 

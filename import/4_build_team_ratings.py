@@ -1,4 +1,4 @@
-# 501_build_team_ratings_fastest.py
+# 4_build_team_ratings.py
 # Builds team ratings and season summary from player-level table.
 # - One row per match -> Elo + Glicko2 updates (robust bisection; bounded iters)
 # - Home-ground advantage via HOME_GROUNDS mapping (no aliasing)
@@ -21,7 +21,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from db_connect import get_engine
-from util import HOME_GROUNDS
+from util import HOME_GROUNDS, SECONDARY_HOME_GROUNDS
 
 # ---------- CLI ----------
 ap = argparse.ArgumentParser()
@@ -46,6 +46,12 @@ ap.add_argument("--g2-rd-decay-per-day", type=float, default=0.6,
 # IO / filters
 ap.add_argument("--only-after", default=None, help="YYYY-MM-DD filter to only process games after this date")
 ap.add_argument("--chunksize", type=int, default=20000, help="DB write chunk size")
+
+# number of games to compute surprise over
+ap.add_argument("--surprise-window", type=int, default=22,
+                help="Number of most recent REGULAR-SEASON games to compute surprise over (default 22)")
+ap.add_argument("--surprise-min-games", type=int, default=8,
+                help="Minimum games required to report surprise; otherwise NaN (default 8)")
 args = ap.parse_args()
 
 # Progress bar
@@ -72,7 +78,23 @@ def is_home(team: str, venue: str) -> bool:
     venue_key = str(venue).strip()
     return venue_key in HOME_GROUNDS.get(team_key, [])
 
+
 # ---------- Helpers ----------
+def clean_ground_list(xs):
+    if xs is None:
+        return []
+    out = []
+    for v in xs:
+        if v is None:
+            continue
+        s = str(v).strip()
+        if s:
+            out.append(s)
+    return out
+
+SECONDARY_HOME_GROUNDS = {k: clean_ground_list(v) for k, v in SECONDARY_HOME_GROUNDS.items()}
+HOME_GROUNDS = {k: clean_ground_list(v) for k, v in HOME_GROUNDS.items()}
+
 def g_glicko(phi):
     return 1.0 / math.sqrt(1.0 + 3.0*(G2_Q**2)*(phi**2)/(math.pi**2))
 
@@ -429,6 +451,7 @@ reg["home_loss"] = ((reg["result"]=="Loss") & (reg["is_home"]==True)).astype(int
 reg["away_win"]  = ((reg["result"]=="Win")  & (reg["is_home"]==False)).astype(int)
 reg["away_loss"] = ((reg["result"]=="Loss") & (reg["is_home"]==False)).astype(int)
 # season totals (regular season)
+# season totals (regular season) — still season-scoped
 season_totals = (
     reg.groupby(["season","Team"], as_index=False)
        .agg(
@@ -437,7 +460,6 @@ season_totals = (
             season_draws  = ("result", lambda s: (s=="Draw").sum()),
             pf            = ("points_for", "sum"),
             pa            = ("points_against", "sum"),
-            season_surprise = ("g2_surprise", "mean"),
             season_home_wins=("home_win","sum"),
             season_home_losses=("home_loss","sum"),
             season_away_wins=("away_win","sum"),
@@ -446,6 +468,29 @@ season_totals = (
 )
 season_totals["season_percentage"] = 100.0 * season_totals["pf"] / season_totals["pa"].replace(0, np.nan)
 season_totals = season_totals.rename(columns={"pf":"season_points_for", "pa":"season_points_against"})
+
+# --- NEW: rolling "surprise" over last N regular-season games in that season ---
+N = int(args.surprise_window)
+MIN_GAMES = int(args.surprise_min_games)
+
+reg_sorted = reg.sort_values(["season", "Team", "Date"]).copy()
+
+# take last N games per (season,Team)
+lastN = (
+    reg_sorted.groupby(["season", "Team"], as_index=False, group_keys=False)
+              .tail(N)
+)
+
+surprise_agg = (
+    lastN.groupby(["season","Team"], as_index=False)
+         .agg(
+             season_surprise=("g2_surprise", "mean"),
+             season_surprise_games=("g2_surprise", "size"),
+         )
+)
+
+# If fewer than MIN_GAMES, blank it out (early-season noise control)
+surprise_agg.loc[surprise_agg["season_surprise_games"] < MIN_GAMES, "season_surprise"] = np.nan
 
 # last post-ratings (may include finals; that's okay for strength going forward)
 last_posts = (team_table
@@ -461,6 +506,7 @@ last_posts = (team_table
               }))
 
 summary = season_totals.merge(last_posts, on=["season","Team"], how="left")
+summary = summary.merge(surprise_agg, on=["season","Team"], how="left")
 
 # ladder points/position (AFL: 4 for win, 2 for draw) — regular season only
 summary["ladder_points"] = 4*summary["season_wins"] + 2*summary["season_draws"]
@@ -490,15 +536,25 @@ summary["percentage_rank"] = (
            .astype(int)
 )
 
+# --- NEW: store home grounds ---
+def join_grounds(d, team):
+    xs = d.get(team, [])
+    xs = [str(x).strip() for x in xs if x is not None and str(x).strip()]
+    return ", ".join(xs)
+
+summary["primary_home_grounds"] = summary["Team"].apply(lambda t: join_grounds(HOME_GROUNDS, t))
+summary["secondary_home_grounds"] = summary["Team"].apply(lambda t: join_grounds(SECONDARY_HOME_GROUNDS, t))
+
 
 summary = summary[[
     "season", "Team",
+    "primary_home_grounds", "secondary_home_grounds",
     "elo", "elo_rank", "glicko", "glicko_rank", "glicko_rd", "glicko_vol",
     "season_wins", "season_losses", "season_draws",
     "season_points_for","season_points_against",
     "season_home_wins", "season_home_losses", "season_away_wins", "season_away_losses",
     "season_percentage", "percentage_rank", "ladder_points", "ladder_position",
-    "season_surprise"
+    "season_surprise", "season_surprise_games"
 ]]
 
 ddl_latest_overall_drop = f'DROP VIEW IF EXISTS team_precompute_latest CASCADE;'
