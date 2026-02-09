@@ -54,7 +54,11 @@ def is_interstate(team: str, venue: str) -> int:
     return int(bool(ts) and bool(vs) and ts != vs)
 
 def is_secondary_home(team: str, venue: str) -> int:
-    return int(is_interstate(team, venue) and (venue or "").strip() in SECONDARY_HOME_GROUNDS.get((team or "").strip(), []))
+    if team is None or venue is None:
+        return 0
+    t = str(team).strip()
+    v = str(venue).strip()
+    return int(v in SECONDARY_HOME_GROUNDS.get(t, []))
 
 def safe_num(x, default=0.0):
     try:
@@ -116,8 +120,17 @@ ng_df = (
       .reset_index(drop=True)
 )
 
+# --- Keep only mutual next-fixture pairs ---
+# A->B exists AND B->A exists on same date (safer) and same venue optional
+ng_key = ng_df.copy()
+ng_key["k"] = ng_key["Team"] + "|" + ng_key["Opponent"] + "|" + ng_key["Date"].dt.strftime("%Y-%m-%d")
+ng_key["k_rev"] = ng_key["Opponent"] + "|" + ng_key["Team"] + "|" + ng_key["Date"].dt.strftime("%Y-%m-%d")
+
+mutual = ng_key["k_rev"].isin(set(ng_key["k"]))
+ng_df = ng_df[mutual].copy().reset_index(drop=True)
+
 if ng_df.empty:
-    raise RuntimeError("No future fixtures found in upcoming_games.")
+    print("⚠️ No mutual next-fixture pairs found (by team+opponent+date). Win probabilities will not be written.")
 
 # ---------- Latest ratings ----------
 teams_tbl = pd.read_sql('SELECT * FROM teams', engine)
@@ -237,24 +250,31 @@ F["pair_key"] = (
 
 def adjust_pair(g: pd.DataFrame) -> pd.DataFrame:
     g = g.copy()
-    p_draw = float(DRAW_BASE_RATE)
-    if len(g) == 2:
-        pa, pb = float(g.iloc[0]["Win_Probability_raw"]), float(g.iloc[1]["Win_Probability_raw"])
-        s = max(pa + pb, 1e-12)
-        pa_norm, pb_norm = pa / s, pb / s
-        if SCALE_DRAW_BY_CLOSENESS:
-            closeness = 2.0 * min(pa_norm, pb_norm)  # 0..1
-            p_draw = float(DRAW_BASE_RATE) * float(closeness)
-        g.loc[g.index[0], "Win_Probability"] = (1.0 - p_draw) * pa_norm * 100.0
-        g.loc[g.index[1], "Win_Probability"] = (1.0 - p_draw) * pb_norm * 100.0
-        g["Draw_Probability"] = p_draw * 100.0
+    if len(g) != 2:
+        g["Win_Probability"] = 0.0
+        g["Draw_Probability"] = 0.0
         return g
-    s = max(g["Win_Probability_raw"].sum(), 1e-12)
-    g["Win_Probability"] = (1.0 - p_draw) * (g["Win_Probability_raw"] / s) * 100.0
+
+    p_draw = float(DRAW_BASE_RATE)
+
+    pa, pb = float(g.iloc[0]["Win_Probability_raw"]), float(g.iloc[1]["Win_Probability_raw"])
+    s = max(pa + pb, 1e-12)
+    pa_norm, pb_norm = pa / s, pb / s
+
+    if SCALE_DRAW_BY_CLOSENESS:
+        closeness = 2.0 * min(pa_norm, pb_norm)  # 0..1
+        p_draw = float(DRAW_BASE_RATE) * float(closeness)
+
+    g.loc[g.index[0], "Win_Probability"] = (1.0 - p_draw) * pa_norm * 100.0
+    g.loc[g.index[1], "Win_Probability"] = (1.0 - p_draw) * pb_norm * 100.0
     g["Draw_Probability"] = p_draw * 100.0
     return g
 
 F = F.groupby("pair_key", group_keys=False).apply(adjust_pair)
+
+F["Win_Probability"] = pd.to_numeric(F["Win_Probability"], errors="coerce").fillna(0.0)
+F["Draw_Probability"] = pd.to_numeric(F["Draw_Probability"], errors="coerce").fillna(0.0)
+
 
 # ---------- Persist to team_precompute (latest row per team) ----------
 with engine.begin() as con:
