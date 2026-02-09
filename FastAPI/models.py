@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, Float, Date, DateTime, BigInteger
+from sqlalchemy import Column, Integer, String, Boolean, Float, Date as SADate, DateTime, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.inspection import inspect
 
@@ -236,7 +236,7 @@ class PlayerNickname(Base):
 class PlayerStats(Base):
     __tablename__ = "player_stats"
 
-    Date = Column("Date", Date, primary_key=True, nullable=True)
+    Date = Column("Date", SADate, primary_key=True, nullable=True)
     Team = Column("Team", String, primary_key=False)
     Opponent = Column("Opponent", String, primary_key=False)
     Player = Column("Player", String, primary_key=True)
@@ -315,14 +315,17 @@ class TeamPrecompute(Base):
     __tablename__ = "team_precompute_latest"
 
     Team = Column("Team", String, primary_key=True,nullable=True)
-    Date = Column("Date", Date, primary_key=True, nullable=True)
+    Date = Column("Date", SADate, primary_key=True, nullable=True)
     elo_rating = Column("elo_rating", Float, nullable=True)
     glicko_rating = Column("glicko_rating", Float, nullable=True)
     ladder_position = Column("ladder_position", Integer, nullable=True)
     Next_Opponent = Column("Next_Opponent", String, nullable=True)
     Win_Probability = Column("Win_Probability", Float, nullable=True)
+    Draw_Probability = Column("Draw_Probability", Float, nullable=True)
     Next_Venue = Column("Next_Venue", String, nullable=True)
-
+    Next_Timeslot = Column("Next_Timeslot", String, nullable=True)
+    Next_Date = Column("Next_Date", SADate, nullable=True)
+    
     season_avg_score = Column("season_avg_score", Integer, nullable=True)
     season_min_score = Column("season_min_score", Integer, nullable=True)
     season_max_score = Column("season_max_score", Integer, nullable=True)
@@ -456,7 +459,7 @@ class UpcomingGame(Base):
 class UpcomingGameWithTips(Base):
     __tablename__ = "upcoming_games_with_tips"
 
-    Date = Column(Date, primary_key=True)
+    Date = Column(SADate, primary_key=True)
     Venue = Column(String, primary_key=True)
     HomeTeam = Column("Home Team", String, primary_key=True)
     AwayTeam = Column("Away Team", String, primary_key=True)
@@ -488,7 +491,7 @@ class TeamGame(Base):
 class Tips(Base):
     __tablename__ = "tips"
 
-    Date = Column("Date", Date, primary_key=True)
+    Date = Column("Date", SADate, primary_key=True)
     Venue = Column("Venue", String, nullable=True, primary_key=True)
     HomeTeam = Column("Home Team", String, nullable=True, primary_key=True)
     AwayTeam = Column("Away Team", String, nullable=True, primary_key=True)

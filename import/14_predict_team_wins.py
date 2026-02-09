@@ -280,6 +280,8 @@ F["Draw_Probability"] = pd.to_numeric(F["Draw_Probability"], errors="coerce").fi
 with engine.begin() as con:
     con.exec_driver_sql('ALTER TABLE team_precompute ADD COLUMN IF NOT EXISTS "Next_Opponent" TEXT')
     con.exec_driver_sql('ALTER TABLE team_precompute ADD COLUMN IF NOT EXISTS "Next_Venue" TEXT')
+    con.exec_driver_sql('ALTER TABLE team_precompute ADD COLUMN IF NOT EXISTS "Next_Timeslot" TEXT')
+    con.exec_driver_sql('ALTER TABLE team_precompute ADD COLUMN IF NOT EXISTS "Next_Date" DATE')
     con.exec_driver_sql('ALTER TABLE team_precompute ADD COLUMN IF NOT EXISTS "Win_Probability" DOUBLE PRECISION')
     con.exec_driver_sql('ALTER TABLE team_precompute ADD COLUMN IF NOT EXISTS "Draw_Probability" DOUBLE PRECISION')
 
@@ -294,16 +296,21 @@ with engine.begin() as con:
         venue  = r.Venue
         winp   = float(r.Win_Probability)
         drawp  = float(r.Draw_Probability)
+        timeslot = r.Timeslot
+        next_date = pd.to_datetime(r.Date).date() if pd.notna(r.Date) else None
+
 
         latest_date = latest_map.get(team)
         if pd.isna(latest_date):
             continue
 
-        params = {"team": team, "date": latest_date, "opp": opp, "venue": venue, "p": winp, "pd": drawp}
+        params = {"team": team, "date": latest_date, "opp": opp, "venue": venue, "p": winp, "pd": drawp, "timeslot": timeslot, "next_date": next_date}
         sql = (
             'UPDATE team_precompute '
             'SET "Next_Opponent" = :opp, '
                 '"Next_Venue" = :venue, '
+                '"Next_Timeslot" = :timeslot, '
+                '"Next_Date" = :next_date, '
                 '"Win_Probability" = :p, '
                 '"Draw_Probability" = :pd '
             'WHERE "Team" = :team AND "Date" = :date'
@@ -325,13 +332,14 @@ def refresh_team_precompute_views(dest="team_precompute"):
             WHERE table_name = :t
             ORDER BY ordinal_position
         """), {"t": dest}).fetchall()]
-        col_list = ", ".join(f'"{c}"' for c in cols)
+        col_list_tp = ", ".join(f'tp."{c}"' for c in cols)
+        col_list_plain = ", ".join(f'"{c}"' for c in cols)
 
         ddl_overall = f'''
         CREATE VIEW {dest}_latest AS
         WITH latest AS (
             SELECT DISTINCT ON (tp."Team")
-                   {col_list}
+                   {col_list_tp}
             FROM "{dest}" tp
             ORDER BY tp."Team", tp."Date" DESC
         )
@@ -355,10 +363,10 @@ def refresh_team_precompute_views(dest="team_precompute"):
 
         ddl_current = f'''
         CREATE VIEW {dest}_latest_current AS
-        SELECT DISTINCT ON ("Team") {col_list}
-        FROM "{dest}"
-        WHERE season = (SELECT MAX(season) FROM "{dest}")
-        ORDER BY "Team", "Date" DESC;
+        SELECT DISTINCT ON (tp."Team") {col_list_tp}
+        FROM "{dest}" tp
+        WHERE tp."season" = (SELECT MAX("season") FROM "{dest}")
+        ORDER BY tp."Team", tp."Date" DESC;
         '''
 
         con.execute(sqtext(drop_overall))
