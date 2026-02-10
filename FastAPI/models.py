@@ -391,6 +391,11 @@ class TeamPrecompute(Base):
     season_avg_away_tackles = Column("season_avg_away_tackles", Integer, nullable=True)
     season_min_away_tackles = Column("season_min_away_tackles", Integer, nullable=True)
     season_max_away_tackles = Column("season_max_away_tackles", Integer, nullable=True)
+    tackles_avg_last_3 = Column("tackles_avg_last_3", Float, nullable=True)
+    tackles_avg_last_5 = Column("tackles_avg_last_5", Float, nullable=True)
+    tackles_avg_last_10 = Column("tackles_avg_last_10", Float, nullable=True)
+    tackles_avg_home_last_5 = Column("tackles_avg_home_last_5", Float, nullable=True)
+    tackles_avg_away_last_5 = Column("tackles_avg_away_last_5", Float, nullable=True)
 
     season_avg_inside50 = Column("season_avg_inside50", Integer, nullable=True)
     season_min_inside50 = Column("season_min_inside50", Integer, nullable=True)
@@ -431,6 +436,26 @@ class TeamPrecompute(Base):
     season_avg_away_free_kicks = Column("season_avg_away_free_kicks", Integer, nullable=True)
     season_min_away_free_kicks = Column("season_min_away_free_kicks", Integer, nullable=True)
     season_max_away_free_kicks = Column("season_max_away_free_kicks", Integer, nullable=True)
+    free_kicks_avg_last_3 = Column("free_kicks_avg_last_3", Float, nullable=True)
+    free_kicks_avg_last_5 = Column("free_kicks_avg_last_5", Float, nullable=True)
+    free_kicks_avg_last_10 = Column("free_kicks_avg_last_10", Float, nullable=True)
+    free_kicks_avg_home_last_5 = Column("free_kicks_avg_home_last_5", Float, nullable=True)
+    free_kicks_avg_away_last_5 = Column("free_kicks_avg_away_last_5", Float, nullable=True)
+
+    season_avg_marks = Column("season_avg_marks", Integer, nullable=True)
+    season_min_marks = Column("season_min_marks", Integer, nullable=True)
+    season_max_marks = Column("season_max_marks", Integer, nullable=True)
+    season_avg_home_marks = Column("season_avg_home_marks", Integer, nullable=True)
+    season_min_home_marks = Column("season_min_home_marks", Integer, nullable=True)
+    season_max_home_marks = Column("season_max_home_marks", Integer, nullable=True)
+    season_avg_away_marks = Column("season_avg_away_marks", Integer, nullable=True)
+    season_min_away_marks = Column("season_min_away_marks", Integer, nullable=True)
+    season_max_away_marks = Column("season_max_away_marks", Integer, nullable=True)
+    marks_avg_last_3 = Column("marks_avg_last_3", Float, nullable=True)
+    marks_avg_last_5 = Column("marks_avg_last_5", Float, nullable=True)
+    marks_avg_last_10 = Column("marks_avg_last_10", Float, nullable=True)
+    marks_avg_home_last_5 = Column("marks_avg_home_last_5", Float, nullable=True)
+    marks_avg_away_last_5 = Column("marks_avg_away_last_5", Float, nullable=True)
 
     def to_dict(self):
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
