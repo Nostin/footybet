@@ -316,6 +316,7 @@ class TeamPrecompute(Base):
 
     Team = Column("Team", String, primary_key=True,nullable=True)
     Date = Column("Date", SADate, primary_key=True, nullable=True)
+    Opponent = Column("Opponent", String, nullable=True)
     elo_rating = Column("elo_rating", Float, nullable=True)
     glicko_rating = Column("glicko_rating", Float, nullable=True)
     ladder_position = Column("ladder_position", Integer, nullable=True)

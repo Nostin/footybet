@@ -203,6 +203,36 @@ async def _get_team_record_and_form(
         "last_results": last_results,
     }
 
+async def _enrich_team_precompute_payload(session: AsyncSession, data: dict) -> dict:
+    opp = data.get("Opponent")
+    dt  = data.get("Date")
+
+    if opp and dt:
+        opp_stats = await _get_opponent_team_stats(session, opp, dt)
+        if opp_stats:
+            if opp_stats.get("opp_inside50") is not None:
+                data["OpponentInside50"] = int(opp_stats["opp_inside50"])
+            if opp_stats.get("opp_free_kicks") is not None:
+                data["OpponentFreeKicks"] = int(opp_stats["opp_free_kicks"])
+            if opp_stats.get("opp_turnovers") is not None:
+                data["OpponentTurnovers"] = int(opp_stats["opp_turnovers"])
+            if opp_stats.get("opp_score") is not None:
+                data["OpponentScore"] = int(opp_stats["opp_score"])
+
+            # margin (handle a couple key naming variants)
+            team_score = (
+                data.get("Team Score")
+                if data.get("Team Score") is not None
+                else data.get("team_score")
+            )
+            if team_score is not None and opp_stats.get("opp_score") is not None:
+                try:
+                    data["Margin"] = int(team_score) - int(opp_stats["opp_score"])
+                except Exception:
+                    pass
+
+    return data
+
 def register_stat_route(stat_name: str, col):
     path = f"/{stat_name}/" + "{player_name}/{value}"
 
@@ -722,3 +752,70 @@ async def get_tips(
         season_obj["rounds"] = [season_obj["rounds"][k] for k in ordered_round_keys]
 
     return {"seasons": [seasons[s] for s in sorted(seasons.keys())]}
+
+TEAM_PRECOMPUTE_MATCH_COLS = """
+  "Team",
+  "Opponent",
+  "Date",
+  "Round",
+  season,
+  "Venue",
+  "Timeslot",
+  points_for,
+  team_disposals,
+  team_goals,
+  team_clearances,
+  team_tackles,
+  team_marks,
+  team_score,
+  team_inside50,
+  team_turnovers,
+  team_free_kicks
+"""
+
+@app.get("/match")
+async def get_match_by_date_and_teams(
+    date: str = Query(..., description="YYYY-MM-DD"),
+    team1: str = Query(...),
+    team2: str = Query(...),
+    session: AsyncSession = Depends(get_session),
+):
+    dt = _to_date(date)
+    if not dt:
+        raise HTTPException(status_code=400, detail="Invalid date. Use YYYY-MM-DD")
+
+    t1 = team1.strip()
+    t2 = team2.strip()
+
+    q = sqtext(f"""
+        SELECT {TEAM_PRECOMPUTE_MATCH_COLS}
+        FROM team_precompute
+        WHERE "Date" = :dt
+          AND (
+            ("Team" = :t1 AND "Opponent" = :t2)
+            OR
+            ("Team" = :t2 AND "Opponent" = :t1)
+          )
+        LIMIT 2
+    """)
+
+    res = await session.execute(q, {"dt": dt, "t1": t1, "t2": t2})
+    rows = [dict(r) for r in res.mappings().all()]
+
+    if not rows:
+        raise HTTPException(status_code=404, detail="Match not found")
+
+    # Ensure stable ordering: return team1 row first if present
+    def row_team(x): return (x.get("Team") or "").strip()
+    row1 = next((x for x in rows if row_team(x) == t1), None)
+    row2 = next((x for x in rows if row_team(x) == t2), None)
+
+    return {
+        "date": dt.isoformat(),
+        "team1": t1,
+        "team2": t2,
+        "team1_view": row1,
+        "team2_view": row2,
+        # fallback in case weird data means we don't get both expected views
+        "rows": rows if (row1 is None or row2 is None) else None,
+    }
