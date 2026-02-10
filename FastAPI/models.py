@@ -315,7 +315,7 @@ class TeamPrecompute(Base):
     __tablename__ = "team_precompute_latest"
 
     Team = Column("Team", String, primary_key=True,nullable=True)
-    Date = Column("Date", SADate, primary_key=True, nullable=True)
+    Date = Column("Date", DateTime, primary_key=True, nullable=True)
     Opponent = Column("Opponent", String, nullable=True)
     elo_rating = Column("elo_rating", Float, nullable=True)
     glicko_rating = Column("glicko_rating", Float, nullable=True)
@@ -464,6 +464,20 @@ class TeamPrecompute(Base):
 
     def to_dict(self):
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
+
+class TeamPrecomputeHistory(Base):
+    __tablename__ = "team_precompute"
+
+    Team = Column("Team", String, primary_key=True)
+    Opponent = Column("Opponent", String, primary_key=True)
+    Date = Column("Date", DateTime, primary_key=True)  # timestamp
+    team_tackles = Column("team_tackles", Integer)
+    team_clearances = Column("team_clearances", Integer)
+    team_free_kicks = Column("team_free_kicks", Integer)
+    team_inside50 = Column("team_inside50", Integer)
+    team_disposals = Column("team_disposals", Integer)
+    team_turnovers = Column("team_turnovers", Integer)
+    team_marks = Column("team_marks", Integer)
 
 class UpcomingGame(Base):
     __tablename__ = "upcoming_games"
