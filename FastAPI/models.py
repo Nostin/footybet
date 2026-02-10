@@ -356,6 +356,7 @@ class TeamPrecompute(Base):
     disposals_avg_last_10 = Column("disposals_avg_last_10", Float, nullable=True)
     disposals_avg_home_last_5 = Column("disposals_avg_home_last_5", Float, nullable=True)
     disposals_avg_away_last_5 = Column("disposals_avg_away_last_5", Float, nullable=True)
+    concede_disposals_avg_last_10 = Column("concede_disposals_avg_last_10", Float, nullable=True)
 
     season_avg_goals = Column("season_avg_goals", Integer, nullable=True)
     season_min_goals = Column("season_min_goals", Integer, nullable=True)
@@ -382,6 +383,7 @@ class TeamPrecompute(Base):
     clearances_avg_last_10 = Column("clearances_avg_last_10", Float, nullable=True)
     clearances_avg_home_last_5 = Column("clearances_avg_home_last_5", Float, nullable=True)
     clearances_avg_away_last_5 = Column("clearances_avg_away_last_5", Float, nullable=True)
+    concede_clearances_avg_last_10 = Column("concede_clearances_avg_last_10", Float, nullable=True)
 
     season_avg_tackles = Column("season_avg_tackles", Integer, nullable=True)
     season_min_tackles = Column("season_min_tackles", Integer, nullable=True)
@@ -397,6 +399,7 @@ class TeamPrecompute(Base):
     tackles_avg_last_10 = Column("tackles_avg_last_10", Float, nullable=True)
     tackles_avg_home_last_5 = Column("tackles_avg_home_last_5", Float, nullable=True)
     tackles_avg_away_last_5 = Column("tackles_avg_away_last_5", Float, nullable=True)
+    concede_tackles_avg_last_10 = Column("concede_tackles_avg_last_10", Float, nullable=True)
 
     season_avg_inside50 = Column("season_avg_inside50", Integer, nullable=True)
     season_min_inside50 = Column("season_min_inside50", Integer, nullable=True)
@@ -457,6 +460,7 @@ class TeamPrecompute(Base):
     marks_avg_last_10 = Column("marks_avg_last_10", Float, nullable=True)
     marks_avg_home_last_5 = Column("marks_avg_home_last_5", Float, nullable=True)
     marks_avg_away_last_5 = Column("marks_avg_away_last_5", Float, nullable=True)
+    concede_marks_avg_last_10 = Column("concede_marks_avg_last_10", Float, nullable=True)
 
     def to_dict(self):
         return {column.name: getattr(self, column.name) for column in self.__table__.columns}
