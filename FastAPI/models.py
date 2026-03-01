@@ -22,6 +22,10 @@ class PlayerPrecompute(Base):
     Prob_25_Disposals = Column("Prob_25_Disposals", Float, nullable=True)
     Prob_30_Disposals = Column("Prob_30_Disposals", Float, nullable=True)
 
+    Prob_1_Goal = Column("Prob_1_Goal", Float, nullable=True)
+    Prob_2_Goals = Column("Prob_2_Goals", Float, nullable=True)
+    Prob_3_Goals = Column("Prob_3_Goals", Float, nullable=True)
+
     Disposal_Season_Avg = Column("Disposal_Season_Avg", Float, nullable=True)
     Disposal_Season_Median = Column("Disposal_Season_Median", Float, nullable=True)
     Disposal_Season_High = Column("Disposal_Season_High", Integer, nullable=True)

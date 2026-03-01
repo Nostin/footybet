@@ -331,7 +331,20 @@ async def get_player(player_name: str, session: AsyncSession = Depends(get_sessi
     if not player:
         raise HTTPException(status_code=404, detail="Player not found")
 
-    return player.to_dict()
+    last_games = []
+    games_stmt = (
+        select(PlayerStats)
+        .where(PlayerStats.Player == player_name)
+        .order_by(desc(PlayerStats.Date))
+        .limit(25)
+    )
+    games_result = await session.execute(games_stmt)
+    games = games_result.scalars().all()
+    last_games = [g.to_dict(use_db_names=False) for g in games]
+
+    payload = player.to_dict()
+    payload["last_games"] = last_games
+    return payload
 
 @app.get("/player-disposals/{player_name}")
 async def get_player_disposals(player_name: str, session: AsyncSession = Depends(get_session)):
