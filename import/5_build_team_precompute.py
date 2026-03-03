@@ -176,38 +176,42 @@ else:
                  .drop_duplicates(subset=["Date","Team"])[["Date","Team","Opponent"]])
     tg = tg.merge(raw_opp, on=["Date","Team"], how="left")
 
-# ------------ Build concede_* for the same game ------------
+# ------------ Build opponent-derived stats for the same game ------------
 # Using the opponent's team totals on that date.
-concede_map = {}
+opp_stat_map = {}
 for src, dst in [
+    ("team_score",      "points_against"),
     ("team_disposals",  "concede_disposals"),
     ("team_tackles",    "concede_tackles"),
     ("team_marks",      "concede_marks"),
     ("team_clearances", "concede_clearances"),
 ]:
     if src in tg.columns:
-        concede_map[src] = dst
+        opp_stat_map[src] = dst
 
-if len(concede_map):
-    opp_view = tg[["Date","Team"] + list(concede_map.keys())].copy()
-    opp_view = opp_view.rename(columns={"Team":"Opponent", **concede_map})
+if len(opp_stat_map):
+    opp_view = tg[["Date","Team"] + list(opp_stat_map.keys())].copy()
+    opp_view = opp_view.rename(columns={"Team":"Opponent", **opp_stat_map})
     tg = tg.merge(opp_view, on=["Date","Opponent"], how="left")
+else:
+    tg["points_against"] = np.nan
 
 # ------------ Feature computation ------------
 WIN_SIZES = [int(w.strip()) for w in args.windows.split(",") if w.strip()]
 
-# All metrics to compute windows for (team + concede)
+# All metrics to compute windows for (team + opponent-derived)
 METRICS = {}
 for name, col in [
-    ("score",          "points_for"),
-    ("disposals",      "team_disposals"),
-    ("goals",          "team_goals"),
-    ("clearances",     "team_clearances"),
-    ("tackles",        "team_tackles"),
-    ("marks",          "team_marks"),
-    ("inside50",       "team_inside50"),
-    ("turnovers",      "team_turnovers"),
-    ("free_kicks",     "team_free_kicks"),
+    ("points_for",         "points_for"),
+    ("points_against",     "points_against"),
+    ("disposals",          "team_disposals"),
+    ("goals",              "team_goals"),
+    ("clearances",         "team_clearances"),
+    ("tackles",            "team_tackles"),
+    ("marks",              "team_marks"),
+    ("inside50",           "team_inside50"),
+    ("turnovers",          "team_turnovers"),
+    ("free_kicks",         "team_free_kicks"),
     ("concede_disposals",  "concede_disposals"),
     ("concede_tackles",    "concede_tackles"),
     ("concede_marks",      "concede_marks"),
@@ -382,7 +386,7 @@ with engine.begin() as con:
     con.execute(text(ddl_latest_overall))
     con.execute(text(ddl_latest_current))
 
-print(f"✅ Wrote {len(tg_out):,} rows to '{dest}' and added concede_* metrics "
+print(f"✅ Wrote {len(tg_out):,} rows to '{dest}' and added opponent-derived metrics "
       f"(windows={WIN_SIZES}, stats_mode={args.stats_mode}).")
 print(f"🏟️ Added home-ground columns: is_primary_home, is_secondary_home, is_home, is_away.")
 print(f"🔎 Created indexes: {idx_team_season_date}, {idx_team_date}")
