@@ -322,6 +322,17 @@ for name, col in STAT_COLUMN_MAP.items():
 register_team_precompute_stat_route("score", "team_score")
 register_team_precompute_stat_route("disposals", "team_disposals")
 
+@app.get("/latest-match")
+async def get_latest_match(session: AsyncSession = Depends(get_session)):
+    stmt = select(TeamGame).order_by(desc(TeamGame.Date)).limit(1)
+    result = await session.execute(stmt)
+    latest_match = result.scalar_one_or_none()
+
+    if latest_match is None:
+        return None
+
+    return {"date": latest_match.Date.strftime("%Y-%m-%d")}
+
 @app.get("/player/{player_name}")
 async def get_player(player_name: str, session: AsyncSession = Depends(get_session)):
     stmt = select(PlayerPrecompute).where(PlayerPrecompute.Player == player_name)

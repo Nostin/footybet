@@ -20,6 +20,8 @@ scripts = [
     (ROOT / "machine_learning" / "4c_reset_team_precomputes.py", []),
     (ROOT / "machine_learning" / "5a_goals_features.py", []),
     (ROOT / "machine_learning" / "5b_train_goals_models.py", []),
+    (ROOT / "machine_learning" / "6a_marks_features.py", []),
+    (ROOT / "machine_learning" / "6b_marks_model_train.py", []),
 ]
 
 for path, args in scripts:
