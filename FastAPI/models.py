@@ -30,6 +30,15 @@ class PlayerPrecompute(Base):
     Prob_4_Marks = Column("Prob_4_Marks", Float, nullable=True)
     Prob_6_Marks = Column("Prob_6_Marks", Float, nullable=True)
 
+    Prob_2_Tackles = Column("Prob_2_Tackles", Float, nullable=True)
+    Prob_4_Tackles = Column("Prob_4_Tackles", Float, nullable=True)
+    Prob_6_Tackles = Column("Prob_6_Tackles", Float, nullable=True)
+    Prob_8_Tackles = Column("Prob_8_Tackles", Float, nullable=True)
+
+    Prob_4_Clearances = Column("Prob_4_Clearances", Float, nullable=True)
+    Prob_6_Clearances = Column("Prob_6_Clearances", Float, nullable=True)
+    Prob_8_Clearances = Column("Prob_8_Clearances", Float, nullable=True)
+
     Disposal_Season_Avg = Column("Disposal_Season_Avg", Float, nullable=True)
     Disposal_Season_Median = Column("Disposal_Season_Median", Float, nullable=True)
     Disposal_Season_High = Column("Disposal_Season_High", Integer, nullable=True)

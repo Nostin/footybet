@@ -26,8 +26,10 @@ scripts = [
     ROOT / "import" / "13_predict_disposals.py",
     ROOT / "import" / "14_predict_goals.py",
     ROOT / "import" / "15_predict_marks.py",
-    ROOT / "import" / "17_predict_team_wins.py",
-    ROOT / "import" / "18_create_player_views.py",
+    ROOT / "import" / "16_predict_tackles.py",
+    ROOT / "import" / "17_predict_clearances.py",
+    ROOT / "import" / "18_predict_team_wins.py",
+    ROOT / "import" / "19_create_player_views.py",
 ]
 
 for script in scripts:

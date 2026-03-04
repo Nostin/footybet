@@ -22,6 +22,10 @@ scripts = [
     (ROOT / "machine_learning" / "5b_train_goals_models.py", []),
     (ROOT / "machine_learning" / "6a_marks_features.py", []),
     (ROOT / "machine_learning" / "6b_marks_model_train.py", []),
+    (ROOT / "machine_learning" / "7a_tackles_features.py", []),
+    (ROOT / "machine_learning" / "7b_tackles_model_train.py", []),
+    (ROOT / "machine_learning" / "8a_clearances_features.py", []),
+    (ROOT / "machine_learning" / "8b_clearances_model_train.py", []),
 ]
 
 for path, args in scripts:
