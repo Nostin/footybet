@@ -321,6 +321,14 @@ for name, col in STAT_COLUMN_MAP.items():
 
 register_team_precompute_stat_route("score", "team_score")
 register_team_precompute_stat_route("disposals", "team_disposals")
+register_team_precompute_stat_route("inside50", "team_inside50")
+register_team_precompute_stat_route("free_kicks", "team_free_kicks")
+register_team_precompute_stat_route("turnovers", "team_turnovers")
+register_team_precompute_stat_route("marks", "team_marks")
+register_team_precompute_stat_route("tackles", "team_tackles")
+register_team_precompute_stat_route("clearances", "team_clearances")
+register_team_precompute_stat_route("kicks", "team_kicks")
+register_team_precompute_stat_route("handballs", "team_handballs")
 
 @app.get("/latest-match")
 async def get_latest_match(session: AsyncSession = Depends(get_session)):
