@@ -413,6 +413,17 @@ async def get_top_disposal_players(session: AsyncSession = Depends(get_session))
     players = result.scalars().all()
     return [player.to_dict() for player in players]
 
+@app.get("/top-marks")
+async def get_top_mark_players(session: AsyncSession = Depends(get_session)):
+    stmt = (
+        select(PlayerPrecompute)
+        .where(PlayerPrecompute.Mark_Season_Avg != None)
+        .order_by(PlayerPrecompute.Mark_Season_Avg.desc())
+        .limit(20)
+    )
+    result = await session.execute(stmt)
+    players = result.scalars().all()
+    return [player.to_dict() for player in players]
 
 @app.get("/players/by-names")
 async def get_players_by_names(names: str = Query(..., description="Comma-separated player names"), session: AsyncSession = Depends(get_session)):
