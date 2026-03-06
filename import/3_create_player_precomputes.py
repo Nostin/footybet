@@ -125,10 +125,16 @@ for player in df['Player'].dropna().unique():
     if row["Next_Venue"]:
         row["Next_Venue_Home"] = int(row["Next_Venue"] in HOME_GROUNDS.get(team_key, []))
 
-    # Time-on-ground (this season)
-    if not p_season.empty and TOG_COL in p_season.columns:
-        row["ToG_Season_Avg"] = float(p_season[TOG_COL].mean())
-        row["ToG_Last"] = float(p_season[TOG_COL].iloc[-1]) if not p_season[TOG_COL].empty else np.nan
+    # Time-on-ground
+    if TOG_COL in p_season.columns and not p_season.empty:
+        tog_season = pd.to_numeric(p_season[TOG_COL], errors="coerce").dropna()
+        if not tog_season.empty:
+            row["ToG_Season_Avg"] = float(tog_season.mean())
+
+    if TOG_COL in p_all.columns and not p_all.empty:
+        tog_all = pd.to_numeric(p_all[TOG_COL], errors="coerce").dropna()
+        if not tog_all.empty:
+            row["ToG_Last"] = float(tog_all.iloc[-1])
 
     # Missed game time in last 4 team matches (absent OR ToG < 50)
     if team:

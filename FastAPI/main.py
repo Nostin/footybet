@@ -449,6 +449,20 @@ async def get_top_tackle_players(session: AsyncSession = Depends(get_session)):
     players = result.scalars().all()
     return [player.to_dict() for player in players]
 
+@app.get("/top-goals")
+async def get_top_goals_players(session: AsyncSession = Depends(get_session)):
+    stmt = (
+        select(PlayerPrecompute)
+        .where(PlayerPrecompute.Goal_10_Avg.is_not(None))
+        .where(PlayerPrecompute.Days_since_last_game.is_not(None))
+        .where(PlayerPrecompute.Days_since_last_game < 200)
+        .order_by(PlayerPrecompute.Goal_10_Avg.desc())
+        .limit(20)
+    )
+    result = await session.execute(stmt)
+    players = result.scalars().all()
+    return [player.to_dict() for player in players]
+
 @app.get("/players/by-names")
 async def get_players_by_names(names: str = Query(..., description="Comma-separated player names"), session: AsyncSession = Depends(get_session)):
     player_names = [name.strip() for name in names.split(",")]
