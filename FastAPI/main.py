@@ -10,9 +10,16 @@ from datetime import date as DateType, datetime as DateTime
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:3000",
+    "https://punters-toolkit.vercel.app",
+    "https://www.punterstoolkit.com",
+    "https://punterstoolkit.com"
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -329,6 +336,10 @@ register_team_precompute_stat_route("tackles", "team_tackles")
 register_team_precompute_stat_route("clearances", "team_clearances")
 register_team_precompute_stat_route("kicks", "team_kicks")
 register_team_precompute_stat_route("handballs", "team_handballs")
+
+@app.get("/")
+async def root():
+    return {"ok": True}
 
 @app.get("/latest-match")
 async def get_latest_match(session: AsyncSession = Depends(get_session)):
