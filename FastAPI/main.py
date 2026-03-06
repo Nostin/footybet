@@ -405,8 +405,8 @@ async def get_all_player_names(session: AsyncSession = Depends(get_session)):
 async def get_top_disposal_players(session: AsyncSession = Depends(get_session)):
     stmt = (
         select(PlayerPrecompute)
-        .where(PlayerPrecompute.Disposal_Season_Avg != None)
-        .order_by(PlayerPrecompute.Disposal_Season_Avg.desc())
+        .where(PlayerPrecompute.Disposal_10_Avg != None)
+        .order_by(PlayerPrecompute.Disposal_10_Avg.desc())
         .limit(20)
     )
     result = await session.execute(stmt)
@@ -417,8 +417,32 @@ async def get_top_disposal_players(session: AsyncSession = Depends(get_session))
 async def get_top_mark_players(session: AsyncSession = Depends(get_session)):
     stmt = (
         select(PlayerPrecompute)
-        .where(PlayerPrecompute.Mark_Season_Avg != None)
-        .order_by(PlayerPrecompute.Mark_Season_Avg.desc())
+        .where(PlayerPrecompute.Mark_10_Avg != None)
+        .order_by(PlayerPrecompute.Mark_10_Avg.desc())
+        .limit(20)
+    )
+    result = await session.execute(stmt)
+    players = result.scalars().all()
+    return [player.to_dict() for player in players]
+
+@app.get("/top-clearances")
+async def get_top_clearance_players(session: AsyncSession = Depends(get_session)):
+    stmt = (
+        select(PlayerPrecompute)
+        .where(PlayerPrecompute.Clearance_10_Avg != None)
+        .order_by(PlayerPrecompute.Clearance_10_Avg.desc())
+        .limit(20)
+    )
+    result = await session.execute(stmt)
+    players = result.scalars().all()
+    return [player.to_dict() for player in players]
+
+@app.get("/top-tackles")
+async def get_top_tackle_players(session: AsyncSession = Depends(get_session)):
+    stmt = (
+        select(PlayerPrecompute)
+        .where(PlayerPrecompute.Tackle_10_Avg != None)
+        .order_by(PlayerPrecompute.Tackle_10_Avg.desc())
         .limit(20)
     )
     result = await session.execute(stmt)
