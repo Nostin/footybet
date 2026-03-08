@@ -17,7 +17,7 @@ ap.add_argument("--source", default="player_stats")
 ap.add_argument("--dest", default="team_precompute")
 ap.add_argument("--windows", default="3,5,10")
 ap.add_argument("--exclude-finals-from-rolling", action="store_true")
-ap.add_argument("--stats-mode", choices=["inclusive", "pre"], default="inclusive")
+ap.add_argument("--stats-mode", choices=["inclusive", "pre"], default="pre")
 ap.add_argument("--only-after", default=None)  # YYYY-MM-DD
 ap.add_argument("--chunksize", type=int, default=20000)
 args = ap.parse_args()
@@ -387,65 +387,87 @@ tg_out.to_sql(
     chunksize=args.chunksize,
 )
 
-cols = list(tg_out.columns)
-
 idx_team_season_date = f'idx_{dest.lower()}_team_season_date'
 idx_team_date = f'idx_{dest.lower()}_team_date'
-
-ddl_indexes = f'''
-CREATE INDEX IF NOT EXISTS {idx_team_season_date}
-  ON "{dest}" ("Team","season","Date" DESC);
-CREATE INDEX IF NOT EXISTS {idx_team_date}
-  ON "{dest}" ("Team","Date" DESC);
-'''
-
-col_list = ", ".join([f'"{c}"' for c in cols])
 
 ddl_latest_overall_drop = f'DROP VIEW IF EXISTS {dest}_latest CASCADE;'
 ddl_latest_current_drop = f'DROP VIEW IF EXISTS {dest}_latest_current CASCADE;'
 
-ddl_latest_overall = f'''
-CREATE VIEW {dest}_latest AS
-WITH latest AS (
-    SELECT DISTINCT ON (tp."Team")
-           {col_list}
-    FROM "{dest}" tp
-    ORDER BY tp."Team", tp."Date" DESC
-)
-SELECT
-    l.*,
-    t."elo"               AS elo_rating,
-    t."glicko"            AS glicko_rating,
-    t."glicko_rd"         AS glicko_rd,
-    t."glicko_vol"        AS glicko_vol,
-    t."season_wins"       AS season_wins,
-    t."season_losses"     AS season_losses,
-    t."season_draws"      AS season_draws,
-    t."season_points_for"      AS season_points_for,
-    t."season_points_against"  AS season_points_against,
-    t."season_percentage" AS season_percentage,
-    t."ladder_points"     AS ladder_points,
-    t."ladder_position"   AS ladder_position,
-    t."season_surprise"   AS season_surprise
-FROM latest l
-LEFT JOIN teams t
-  ON t."Team" = l."Team" AND t."season" = l."season";
-'''
-
-ddl_latest_current = f'''
-CREATE VIEW {dest}_latest_current AS
-SELECT DISTINCT ON ("Team") {col_list}
-FROM "{dest}"
-WHERE season = (SELECT MAX(season) FROM "{dest}")
-ORDER BY "Team", "Date" DESC;
-'''
-
 with engine.begin() as con:
+    # Drop views first so the table can be replaced cleanly
     con.execute(text(ddl_latest_overall_drop))
     con.execute(text(ddl_latest_current_drop))
+
+    # Replace the destination table
     con.execute(text(f'DROP TABLE IF EXISTS "{dest}" CASCADE;'))
     con.execute(text(f'ALTER TABLE "{staging}" RENAME TO "{dest}"'))
-    con.execute(text(ddl_indexes))
+
+    # Ensure prediction/output columns always exist for the API
+    con.execute(text(f'ALTER TABLE "{dest}" ADD COLUMN IF NOT EXISTS "Next_Opponent" TEXT'))
+    con.execute(text(f'ALTER TABLE "{dest}" ADD COLUMN IF NOT EXISTS "Next_Venue" TEXT'))
+    con.execute(text(f'ALTER TABLE "{dest}" ADD COLUMN IF NOT EXISTS "Next_Timeslot" TEXT'))
+    con.execute(text(f'ALTER TABLE "{dest}" ADD COLUMN IF NOT EXISTS "Next_Date" DATE'))
+    con.execute(text(f'ALTER TABLE "{dest}" ADD COLUMN IF NOT EXISTS "Win_Probability" DOUBLE PRECISION'))
+    con.execute(text(f'ALTER TABLE "{dest}" ADD COLUMN IF NOT EXISTS "Draw_Probability" DOUBLE PRECISION'))
+
+    # Rebuild indexes on the new table
+    con.execute(text(f'''
+        CREATE INDEX IF NOT EXISTS {idx_team_season_date}
+        ON "{dest}" ("Team","season","Date" DESC);
+    '''))
+    con.execute(text(f'''
+        CREATE INDEX IF NOT EXISTS {idx_team_date}
+        ON "{dest}" ("Team","Date" DESC);
+    '''))
+
+    # Fetch actual columns from the real table AFTER the extra columns were added
+    cols = [
+        r[0] for r in con.execute(text("""
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_name = :t
+            ORDER BY ordinal_position
+        """), {"t": dest}).fetchall()
+    ]
+
+    col_list = ", ".join([f'tp."{c}"' for c in cols])
+
+    ddl_latest_overall = f'''
+    CREATE VIEW {dest}_latest AS
+    WITH latest AS (
+        SELECT DISTINCT ON (tp."Team")
+               {col_list}
+        FROM "{dest}" tp
+        ORDER BY tp."Team", tp."Date" DESC
+    )
+    SELECT
+        l.*,
+        t."elo"               AS elo_rating,
+        t."glicko"            AS glicko_rating,
+        t."glicko_rd"         AS glicko_rd,
+        t."glicko_vol"        AS glicko_vol,
+        t."season_wins"       AS season_wins,
+        t."season_losses"     AS season_losses,
+        t."season_draws"      AS season_draws,
+        t."season_points_for"      AS season_points_for,
+        t."season_points_against"  AS season_points_against,
+        t."season_percentage" AS season_percentage,
+        t."ladder_points"     AS ladder_points,
+        t."ladder_position"   AS ladder_position,
+        t."season_surprise"   AS season_surprise
+    FROM latest l
+    LEFT JOIN teams t
+      ON t."Team" = l."Team" AND t."season" = l."season";
+    '''
+
+    ddl_latest_current = f'''
+    CREATE VIEW {dest}_latest_current AS
+    SELECT DISTINCT ON (tp."Team") {col_list}
+    FROM "{dest}" tp
+    WHERE tp."season" = (SELECT MAX("season") FROM "{dest}")
+    ORDER BY tp."Team", tp."Date" DESC;
+    '''
+
     con.execute(text(ddl_latest_overall))
     con.execute(text(ddl_latest_current))
 
