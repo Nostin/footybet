@@ -337,6 +337,14 @@ register_team_precompute_stat_route("clearances", "team_clearances")
 register_team_precompute_stat_route("kicks", "team_kicks")
 register_team_precompute_stat_route("handballs", "team_handballs")
 
+def active_days_threshold(today: Optional[DateType] = None) -> int:
+    today = today or DateType.today()
+
+    if today.month in [10, 11, 12, 1, 2]:
+        return 220
+
+    return 100
+
 @app.get("/")
 async def root():
     return {"ok": True}
@@ -426,10 +434,12 @@ async def get_top_disposal_players(session: AsyncSession = Depends(get_session))
 
 @app.get("/top-marks")
 async def get_top_mark_players(session: AsyncSession = Depends(get_session)):
+    threshold = active_days_threshold()
     stmt = (
         select(PlayerPrecompute)
         .where(PlayerPrecompute.Mark_10_Avg != None)
         .order_by(PlayerPrecompute.Mark_10_Avg.desc())
+        .where(PlayerPrecompute.Days_since_last_game <= threshold)
         .limit(20)
     )
     result = await session.execute(stmt)
@@ -438,10 +448,12 @@ async def get_top_mark_players(session: AsyncSession = Depends(get_session)):
 
 @app.get("/top-clearances")
 async def get_top_clearance_players(session: AsyncSession = Depends(get_session)):
+    threshold = active_days_threshold()
     stmt = (
         select(PlayerPrecompute)
         .where(PlayerPrecompute.Clearance_10_Avg != None)
         .order_by(PlayerPrecompute.Clearance_10_Avg.desc())
+        .where(PlayerPrecompute.Days_since_last_game <= threshold)
         .limit(20)
     )
     result = await session.execute(stmt)
@@ -450,10 +462,12 @@ async def get_top_clearance_players(session: AsyncSession = Depends(get_session)
 
 @app.get("/top-tackles")
 async def get_top_tackle_players(session: AsyncSession = Depends(get_session)):
+    threshold = active_days_threshold()
     stmt = (
         select(PlayerPrecompute)
         .where(PlayerPrecompute.Tackle_10_Avg != None)
         .order_by(PlayerPrecompute.Tackle_10_Avg.desc())
+        .where(PlayerPrecompute.Days_since_last_game <= threshold)
         .limit(20)
     )
     result = await session.execute(stmt)
@@ -462,11 +476,11 @@ async def get_top_tackle_players(session: AsyncSession = Depends(get_session)):
 
 @app.get("/top-goals")
 async def get_top_goals_players(session: AsyncSession = Depends(get_session)):
+    threshold = active_days_threshold()
     stmt = (
         select(PlayerPrecompute)
         .where(PlayerPrecompute.Goal_10_Avg.is_not(None))
-        .where(PlayerPrecompute.Days_since_last_game.is_not(None))
-        .where(PlayerPrecompute.Days_since_last_game < 200)
+        .where(PlayerPrecompute.Days_since_last_game <= threshold)
         .order_by(PlayerPrecompute.Goal_10_Avg.desc())
         .limit(20)
     )
@@ -493,11 +507,21 @@ async def get_players_by_names(names: str = Query(..., description="Comma-separa
     ]
 
     return ordered_players
-    
+
 # get all players by team name eg: /player-by-team/Carlton
 @app.get("/player-by-team/{team_name}")
-async def get_players_by_team_path(team_name: str, session: AsyncSession = Depends(get_session)):
-    stmt = select(PlayerPrecompute).where(PlayerPrecompute.Team == team_name)
+async def get_players_by_team_path(
+    team_name: str,
+    session: AsyncSession = Depends(get_session)
+):
+    threshold = active_days_threshold()
+
+    stmt = (
+        select(PlayerPrecompute)
+        .where(PlayerPrecompute.Team == team_name)
+        .where(PlayerPrecompute.Days_since_last_game <= threshold)
+    )
+
     result = await session.execute(stmt)
     players = result.scalars().all()
 
